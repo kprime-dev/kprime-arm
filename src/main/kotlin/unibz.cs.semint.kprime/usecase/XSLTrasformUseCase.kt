@@ -1,0 +1,11 @@
+package unibz.cs.semint.kprime.usecase
+
+import unibz.cs.semint.kprime.domain.UseCaseResult
+import unibz.cs.semint.kprime.service.IXSLTransformerService
+
+class XSLTrasformUseCase (val transformer:IXSLTransformerService){
+
+    fun transform(xsl: String, xml: String, out: String):UseCaseResult<Unit> {
+        return UseCaseResult("done",transformer.trasform(xsl,xml,out))
+    }
+}
