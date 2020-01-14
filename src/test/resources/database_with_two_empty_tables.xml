@@ -1,0 +1,13 @@
+<database name="dbname" id="iddb">
+    <schema name="" id="idschema">
+        <tables>
+            <tables name="" id="">
+                <columns/>
+            </tables>
+            <tables name="" id="">
+                <columns/>
+            </tables>
+        </tables>
+        <constraints/>
+    </schema>
+</database>

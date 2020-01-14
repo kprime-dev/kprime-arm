@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="prova" id="">
+    <schema name="" id="">
+        <tables>
+            <tables name="univ" id="">
+                <columns>
+                    <columns name="SSN" id="" dbname=""/>
+                    <columns name="Name" id="" dbname=""/>
+                    <columns name="DepName" id="" dbname=""/>
+                    <columns name="DepAddress" id="" dbname=""/>
+                </columns>
+            </tables>
+        </tables>
+        <constraints>
+            <constraints name="depname-has-address-depaddress" id="" type="">
+                <source name="" id="" table="">
+                    <columns>
+                        <columns name="DepName" id="" dbname=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="DepAddress" id="" dbname=""/>
+                    </columns>
+                </target>
+            </constraints>
+        </constraints>
+    </schema>
+</database>
+

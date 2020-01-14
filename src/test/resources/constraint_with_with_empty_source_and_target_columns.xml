@@ -1,0 +1,8 @@
+<constraint name="" id="idconst1" type="">
+    <source name="" id="" table="">
+        <columns/>
+    </source>
+    <target name="" id="" table="">
+        <columns/>
+    </target>
+</constraint>

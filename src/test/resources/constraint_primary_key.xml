@@ -1,0 +1,12 @@
+<constraint name="" id="idconst1" type="PRIMARY_KEY">
+    <source name="" id="" table="">
+        <columns>
+            <columns name="" id="" dbname="" dbtype="" nullable="false"/>
+            <columns name="" id="" dbname="" dbtype="" nullable="false"/>
+            <columns name="" id="" dbname="" dbtype="" nullable="false"/>
+        </columns>
+    </source>
+    <target name="" id="" table="">
+        <columns/>
+    </target>
+</constraint>
