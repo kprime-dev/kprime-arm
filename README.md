@@ -15,3 +15,10 @@
 ## test
 
     mvn test
+    
+    
+## edit
+
+Mostly required IntelliJ IDEA for Kotlin.
+
+    idea . &
