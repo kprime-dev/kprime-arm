@@ -1,5 +1,7 @@
 package unibz.cs.semint.kprime
 
+import unibz.cs.semint.kprime.scenario.SakilaScenario
+
 class Starter {
 
  companion object {

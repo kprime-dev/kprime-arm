@@ -41,14 +41,14 @@ main class entry point
 
 technology free packages
 
-    domain/     where aggregates, entities, values lives
-    usecase/    where domain components play toghether using services, repositories interfaces
+    domain/     where aggregates, entities, values lives.
+    usecase/    where domain components play toghether using services, repositories interfaces.
 
 technology depenent packages
 
-    adapter/    where services, repositories implementations lives
-    support/    where domain indipendent sherable implementation components lives
-    
+    adapter/    where services, repositories implementations lives.
+    support/    where domain indipendent sherable implementation components lives.
+    scenario/   where usecases are applied to real technology dependent case.    
 
 ## classes conventions
 
