@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <main.class>unibz.cs.semint.kprime.StarterKt</main.class>
+        <main.class>unibz.cs.semint.kprime.Starter</main.class>
 
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
