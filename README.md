@@ -16,6 +16,16 @@
 
     mvn test
     
+
+## test integration (manual invocation)
+
+for person vplit scenario:
+ 
+    mvn -Dtest=PersonVSplitScenarioTI test
+
+for sakila scenario (it requires postgres db access and configuration):
+
+    mvn -Dtest=SakilaScenarioTI test
     
 ## edit
 
