@@ -5,10 +5,22 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
 @JacksonXmlRootElement(localName = "table")
 class Table () {
+
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""
+
     @JacksonXmlProperty(isAttribute = true)
     var id: String=""
 
+    @JacksonXmlProperty(isAttribute = true)
+    var view: Boolean = false
+
     var columns= ArrayList<Column>()
+
+    fun hasNullable(): Boolean {
+        for (col in columns) {
+            if (col.nullable) return true
+        }
+        return false
+    }
 }
