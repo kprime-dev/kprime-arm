@@ -3,21 +3,13 @@ package unibz.cs.semint.kprime.scenario
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.*
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
-import javax.xml.crypto.Data
 
 class PersonVSplitScenario {
 
     fun run() {
         val personMetadata = buildPersonMetadata()
-        print(XMLSerializeUseCase(XMLSerializerJacksonAdapter()).prettyDatabase(personMetadata).ok)
-        vsplitSakila(personMetadata)
+        vsplitPersonMetadata(personMetadata)
 
-    }
-
-    private fun vsplitSakila(personMetadata: Database) {
-        val  detected = detect(personMetadata)
-        if (detected.ok!=null)
-            apply(personMetadata,detected)
     }
 
     private fun buildPersonMetadata(): Database {
@@ -35,8 +27,24 @@ class PersonVSplitScenario {
         primaryConstraint.name="primaryKey.person"
         primaryConstraint.source.columns.add(colSSN)
         primaryConstraint.source.columns.add(colT)
+        primaryConstraint.type=Constraint.TYPE.PRIMARY_KEY.name
         db.schema.constraints.add(primaryConstraint)
         return db
+    }
+
+    private fun vsplitPersonMetadata(personMetadata: Database) {
+        printDb(personMetadata)
+        val  detected = detect(personMetadata)
+        if (detected.ok!=null) {
+            val applied = apply(personMetadata, detected)
+            if (applied.ok!=null) printDb(applied.ok)
+        }
+    }
+
+    private fun printDb(db:Database) {
+        println()
+        println("--------------------------------------------------------------------------")
+        println(XMLSerializeUseCase(XMLSerializerJacksonAdapter()).prettyDatabase(db))
     }
 
     private fun detect(personMetadata: Database): UseCaseResult<Database> {
@@ -46,5 +54,4 @@ class PersonVSplitScenario {
     private fun apply(personMetadata: Database, detected: UseCaseResult<Database>): UseCaseResult<Database>{
         return UseCaseResult("done apply", personMetadata)
     }
-
 }
