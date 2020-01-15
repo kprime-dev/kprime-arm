@@ -1,8 +1,8 @@
 package unibz.cs.semint.kprime.usecase.meta
 
 import org.junit.Test
-import unibz.cs.semint.kprime.adapter.MetaSchemaJdbcAdapter
-import unibz.cs.semint.kprime.adapter.XMLSerializerJacksonAdapter
+import unibz.cs.semint.kprime.adapter.repository.MetaSchemaJdbcAdapter
+import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.usecase.MetaSchemaReadUseCase
 import kotlin.test.assertEquals
@@ -20,7 +20,7 @@ class SakilaMetaTI {
         val pass = "pass"
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
-        val result = MetaSchemaReadUseCase().doit(sakilaSource,"read-meta-schema sakila-source",MetaSchemaJdbcAdapter(),XMLSerializerJacksonAdapter())
+        val result = MetaSchemaReadUseCase().doit(sakilaSource,"read-meta-schema sakila-source", MetaSchemaJdbcAdapter(), XMLSerializerJacksonAdapter())
         // then
         assertEquals("read-meta-schema done.",result.message)
     }

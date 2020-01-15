@@ -1,7 +1,7 @@
 package unibz.cs.semint.kprime.usecase
 
 import unibz.cs.semint.kprime.domain.*
-import unibz.cs.semint.kprime.service.IXMLSerializerService
+import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
 
 class XMLSerializeUseCase(val xmlSerializerService: IXMLSerializerService) {
 

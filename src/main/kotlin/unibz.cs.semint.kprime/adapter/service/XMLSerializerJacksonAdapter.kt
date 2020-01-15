@@ -1,9 +1,9 @@
-package unibz.cs.semint.kprime.adapter
+package unibz.cs.semint.kprime.adapter.service
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import unibz.cs.semint.kprime.domain.*
-import unibz.cs.semint.kprime.service.IXMLSerializerService
+import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
 
 class XMLSerializerJacksonAdapter : IXMLSerializerService {
 

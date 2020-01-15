@@ -3,7 +3,7 @@ package unibz.cs.semint.kprime.usecase.serialize
 import org.junit.Assert.assertFalse
 import org.junit.Test
 import org.xmlunit.builder.DiffBuilder
-import unibz.cs.semint.kprime.adapter.XMLSerializerJacksonAdapter
+import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.Column
 import unibz.cs.semint.kprime.domain.Table
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase

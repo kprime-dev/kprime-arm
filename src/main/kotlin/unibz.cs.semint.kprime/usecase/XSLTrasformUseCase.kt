@@ -1,7 +1,7 @@
 package unibz.cs.semint.kprime.usecase
 
 import unibz.cs.semint.kprime.domain.UseCaseResult
-import unibz.cs.semint.kprime.service.IXSLTransformerService
+import unibz.cs.semint.kprime.usecase.service.IXSLTransformerService
 
 class XSLTrasformUseCase (val transformer:IXSLTransformerService){
 

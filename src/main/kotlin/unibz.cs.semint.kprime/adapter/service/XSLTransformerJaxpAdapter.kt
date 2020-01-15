@@ -1,6 +1,6 @@
-package unibz.cs.semint.kprime.adapter
+package unibz.cs.semint.kprime.adapter.service
 
-import unibz.cs.semint.kprime.service.IXSLTransformerService
+import unibz.cs.semint.kprime.usecase.service.IXSLTransformerService
 import java.io.FileOutputStream
 import javax.xml.transform.OutputKeys
 import javax.xml.transform.TransformerFactory

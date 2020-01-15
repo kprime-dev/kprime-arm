@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.service
+package unibz.cs.semint.kprime.usecase.service
 
 import unibz.cs.semint.kprime.domain.Constraint
 import unibz.cs.semint.kprime.domain.Database

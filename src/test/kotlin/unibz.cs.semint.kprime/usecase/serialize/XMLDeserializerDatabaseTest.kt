@@ -1,7 +1,7 @@
 package unibz.cs.semint.kprime.usecase.serialize
 
 import org.junit.Test
-import unibz.cs.semint.kprime.adapter.XMLSerializerJacksonAdapter
+import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
 import java.io.File
 import kotlin.test.assertEquals
