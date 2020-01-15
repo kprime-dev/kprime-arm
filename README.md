@@ -60,9 +60,17 @@ technology depenent packages
     support/    where domain indipendent sherable implementation components lives.
     scenario/   where usecases are applied to real technology dependent case.    
 
-## classes conventions
+### classes conventions
 
-* A UseCase will return allways a UseCaseResult.
+* A UseCase will return always a UseCaseResult.
 * A UseCase may use only domain, service, repository components.
 * An Adapter ha always to implement a service or repository interface.
 * A domain component has to depends on nothing. 
+
+
+## to do
+
+* schema clone, builder, immutable
+* schema pattern matcher
+* schema variable extrator
+* sql view generator
