@@ -2,6 +2,7 @@ package unibz.cs.semint.kprime.scenario
 
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.*
+import unibz.cs.semint.kprime.usecase.SQLizeUseCase
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
 
 class PersonVSplitScenario {
@@ -41,8 +42,18 @@ class PersonVSplitScenario {
         val  detected = detect(personMetadata)
         if (detected.ok!=null) {
             val applied = apply(personMetadata, detected)
-            if (applied.ok!=null) printDb(applied.ok)
+            if (applied.ok!=null) {
+                printDb(applied.ok)
+                printSql(SQLizeUseCase().sqlize(applied.ok))
+            }
+
         }
+    }
+
+    private fun printSql(sqlines: List<String>) {
+        println()
+        println("--------------------------------------------------------------------------")
+        for (sql in sqlines) println(sql)
     }
 
     private fun printDb(db:Database) {
@@ -68,7 +79,8 @@ class PersonVSplitScenario {
         // pure person
         val table = Table()
         table.name= "pure_person"
-        table.view=true
+        table.view="person"
+        table.condition="person.T=null AND person.S=null"
         personMetadata.schema.tables.add(table)
         val colSSN = Column("SSN", "id.SSN", "dbname.SSN")
         colSSN.nullable=false
@@ -76,18 +88,20 @@ class PersonVSplitScenario {
 
         // person with only telephone
         val tableWithT = Table()
-        tableWithT.view=true
+        tableWithT.view="person"
         tableWithT.name= "person_with_T"
+        tableWithT.condition="person.T NOT null AND person.S=null"
         personMetadata.schema.tables.add(tableWithT)
         val colT = Column("T", "id.T", "dbname.T")
         colT.nullable=false
         tableWithT.columns.add(colSSN)
         tableWithT.columns.add(colT)
 
-        // person with only S
+        // person with only TS
         val tableWithS = Table()
-        tableWithS.view=true
-        tableWithS.name= "person_with_S"
+        tableWithS.view="person"
+        tableWithS.name= "person_with_TS"
+        tableWithS.condition="person.T = null AND person.S NOT null"
         personMetadata.schema.tables.add(tableWithS)
         val colS = Column("S", "id.S", "dbname.S")
         colS.nullable=false
@@ -97,8 +111,9 @@ class PersonVSplitScenario {
 
         // person with only S
         val tableWithTS = Table()
-        tableWithTS.view=true
+        tableWithTS.view="person"
         tableWithTS.name= "person_with_S"
+        tableWithTS.condition="person.T NOT null AND person.S NOT null"
         personMetadata.schema.tables.add(tableWithTS)
         tableWithTS.columns.add(colSSN)
         tableWithTS.columns.add(colT)

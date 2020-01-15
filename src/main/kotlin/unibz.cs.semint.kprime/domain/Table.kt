@@ -13,7 +13,10 @@ class Table () {
     var id: String=""
 
     @JacksonXmlProperty(isAttribute = true)
-    var view: Boolean = false
+    var view: String =""
+
+    @JacksonXmlProperty(isAttribute = true)
+    var condition: String =""
 
     var columns= ArrayList<Column>()
 
