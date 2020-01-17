@@ -1,10 +1,10 @@
 <database name="dbname" id="iddb">
     <schema name="" id="idschema">
         <tables>
-            <tables name="" id="">
+            <tables name="" id="" condition="" view="">
                 <columns/>
             </tables>
-            <tables name="" id="">
+            <tables name="" id="" condition="" view="">
                 <columns/>
             </tables>
         </tables>

@@ -1,5 +1,6 @@
 package unibz.cs.semint.kprime.adapter.service
 
+import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import unibz.cs.semint.kprime.domain.*
@@ -56,4 +57,24 @@ class XMLSerializerJacksonAdapter : IXMLSerializerService {
         val mapper = XmlMapper()
         return mapper.readValue(s,Constraint::class.java)
     }
+
+    // changeset
+
+    override fun serializeChangeSet(changeset: ChangeSet): String {
+        val mapper = XmlMapper().registerModule(KotlinModule())
+        return mapper.writeValueAsString(changeset)
+    }
+
+    override fun deserializeChangeSet(changeset: String): ChangeSet {
+        val mapper = XmlMapper()
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        return mapper.readValue(changeset,ChangeSet::class.java)
+    }
+
+    override fun prettyChangeSet(table: ChangeSet): String {
+        val mapper = XmlMapper().registerModule(KotlinModule())
+        val writer = mapper.writerWithDefaultPrettyPrinter()
+        return writer.writeValueAsString(table)
+    }
+
 }

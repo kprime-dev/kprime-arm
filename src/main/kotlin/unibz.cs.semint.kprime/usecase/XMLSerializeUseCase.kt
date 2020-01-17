@@ -43,4 +43,19 @@ class XMLSerializeUseCase(val xmlSerializerService: IXMLSerializerService) {
     fun deserializeConstraint(constraint: String): UseCaseResult<Constraint> {
         return UseCaseResult("done",xmlSerializerService.deserializeConstraint(constraint))
     }
+
+    // changeset
+
+    fun serializeChangeSet(changeset: ChangeSet): UseCaseResult<String> {
+        return UseCaseResult("done",xmlSerializerService.serializeChangeSet(changeset))
+    }
+
+    fun deserializeChangeSet(changeset: String): UseCaseResult<ChangeSet> {
+        return UseCaseResult("done",xmlSerializerService.deserializeChangeSet(changeset))
+    }
+
+    fun prettyChangeSet(changeset: ChangeSet): UseCaseResult<String> {
+        return UseCaseResult("done",xmlSerializerService.prettyChangeSet(changeset))
+    }
+
 }

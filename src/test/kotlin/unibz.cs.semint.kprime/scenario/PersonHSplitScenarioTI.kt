@@ -2,14 +2,14 @@ package unibz.cs.semint.kprime.scenario
 
 import org.junit.Test
 
-class PersonVSplitScenarioTI {
+class PersonHSplitScenarioTI {
 
     @Test
-    fun test_person_vsplit_scenario() {
+    fun test_person_hsplit_scenario() {
         // given
-        val personVSplitScenario = PersonVSplitScenario()
+        val personHSplitScenario = PersonHSplitScenario()
         // when
-        personVSplitScenario.run()
+        personHSplitScenario.run()
         // then
         // prints splitted database
     }
