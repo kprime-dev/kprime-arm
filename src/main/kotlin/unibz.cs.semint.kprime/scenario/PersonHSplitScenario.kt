@@ -10,7 +10,6 @@ class PersonHSplitScenario {
     fun run() {
         val personMetadata = buildPersonMetadata()
         hsplitPersonMetadata(personMetadata)
-
     }
 
     private fun buildPersonMetadata(): Database {
@@ -27,6 +26,7 @@ class PersonHSplitScenario {
         colS.nullable=true
         personTable.columns.add(colS)
         db.schema.tables.add(personTable)
+
         val primaryConstraint = Constraint()
         primaryConstraint.name="primaryKey.person"
         primaryConstraint.source.table="person"
@@ -34,6 +34,7 @@ class PersonHSplitScenario {
         primaryConstraint.source.columns.add(colT)
         primaryConstraint.type=Constraint.TYPE.PRIMARY_KEY.name
         db.schema.constraints.add(primaryConstraint)
+
         return db
     }
 

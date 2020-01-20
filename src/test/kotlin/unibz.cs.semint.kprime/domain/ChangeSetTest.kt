@@ -12,7 +12,7 @@ class ChangeSetTest  {
         // given
         val changeSet = ChangeSet()
         val view = CreateView()
-        view.value="select * from table"
+        view.text="select * from table"
         changeSet.createView.add(view)
         changeSet.createView.add(view)
         // when

@@ -12,5 +12,5 @@ class CreateView() {
     @JacksonXmlProperty(isAttribute = true)
     var viewName: String = ""
     @JacksonXmlText
-    var value:String = ""
+    var text:String = ""
 }

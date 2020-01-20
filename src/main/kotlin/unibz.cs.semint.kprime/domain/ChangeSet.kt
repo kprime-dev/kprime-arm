@@ -11,4 +11,6 @@ class ChangeSet() {
     @JacksonXmlElementWrapper(useWrapping=false)
     var createView= ArrayList<CreateView>()
 
+    @JacksonXmlElementWrapper(useWrapping=false)
+    var createConstraint= ArrayList<Constraint>()
 }

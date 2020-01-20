@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
 @JacksonXmlRootElement(localName = "database")
 open class Database () {
+
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""
     @JacksonXmlProperty(isAttribute = true)
@@ -19,4 +20,5 @@ open class Database () {
 //        this.id=id
 //        this.schema=schema
 //    }
+
 }
