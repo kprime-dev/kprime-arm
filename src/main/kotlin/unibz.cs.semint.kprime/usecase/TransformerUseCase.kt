@@ -4,5 +4,6 @@ import unibz.cs.semint.kprime.domain.ChangeSet
 import unibz.cs.semint.kprime.domain.Database
 
 interface TransformerUseCase {
-    fun compute(db: Database):ChangeSet
+    fun decompose(db: Database):Database
+    fun compose(db:Database): Database
 }

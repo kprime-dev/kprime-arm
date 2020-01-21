@@ -1,65 +1,29 @@
-package unibz.cs.semint.kprime.scenario
+package unibz.cs.semint.kprime.usecase
 
-import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.*
-import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
 
-class PersonVSplitScenario {
+class VSplitUseCase {
 
-    fun run(): ChangeSet {
-        val personMetadata = buildPersonMetadata()
-        println(XMLSerializeUseCase(XMLSerializerJacksonAdapter()).prettyDatabase(personMetadata))
-        return vsplitPersonMetadata(personMetadata)
-    }
-
-    private fun buildPersonMetadata(): Database {
-        val db = Database()
-        val personTable = Table()
-        personTable.name= "person"
-        val colSSN = Column("SSN", "id.SSN", "dbname.SSN")
-        personTable.columns.add(colSSN)
-        colSSN.nullable=false
-
-        val colT = Column("T", "id.T", "dbname.T")
-        personTable.columns.add(colT)
-        colT.nullable=false
-
-        val colS = Column("S", "id.S", "dbname.S")
-        colS.nullable=true
-        personTable.columns.add(colS)
-
-        val colX = Column("X", "id.X", "dbname.X")
-        colX.nullable=true
-        personTable.columns.add(colX)
-
-        db.schema.key("person", mutableSetOf(colSSN))
-        db.schema.functional("person", mutableSetOf(colT), mutableSetOf(colS))
-
-        db.schema.tables.add(personTable)
-
-        return db
-    }
-
-    private fun vsplitPersonMetadata(personMetadata: Database): ChangeSet {
+    fun compute(metadataDatabase: Database): ChangeSet {
         // check for functional dep
         // create changeset
         var changeSet = ChangeSet()
 
         // compute K
-        val keyCols = personMetadata.schema.key("person")
+        val keyCols = metadataDatabase.schema.key("person")
         var key = keyCols.map { x -> x.name }.toSet()
         println("key $key")
         // compute LHS
-        var lhsCols = personMetadata.schema.functionalLHS("person")
+        var lhsCols = metadataDatabase.schema.functionalLHS("person")
                 var lhs= lhsCols.map { x -> x.name }.toSet()
         println("lhs $lhs")
         if (lhs.isEmpty()) return changeSet
         // compute RHS
-        val rhsCols = personMetadata.schema.functionalRHS("person")
+        val rhsCols = metadataDatabase.schema.functionalRHS("person")
         var rhs = rhsCols.map { x -> x.name }.toSet()
         println("rhs $rhs")
         // compute Rest
-        val allCols = personMetadata.schema.table("person").columns.toSet()
+        val allCols = metadataDatabase.schema.table("person").columns.toSet()
         val all = allCols.map { x -> x.name }.toSet()
         var rest = all.minus(key).minus(lhs).minus(rhs)
         val allNotKey = all.minus(key)
@@ -89,20 +53,12 @@ class PersonVSplitScenario {
         changeSet.createConstraint.add(inclusionTab1Tab2)
         // create inclusion constraint tab2 tab1
         val inclusionTab2Tab1 = Constraint()
-        inclusionTab2Tab1.type=Constraint.TYPE.INCLUSION.name
+        inclusionTab2Tab1.type=Constraint.TYPE.DOUBLE_INCLUSION.name
         inclusionTab2Tab1.source.table="tableName2"
         inclusionTab2Tab1.source.columns.addAll(lhsCols)
         inclusionTab2Tab1.target.table="tableName1"
         inclusionTab2Tab1.target.columns.addAll(lhsCols)
         changeSet.createConstraint.add(inclusionTab2Tab1)
-        // create primary key on tab2
-        val primaryTab2 = Constraint()
-        primaryTab2.type=Constraint.TYPE.PRIMARY_KEY.name
-        primaryTab2.source.table="tableName2"
-        primaryTab2.source.columns.addAll(lhsCols)
-        primaryTab2.target.table="tableName2"
-        primaryTab2.target.columns.addAll(rhsCols)
-        changeSet.createConstraint.add(primaryTab2)
         return changeSet
     }
 }

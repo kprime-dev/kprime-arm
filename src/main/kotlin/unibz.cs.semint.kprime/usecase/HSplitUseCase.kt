@@ -1,48 +1,17 @@
-package unibz.cs.semint.kprime.scenario
+package unibz.cs.semint.kprime.usecase
 
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.*
 import unibz.cs.semint.kprime.usecase.SQLizeUseCase
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
 
-class PersonHSplitScenario {
+class HSplitUseCase {
 
-    fun run() {
-        val personMetadata = buildPersonMetadata()
-        hsplitPersonMetadata(personMetadata)
-    }
-
-    private fun buildPersonMetadata(): Database {
-        val db = Database()
-        val personTable = Table()
-        personTable.name= "person"
-        val colSSN = Column("SSN", "id.SSN", "dbname.SSN")
-        personTable.columns.add(colSSN)
-        colSSN.nullable=false
-        val colT = Column("T", "id.T", "dbname.T")
-        personTable.columns.add(colT)
-        colT.nullable=false
-        val colS = Column("S", "id.S", "dbname.S")
-        colS.nullable=true
-        personTable.columns.add(colS)
-        db.schema.tables.add(personTable)
-
-        val primaryConstraint = Constraint()
-        primaryConstraint.name="primaryKey.person"
-        primaryConstraint.source.table="person"
-        primaryConstraint.source.columns.add(colSSN)
-        primaryConstraint.source.columns.add(colT)
-        primaryConstraint.type=Constraint.TYPE.PRIMARY_KEY.name
-        db.schema.constraints.add(primaryConstraint)
-
-        return db
-    }
-
-    private fun hsplitPersonMetadata(personMetadata: Database) {
-        printDb(personMetadata)
-        val  detected = detect(personMetadata)
+    fun compute(databaseMetadata: Database) {
+        printDb(databaseMetadata)
+        val  detected = detect(databaseMetadata)
         if (detected.ok!=null) {
-            val applied = apply(personMetadata, detected)
+            val applied = apply(databaseMetadata, detected)
             if (applied.ok!=null) {
                 printDb(applied.ok)
                 printSql(SQLizeUseCase().sqlize(applied.ok))

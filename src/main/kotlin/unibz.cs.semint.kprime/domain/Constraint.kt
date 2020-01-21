@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 @JacksonXmlRootElement(localName = "constraint")
 class Constraint () {
     enum class TYPE {
-        FOREIGN_KEY,PRIMARY_KEY,FUNCTIONAL,INCLUSION,DISJUNCTION,COVER
+        FOREIGN_KEY,PRIMARY_KEY,FUNCTIONAL,DOUBLE_INCLUSION,INCLUSION,DISJUNCTION,COVER
     }
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""
