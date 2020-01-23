@@ -19,8 +19,8 @@ class XPathTransformUseCase {
         val vdecomposeTemplatePath = "transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.template"
 
         val personProperties = XPathTransformUseCase::class.java.getResourceAsStream(vdecomposeFilePath)
-        val personPaths = Properties()
-        personPaths.load(personProperties)
+        val xPaths = Properties()
+        xPaths.load(personProperties)
 
         var dbStream : InputStream
         if (dbFilePath.startsWith("/"))
@@ -35,35 +35,54 @@ class XPathTransformUseCase {
         val templConfig = Configuration(Configuration.VERSION_2_3_29)
         val classTemplLoader = ClassTemplateLoader(XPathTransformUseCase::javaClass.javaClass, "/")
         templConfig.templateLoader = classTemplLoader
-        val templModel = mutableMapOf<String, Any>()
+        val templModel = mutableMapOf<String, List<String>>()
 
         // compute xpath lists
         val xpath = XPathFactory.newInstance().newXPath()
-        for (entryNameas in personPaths.propertyNames()) {
+        var goon=true
+        for (entryNameas in xPaths.propertyNames()) {
             val name = entryNameas as String
-            val value = personPaths.getProperty(name)
+            val pathTokens = xPaths.getProperty(name).split(" ")
+            val value = pathTokens[0]
             if (!(value.startsWith("-") || value.startsWith("+"))) {
                 templModel[name] = asValueList(xpath.compile(value).evaluate(doc, XPathConstants.NODESET) as NodeList)
                 println(" ${name} = ${value}")
                 println(" ${name} = ${templModel[name]}")
             }
+            if (pathTokens.size==3) {
+                val pathCondition = pathTokens[1]
+                val pathSize = pathTokens[2].toInt()
+                if (pathCondition==">")
+                    if ((templModel[name])!!.size <= pathSize ) goon=false
+                if (pathCondition=="=")
+                    if ((templModel[name])!!.size != pathSize ) goon=false
+            }
+        }
+        if (!goon) {
+            println("Condition Failure")
+            return
         }
         // compute derived list sum and minus
-        for (entryNameas in personPaths.propertyNames()) {
+        for (entryNameas in xPaths.propertyNames()) {
             val name = entryNameas as String
-            val value = personPaths.getProperty(name)
+            val value = xPaths.getProperty(name)
             if (value.startsWith("-") || value.startsWith("+")) {
                 println(" ${name} = ${value}")
                 templModel[name] = computeDerivedList(templModel, value)
             }
         }
+        // compute list conditions
+        // = = 3 xpath
+        // = > 0 xpath
+        // = = 0 xpath
+
         val templ = //Template.getPlainTextTemplate("templ1",personTemplate,templConfig)
                 templConfig.getTemplate(vdecomposeTemplatePath)
         templ.process(templModel, OutputStreamWriter(System.out))
     }
 
 
-    private fun computeDerivedList(templModel: MutableMap<String, Any>, derivationRule: String): Any {
+    private fun computeDerivedList(templModel: MutableMap<String, List<String>>, derivationRule: String): List<String> {
         var derivedList = mutableListOf<String>()
         // if derivationRule starts with + then compute union
         val splittedRule = derivationRule.split(" ")

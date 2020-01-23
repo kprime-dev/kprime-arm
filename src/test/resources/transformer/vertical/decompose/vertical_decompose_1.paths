@@ -1,6 +1,6 @@
-all=/database/schema/tables/tables[@name='person']/columns/columns/@name
-keys=/database/schema/constraints/constraints[@type='PRIMARY_KEY']/source/columns/columns/@name
+all=/database/schema/tables/tables[@name='person']/columns/columns/@name = 4
+keys=/database/schema/constraints/constraints[@type='PRIMARY_KEY']/source/columns/columns/@name > 0
 lhss=/database/schema/constraints/constraints[@type='FUNCTIONAL']/source/columns/columns/@name
 rhss=/database/schema/constraints/constraints[@type='FUNCTIONAL']/target/columns/columns/@name
 rests=- all keys lhss rhss
-table=/database/schema/tables/tables[@name='person']/@name
+table=/database/schema/tables/tables[@name='person']/@name = 1
