@@ -1,0 +1,49 @@
+<database name="" id="">
+    <schema name="" id="">
+        <tables>
+            <tables name="person1" id="" view="" condition="">
+                <columns>
+                    <#list keys as key>
+                    <columns name=${key} id="id.${key}" nullable="false" dbtype=""/>
+                    </#list>
+                    <#list lhss as lhs>
+                    <columns name="${lhs}" id="id.${lhs}" nullable="false" dbtype=""/>
+                    </#list>
+                    <#list rests as rest>
+                    <columns name="${rest}" id="id.${rest}" nullable="true" dbtype=""/>
+                    </#list>
+                </columns>
+            </tables>
+            <tables name="person2" id="" view="" condition="">
+                <columns>
+                    <columns name="T" id="id.T" dbname="dbname.T" nullable="false" dbtype=""/>
+                    <columns name="S" id="id.S" dbname="dbname.S" nullable="true" dbtype=""/>
+                </columns>
+            </tables>
+        </tables>
+        <constraints>
+            <constraints name="primaryKey.person" id="" type="PRIMARY_KEY">
+                <source name="" id="" table="person">
+                    <columns>
+                        <columns name="SSN" id="id.SSN" dbname="dbname.SSN" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns/>
+                </target>
+            </constraints>
+            <constraints name="functional.person" id="" type="FUNCTIONAL">
+                <source name="" id="" table="person">
+                    <columns>
+                        <columns name="T" id="id.T" dbname="dbname.T" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="person">
+                    <columns>
+                        <columns name="S" id="id.S" dbname="dbname.S" nullable="true" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+        </constraints>
+    </schema>
+</database>

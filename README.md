@@ -74,3 +74,10 @@ technology depenent packages
 * schema pattern matcher
 * schema variable extrator
 * sql view generator
+
+## references
+
+https://www.baeldung.com/java-xpath
+https://freemarker.apache.org/
+https://github.com/ostap/relations-java
+https://github.com/JSQLParser/JSqlParser/wiki/Examples-of-SQL-parsing

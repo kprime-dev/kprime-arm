@@ -51,4 +51,10 @@ class PersonVSplitScenarioTI {
         // prints changeset
         println(XMLSerializeUseCase(XMLSerializerJacksonAdapter()).prettyChangeSet(changeSet))
     }
+
+    @Test
+    fun test_print_input_db() {
+        val db = buildPersonMetadata()
+        println(XMLSerializeUseCase(XMLSerializerJacksonAdapter()).prettyDatabase(db).ok)
+    }
 }
