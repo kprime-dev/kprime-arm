@@ -9,6 +9,14 @@
                     <columns name="X" id="id.X" dbname="dbname.X" nullable="true" dbtype=""/>
                 </columns>
             </tables>
+            <tables name="person2" id="" view="" condition="">
+                <columns>
+                    <columns name="SSN2" id="id.SSN" dbname="dbname.SSN" nullable="false" dbtype=""/>
+                    <columns name="T2" id="id.T" dbname="dbname.T" nullable="false" dbtype=""/>
+                    <columns name="S2" id="id.S" dbname="dbname.S" nullable="true" dbtype=""/>
+                    <columns name="X2" id="id.X" dbname="dbname.X" nullable="true" dbtype=""/>
+                </columns>
+            </tables>
         </tables>
         <constraints>
             <constraints name="primaryKey.person" id="" type="PRIMARY_KEY">

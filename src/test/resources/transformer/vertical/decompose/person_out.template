@@ -1,0 +1,67 @@
+<database name="" id="">
+    <schema name="" id="">
+        <tables>
+            <tables name="${table[0]}1" id="" view="" condition="">
+                <columns>
+                    <#list keys as key>
+                    <columns name=${key} id="id.${key}" nullable="false" dbtype=""/>
+                    </#list>
+                    <#list lhss as lhs>
+                    <columns name="${lhs}" id="id.${lhs}" nullable="false" dbtype=""/>
+                    </#list>
+                    <#list rests as rest>
+                    <columns name="${rest}" id="id.${rest}" nullable="true" dbtype=""/>
+                    </#list>
+                </columns>
+            </tables>
+            <tables name="${table[0]}2" id="" view="" condition="">
+                <columns>
+                    <#list lhss as lhs>
+                    <columns name="${lhs}" id="id.${lhs}" nullable="false" dbtype=""/>
+                    </#list>
+                    <#list rhss as rhs>
+                    <columns name="${rhs}" id="id.${rhs}" nullable="false" dbtype=""/>
+                    </#list>
+                </columns>
+            </tables>
+        </tables>
+        <constraints>
+            <constraints name="primaryKey.${table[0]}1" id="" type="PRIMARY_KEY">
+                <source name="" id="" table="${table[0]}1">
+                    <columns>
+                        <#list keys as key>
+                        <columns name="${key}" id="id.${key}" dbname="dbname.${key}" nullable="false" dbtype=""/>
+                        </#list>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns/>
+                </target>
+            </constraints>
+            <constraints name="primaryKey.${table[0]}2" id="" type="PRIMARY_KEY">
+                <source name="" id="" table="${table[0]}2">
+                    <columns>
+                        <#list lhss as lhs>
+                        <columns name="${lhs}" id="id.${lhs}" dbname="dbname.${lhs}" nullable="false" dbtype=""/>
+                        </#list>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns/>
+                </target>
+            </constraints>
+            <constraints name="functional.${table[0]}" id="" type="BIFUNCTIONAL">
+                <source name="" id="" table="${table[0]}1">
+                        <#list lhss as lhs>
+                        <columns name="${lhs}" id="id.${lhs}" dbname="dbname.${lhs}" nullable="false" dbtype=""/>
+                        </#list>
+                </source>
+                <target name="" id="" table="${table[0]}2">
+                        <#list lhss as lhs>
+                        <columns name="${lhs}" id="id.${lhs}" dbname="dbname.${lhs}" nullable="false" dbtype=""/>
+                        </#list>
+                </target>
+            </constraints>
+        </constraints>
+    </schema>
+</database>
