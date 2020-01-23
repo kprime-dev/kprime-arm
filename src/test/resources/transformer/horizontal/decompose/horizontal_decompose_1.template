@@ -1,0 +1,31 @@
+<database name="" id="">
+  <schema name="" id="">
+    <tables>
+      <tables name="pure_person" id="" view="person" condition="person.T=null AND person.S=null">
+        <columns>
+          <columns name="SSN" id="id.SSN" dbname="dbname.SSN" nullable="false" dbtype=""/>
+        </columns>
+      </tables>
+      <tables name="person_with_T" id="" view="person" condition="person.T NOT null AND person.S=null">
+        <columns>
+          <columns name="SSN" id="id.SSN" dbname="dbname.SSN" nullable="false" dbtype=""/>
+          <columns name="T" id="id.T" dbname="dbname.T" nullable="false" dbtype=""/>
+        </columns>
+      </tables>
+      <tables name="person_with_TS" id="" view="person" condition="person.T = null AND person.S NOT null">
+        <columns>
+          <columns name="SSN" id="id.SSN" dbname="dbname.SSN" nullable="false" dbtype=""/>
+          <columns name="S" id="id.S" dbname="dbname.S" nullable="false" dbtype=""/>
+        </columns>
+      </tables>
+      <tables name="person_with_S" id="" view="person" condition="person.T NOT null AND person.S NOT null">
+        <columns>
+          <columns name="SSN" id="id.SSN" dbname="dbname.SSN" nullable="false" dbtype=""/>
+          <columns name="T" id="id.T" dbname="dbname.T" nullable="false" dbtype=""/>
+          <columns name="S" id="id.S" dbname="dbname.S" nullable="false" dbtype=""/>
+        </columns>
+      </tables>
+    </tables>
+    <constraints/>
+  </schema>
+</database>

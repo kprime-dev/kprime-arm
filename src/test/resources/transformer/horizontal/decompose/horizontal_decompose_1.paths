@@ -1,0 +1,5 @@
+all=/database/schema/tables/tables[@name='%%table%%']/columns/columns/@name = 4
+keys=/database/schema/constraints/constraints[@type='PRIMARY_KEY']/source/columns/columns/@name > 0
+nullable=/database/schema/constraints/constraints[@type='FUNCTIONAL']/source/columns/columns/@name
+rests=- all keys nullable
+table=/database/schema/tables/tables[@name='%%table%%']/@name = 1

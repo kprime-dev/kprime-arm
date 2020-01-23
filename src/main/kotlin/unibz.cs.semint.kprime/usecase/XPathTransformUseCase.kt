@@ -13,7 +13,7 @@ import javax.xml.xpath.XPathFactory
 
 class XPathTransformUseCase {
 
-    fun transform(dbFilePath: String, trasformerName: String, trasformerDirection: String, trasformerVersion: String) {
+    fun transform(dbFilePath: String, trasformerName: String, trasformerDirection: String, trasformerVersion: String, tranformerParmeters: MutableMap<String, Any>) {
 
         val vdecomposeFilePath = "/transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.paths"
         val vdecomposeTemplatePath = "transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.template"
@@ -43,7 +43,7 @@ class XPathTransformUseCase {
         for (entryNameas in xPaths.propertyNames()) {
             val name = entryNameas as String
             val pathTokens = xPaths.getProperty(name).split(" ")
-            val value = pathTokens[0]
+            val value = parametrized(pathTokens[0],tranformerParmeters)
             if (!(value.startsWith("-") || value.startsWith("+"))) {
                 templModel[name] = asValueList(xpath.compile(value).evaluate(doc, XPathConstants.NODESET) as NodeList)
                 println(" ${name} = ${value}")
@@ -79,6 +79,14 @@ class XPathTransformUseCase {
         val templ = //Template.getPlainTextTemplate("templ1",personTemplate,templConfig)
                 templConfig.getTemplate(vdecomposeTemplatePath)
         templ.process(templModel, OutputStreamWriter(System.out))
+    }
+
+    private fun parametrized(line: String, tranformerParmeters: MutableMap<String, Any>): String {
+        var newline = line
+        for (key in tranformerParmeters.keys) {
+            newline = newline.replace("%%${key}%%", tranformerParmeters[key] as String)
+        }
+        return newline
     }
 
 

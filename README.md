@@ -68,14 +68,34 @@ technology depenent packages
 * A domain component has to depends on nothing. 
 
 
-## to do
+## v1.0.0
 
-* schema clone, builder, immutable
-* schema pattern matcher
-* schema variable extrator
-* sql view generator
+from object database meta representation as input
+apply kotlin transformer vertical or horizontal
+obtain a second database meta representation as output
 
-## references
+
+## v2.0.0
+
+from xml object database meta representation as input
+apply kotlin transformer vertical or horizontal
+obtain a changeset representation as output
+
+
+## v3.0.0
+
+from xml object database meta representation as input
+a generic xpath engine extraction plus freemarker template to generate
+obtain a database meta representation as output
+
+### to do
+
+* horizontal simple decomposition to remove null columns
+* merge selected input database out template process
+* (probably) xpath with use of result of previous xpath computation as parameter
+* (probably) sql xml representation to add database representation
+
+### references
 
 https://www.baeldung.com/java-xpath
 https://freemarker.apache.org/
