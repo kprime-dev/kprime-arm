@@ -77,4 +77,18 @@ class XMLSerializerJacksonAdapter : IXMLSerializerService {
         return writer.writeValueAsString(table)
     }
 
+    override fun serializeTransfomer(transformer: Transformer): String {
+        val mapper = XmlMapper().registerModule(KotlinModule())
+        val writer = mapper.writerWithDefaultPrettyPrinter()
+        return writer.writeValueAsString(transformer)
+
+    }
+
+    override fun deserializeTransformer(transformerXml: String): Transformer {
+        println(transformerXml)
+        val mapper = XmlMapper()
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        return mapper.readValue(transformerXml,Transformer::class.java)
+    }
+
 }

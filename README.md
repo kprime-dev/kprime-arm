@@ -68,25 +68,30 @@ technology depenent packages
 * A domain component has to depends on nothing. 
 
 
-## v1.0.0
+## v0.1.0
 
 from object database meta representation as input
 apply kotlin transformer vertical or horizontal
 obtain a second database meta representation as output
 
 
-## v2.0.0
+## v0.2.0
 
 from xml object database meta representation as input
 apply kotlin transformer vertical or horizontal
 obtain a changeset representation as output
 
 
-## v3.0.0
+## v0.3.0
 
 from xml object database meta representation as input
 a generic xpath engine extraction plus freemarker template to generate
 obtain a database meta representation as output
+
+## v0.4.0
+
+from xml object database meta representation as input
+a xml transfomer descriptor
 
 ### to do
 

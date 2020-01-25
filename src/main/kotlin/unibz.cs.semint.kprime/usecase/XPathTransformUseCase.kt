@@ -13,15 +13,16 @@ import javax.xml.xpath.XPathFactory
 
 class XPathTransformUseCase {
 
-    fun transform(dbFilePath: String, trasformerName: String, trasformerDirection: String, trasformerVersion: String, tranformerParmeters: MutableMap<String, Any>) {
-
+    fun transform(dbFilePath: String, trasformerName: String, trasformerDirection: String, trasformerVersion: String, tranformerParmeters: MutableMap<String, Any>,outWriter:OutputStreamWriter) {
         val vdecomposeFilePath = "/transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.paths"
         val vdecomposeTemplatePath = "transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.template"
-
         val personProperties = XPathTransformUseCase::class.java.getResourceAsStream(vdecomposeFilePath)
         val xPaths = Properties()
         xPaths.load(personProperties)
+        return transform(dbFilePath,vdecomposeTemplatePath,xPaths, tranformerParmeters,outWriter)
+    }
 
+    fun transform(dbFilePath: String, templateFilePath: String, xPaths: Properties, tranformerParmeters: MutableMap<String, Any>,outWriter:OutputStreamWriter) {
         var dbStream : InputStream
         if (dbFilePath.startsWith("/"))
                 dbStream = FileInputStream(dbFilePath)
@@ -77,8 +78,8 @@ class XPathTransformUseCase {
         // = = 0 xpath
 
         val templ = //Template.getPlainTextTemplate("templ1",personTemplate,templConfig)
-                templConfig.getTemplate(vdecomposeTemplatePath)
-        templ.process(templModel, OutputStreamWriter(System.out))
+                templConfig.getTemplate(templateFilePath)
+        templ.process(templModel, outWriter)
     }
 
     private fun parametrized(line: String, tranformerParmeters: MutableMap<String, Any>): String {

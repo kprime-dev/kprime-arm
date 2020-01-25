@@ -58,4 +58,14 @@ class XMLSerializeUseCase(val xmlSerializerService: IXMLSerializerService) {
         return UseCaseResult("done",xmlSerializerService.prettyChangeSet(changeset))
     }
 
+    // trasnfomer
+
+    fun serializeTransformer(transformer: Transformer): UseCaseResult<String> {
+        return UseCaseResult("done",xmlSerializerService.serializeTransfomer(transformer))
+    }
+
+    fun deserializeTransformer(transformerXml: String): UseCaseResult<Transformer> {
+        return UseCaseResult("done",xmlSerializerService.deserializeTransformer(transformerXml))
+    }
+
 }
