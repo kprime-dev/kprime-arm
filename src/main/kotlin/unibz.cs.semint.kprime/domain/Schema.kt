@@ -67,4 +67,5 @@ class Schema () {
         constraints.add(functionalConstraint)
 
     }
+
 }

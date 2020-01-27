@@ -16,4 +16,5 @@ interface IXMLSerializerService {
     fun prettyChangeSet(table: ChangeSet): String
     fun serializeTransfomer(transformer: Transformer): String
     fun deserializeTransformer(transformer: String): Transformer
+    fun deepclone(database: Database):Database
 }

@@ -46,6 +46,11 @@ class XMLSerializerJacksonAdapter : IXMLSerializerService {
         return writer.writeValueAsString(db)
     }
 
+    override fun deepclone(database: Database): Database {
+        val serializeDatabase = serializeDatabase(database)
+        return deserializeDatabase(serializeDatabase)
+    }
+
     // constraint
 
     override fun serializeConstraint(constraint: Constraint): String {

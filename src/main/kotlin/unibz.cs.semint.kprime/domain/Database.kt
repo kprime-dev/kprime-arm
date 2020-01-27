@@ -14,11 +14,4 @@ open class Database () {
 
     var schema: Schema = Schema()
 
-//    @JsonCreator
-//    constructor(name:String, id:String, schema:Schema):this() {
-//        this.name=name
-//        this.id=id
-//        this.schema=schema
-//    }
-
 }

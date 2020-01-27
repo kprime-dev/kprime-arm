@@ -2,6 +2,7 @@ package unibz.cs.semint.kprime.domain
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import kotlin.Cloneable
 
 @JacksonXmlRootElement(localName = "constraint")
 class Constraint () {
@@ -18,4 +19,5 @@ class Constraint () {
 
     var source = Source()
     var target = Target()
+
 }
