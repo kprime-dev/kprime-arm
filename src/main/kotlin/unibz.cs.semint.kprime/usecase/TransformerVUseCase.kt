@@ -1,6 +1,6 @@
 package unibz.cs.semint.kprime.usecase
 
-import unibz.cs.semint.kprime.domain.Database
+import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
 
 class TransformerVUseCase(serializer:IXMLSerializerService) :TransformerUseCase {

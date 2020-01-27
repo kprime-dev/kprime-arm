@@ -93,12 +93,19 @@ obtain a database meta representation as output
 from xml object database meta representation as input
 a xml transfomer descriptor
 
+### to fix
+
+* xml with constraint and empty columns (as primary keys).
+* use case API transform/scenario , must output database, input database to let iterate.
+* PROBLEM: xpath uses doc database file as source, must use string not file OR write database to file as output.
+
 ### to do
 
 * horizontal simple decomposition to remove null columns
 * merge selected input database out template process
 * (probably) xpath with use of result of previous xpath computation as parameter
 * (probably) sql xml representation to add database representation
+* (probably) sql xml for relational algebra representation for selection
 
 ### references
 

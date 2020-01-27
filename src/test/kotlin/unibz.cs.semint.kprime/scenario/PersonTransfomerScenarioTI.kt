@@ -6,6 +6,7 @@ import unibz.cs.semint.kprime.domain.Xrule
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
 import unibz.cs.semint.kprime.usecase.XPathTransformUseCase
 import java.io.OutputStreamWriter
+import java.io.StringWriter
 import java.util.*
 
 class PersonTransfomerScenarioTI {
@@ -22,7 +23,7 @@ class PersonTransfomerScenarioTI {
         tranformerParmeters["table"]="person"
         println(templateFilePath)
         // when
-        XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules,tranformerParmeters, OutputStreamWriter(System.out))
+        XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules,tranformerParmeters, StringWriter())
         // then
         // print to console output
     }

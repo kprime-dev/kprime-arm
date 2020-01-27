@@ -1,6 +1,8 @@
 package unibz.cs.semint.kprime.adapter.repository
 
 import unibz.cs.semint.kprime.domain.*
+import unibz.cs.semint.kprime.domain.ddl.*
+import unibz.cs.semint.kprime.domain.ddl.Target
 import unibz.cs.semint.kprime.usecase.repository.IMetaSchemaRepository
 import java.sql.DatabaseMetaData
 import java.sql.DriverManager
@@ -10,7 +12,7 @@ import java.util.*
 
 class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
 
-    override fun metaDatabase(datasource: DataSource) :Database{
+    override fun metaDatabase(datasource: DataSource) : Database {
             val source = datasource
             val user = source.user
             val pass = source.pass
@@ -32,7 +34,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             db.schema.name="sourceName"
             db.schema.id=UUID.randomUUID().toString()
             var tableNames :List<String>
-            if (table.isNotEmpty()) {
+            if (table!=null && table.isNotEmpty()) {
                 tableNames= listOf(table)
             } else {
                 tableNames = readTables(metaData,db)
@@ -70,7 +72,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
                 column.dbname=colName
                 column.nullable=colNullable
                 column.dbtype= JDBCType.valueOf(columns.getString("DATA_TYPE").toInt()).name
-                db.schema.table(tableName).columns.add(column)
+                db.schema.table(tableName).let { t -> if (t!=null) t.columns.add(column) }
             }
         }
     }
@@ -83,7 +85,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             while (primaryKeys.next()) {
                 //println("   " + primaryKeys.getString("COLUMN_NAME") + " === " + primaryKeys.getString("PK_NAME"))
                 val constr = Constraint()
-                constr.type=Constraint.TYPE.PRIMARY_KEY.name
+                constr.type= Constraint.TYPE.PRIMARY_KEY.name
                 constr.name=primaryKeys.getString("PK_NAME")
                 constr.source= Source()
                 constr.source.name=tableName
@@ -103,14 +105,14 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             while (fkeys.next()) {
                 //println("   " + fkeys.getString("PKTABLE_NAME") + " --- " + fkeys.getString("PKCOLUMN_NAME") + " === " + fkeys.getString("FKCOLUMN_NAME"))
                 val constr = Constraint()
-                constr.type=Constraint.TYPE.FOREIGN_KEY.name
+                constr.type= Constraint.TYPE.FOREIGN_KEY.name
                 constr.name=fkeys.getString("PKTABLE_NAME") + "." + fkeys.getString("PKCOLUMN_NAME")
                 constr.source= Source()
                 constr.source.name=tableName
                 val colSource = Column()
                 colSource.name=fkeys.getString("FKCOLUMN_NAME")
                 constr.source.columns.add(colSource)
-                constr.target= unibz.cs.semint.kprime.domain.Target()
+                constr.target= Target()
                 constr.target.name=fkeys.getString("PKTABLE_NAME")
                 val colTarget = Column()
                 colTarget.name=fkeys.getString("PKCOLUMN_NAME")

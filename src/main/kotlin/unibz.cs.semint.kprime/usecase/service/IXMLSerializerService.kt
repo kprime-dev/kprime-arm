@@ -1,6 +1,10 @@
 package unibz.cs.semint.kprime.usecase.service
 
 import unibz.cs.semint.kprime.domain.*
+import unibz.cs.semint.kprime.domain.ddl.Constraint
+import unibz.cs.semint.kprime.domain.ddl.Database
+import unibz.cs.semint.kprime.domain.ddl.Table
+import unibz.cs.semint.kprime.domain.dml.ChangeSet
 
 interface IXMLSerializerService {
     fun serializeTable(table: Table): String
@@ -16,5 +20,5 @@ interface IXMLSerializerService {
     fun prettyChangeSet(table: ChangeSet): String
     fun serializeTransfomer(transformer: Transformer): String
     fun deserializeTransformer(transformer: String): Transformer
-    fun deepclone(database: Database):Database
+    fun deepclone(database: Database): Database
 }

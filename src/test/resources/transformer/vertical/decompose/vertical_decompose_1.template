@@ -4,7 +4,7 @@
             <tables name="${table[0]}1" id="" view="" condition="">
                 <columns>
                     <#list keys as key>
-                    <columns name=${key} id="id.${key}" nullable="false" dbtype=""/>
+                    <columns name="${key}" id="id.${key}" nullable="false" dbtype=""/>
                     </#list>
                     <#list lhss as lhs>
                     <columns name="${lhs}" id="id.${lhs}" nullable="false" dbtype=""/>

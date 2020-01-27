@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.ddl
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
@@ -13,8 +13,14 @@ class Schema () {
     var tables= ArrayList<Table>()
     var constraints= ArrayList<Constraint>()
 
-    fun table(name: String):Table {
-        return tables.filter { t -> t.name==name }.first()
+    fun table(name: String): Table? {
+        if (tables.isEmpty()) return null
+        return tables.filter { t -> t.name==name }.firstOrNull()
+    }
+
+    fun constraint(name: String): Constraint? {
+        if (constraints.isEmpty()) return null
+        return constraints.filter { c -> c.name==name}.firstOrNull()
     }
 
     fun key(tableName: String): Set<Column> {
@@ -52,7 +58,7 @@ class Schema () {
         primaryConstraint.name="primaryKey.$tableName"
         primaryConstraint.source.table="$tableName"
         primaryConstraint.source.columns.addAll(k)
-        primaryConstraint.type=Constraint.TYPE.PRIMARY_KEY.name
+        primaryConstraint.type= Constraint.TYPE.PRIMARY_KEY.name
         constraints.add(primaryConstraint)
     }
 

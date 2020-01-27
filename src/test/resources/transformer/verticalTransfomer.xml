@@ -18,6 +18,6 @@
                 <xrules name="table">/database/schema/tables/tables[@name='%%table%%']/@name = 1</xrules>
             </xrules>
         </xman>
-        <template filename="transformer/vertical/decompose/vertical_decompose_1.template"/>
+        <template filename="transformer/vertical/decompose/vertical_changeset_1.template"/>
     </splitter>
 </transformer>

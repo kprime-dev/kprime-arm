@@ -3,9 +3,11 @@ package unibz.cs.semint.kprime.usecase
 import freemarker.cache.ClassTemplateLoader
 import freemarker.template.Configuration
 import org.w3c.dom.NodeList
+import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import java.io.FileInputStream
 import java.io.InputStream
 import java.io.OutputStreamWriter
+import java.io.Writer
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
@@ -13,7 +15,7 @@ import javax.xml.xpath.XPathFactory
 
 class XPathTransformUseCase {
 
-    fun transform(dbFilePath: String, trasformerName: String, trasformerDirection: String, trasformerVersion: String, tranformerParmeters: MutableMap<String, Any>,outWriter:OutputStreamWriter) {
+    fun transform(dbFilePath: String, trasformerName: String, trasformerDirection: String, trasformerVersion: String, tranformerParmeters: MutableMap<String, Any>,outWriter: Writer) {
         val vdecomposeFilePath = "/transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.paths"
         val vdecomposeTemplatePath = "transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.template"
         val personProperties = XPathTransformUseCase::class.java.getResourceAsStream(vdecomposeFilePath)
@@ -22,7 +24,7 @@ class XPathTransformUseCase {
         return transform(dbFilePath,vdecomposeTemplatePath,xPaths, tranformerParmeters,outWriter)
     }
 
-    fun transform(dbFilePath: String, templateFilePath: String, xPaths: Properties, tranformerParmeters: MutableMap<String, Any>,outWriter:OutputStreamWriter) {
+    fun transform(dbFilePath: String, templateFilePath: String, xPaths: Properties, tranformerParmeters: MutableMap<String, Any>,outWriter:Writer) {
         var dbStream : InputStream
         if (dbFilePath.startsWith("/"))
                 dbStream = FileInputStream(dbFilePath)
@@ -80,6 +82,19 @@ class XPathTransformUseCase {
         val templ = //Template.getPlainTextTemplate("templ1",personTemplate,templConfig)
                 templConfig.getTemplate(templateFilePath)
         templ.process(templModel, outWriter)
+        val changeSetXml = outWriter.toString()
+        println(changeSetXml)
+        val serializer = XMLSerializerJacksonAdapter()
+        val changeSet = XMLSerializeUseCase(serializer).deserializeChangeSet(changeSetXml).ok
+        if (changeSet==null) { println("changeset null"); return }
+
+        val dbXml = XPathTransformUseCase::class.java.getResource("/${dbFilePath}").readText()
+        val db = serializer.deserializeDatabase(dbXml)
+        val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet);
+
+        println("-----------------------NEW-DB---------------")
+        println(serializer.prettyDatabase(newdb))
+
     }
 
     private fun parametrized(line: String, tranformerParmeters: MutableMap<String, Any>): String {

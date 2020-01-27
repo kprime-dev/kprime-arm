@@ -26,7 +26,9 @@
                     </columns>
                 </source>
                 <target name="" id="" table="">
-                    <columns/>
+                    <columns>
+                        <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
                 </target>
             </constraints>
             <constraints name="functional.person" id="" type="FUNCTIONAL">

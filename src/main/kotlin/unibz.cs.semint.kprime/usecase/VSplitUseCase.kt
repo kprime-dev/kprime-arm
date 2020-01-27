@@ -1,6 +1,9 @@
 package unibz.cs.semint.kprime.usecase
 
-import unibz.cs.semint.kprime.domain.*
+import unibz.cs.semint.kprime.domain.ddl.Constraint
+import unibz.cs.semint.kprime.domain.ddl.Database
+import unibz.cs.semint.kprime.domain.dml.ChangeSet
+import unibz.cs.semint.kprime.domain.dml.CreateView
 
 class VSplitUseCase {
 
@@ -10,7 +13,7 @@ class VSplitUseCase {
 
         // precondition: check for first table with functional dep, get the name
         var tableWithFunctionalName= metadataDatabase.schema.constraints
-                .filter { c -> c.type==Constraint.TYPE.FUNCTIONAL.name }
+                .filter { c -> c.type== Constraint.TYPE.FUNCTIONAL.name }
                 .map { c -> c.source.table }.first()
         if (tableWithFunctionalName.isEmpty()) return changeSet
 
@@ -31,7 +34,10 @@ class VSplitUseCase {
         println("rhs $rhs")
 
         // compute Rest
-        val allCols = metadataDatabase.schema.table(tableWithFunctionalName).columns.toSet()
+        val table = metadataDatabase.schema.table(tableWithFunctionalName)
+        if (table==null)  return changeSet
+
+        val allCols = table.columns.toSet()
         val all = allCols.map { x -> x.name }.toSet()
         var rest = all.minus(key).minus(lhs).minus(rhs)
         val allNotKey = all.minus(key)
@@ -55,14 +61,14 @@ class VSplitUseCase {
 
         // create key constraint tab2
         val keyTab2 = Constraint()
-        keyTab2.type=Constraint.TYPE.PRIMARY_KEY.name
+        keyTab2.type= Constraint.TYPE.PRIMARY_KEY.name
         keyTab2.source.table="tableName2"
         keyTab2.source.columns.addAll(lhsCols)
         changeSet.createConstraint.add(keyTab2)
 
         // create inclusion constraint tab2 tab1
         val inclusionTab2Tab1 = Constraint()
-        inclusionTab2Tab1.type=Constraint.TYPE.DOUBLE_INCLUSION.name
+        inclusionTab2Tab1.type= Constraint.TYPE.DOUBLE_INCLUSION.name
         inclusionTab2Tab1.source.table="tableName2"
         inclusionTab2Tab1.source.columns.addAll(lhsCols)
         inclusionTab2Tab1.target.table="tableName1"

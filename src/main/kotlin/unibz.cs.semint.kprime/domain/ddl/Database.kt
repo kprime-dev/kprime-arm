@@ -1,16 +1,16 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.ddl
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
-@JacksonXmlRootElement(localName = "target")
-class Target () {
+@JacksonXmlRootElement(localName = "database")
+open class Database () {
+
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""
     @JacksonXmlProperty(isAttribute = true)
     var id: String=""
-    @JacksonXmlProperty(isAttribute = true)
-    var table: String=""
 
-    var columns= ArrayList<Column>()
+    var schema: Schema = Schema()
+
 }

@@ -4,7 +4,7 @@ import org.junit.Test
 import unibz.cs.semint.kprime.adapter.repository.MetaSchemaJdbcAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
-import unibz.cs.semint.kprime.domain.Database
+import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.usecase.MetaSchemaReadUseCase
 
 class SakilaScenarioTI {

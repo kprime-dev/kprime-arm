@@ -4,8 +4,8 @@ import org.junit.Assert.assertFalse
 import org.junit.Test
 import org.xmlunit.builder.DiffBuilder
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.Column
-import unibz.cs.semint.kprime.domain.Table
+import unibz.cs.semint.kprime.domain.ddl.Column
+import unibz.cs.semint.kprime.domain.ddl.Table
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
 import java.io.File
 import kotlin.test.assertEquals
@@ -35,8 +35,8 @@ class XMLSerializerTableTest {
         var table = Table()
         table.name="Gigi"
         table.id="22"
-        table.columns.add(Column(name="col1",id = "id1", dbname = "dbname1"))
-        table.columns.add(Column(name="col2",id = "id2", dbname = "dbname2"))
+        table.columns.add(Column(name = "col1", id = "id1", dbname = "dbname1"))
+        table.columns.add(Column(name = "col2", id = "id2", dbname = "dbname2"))
 
         val result = serializer.serializeTable(table).ok
         // then
@@ -50,8 +50,8 @@ class XMLSerializerTableTest {
         var table = Table()
         table.name="Gigi"
         table.id="23"
-        table.columns.add(Column(name="col1",id = "id1", dbname = "dbname1"))
-        table.columns.add(Column(name="col2",id = "id2", dbname = "dbname2"))
+        table.columns.add(Column(name = "col1", id = "id1", dbname = "dbname1"))
+        table.columns.add(Column(name = "col2", id = "id2", dbname = "dbname2"))
         // when
         val result = serializer.prettyTable(table).ok
         print(result)

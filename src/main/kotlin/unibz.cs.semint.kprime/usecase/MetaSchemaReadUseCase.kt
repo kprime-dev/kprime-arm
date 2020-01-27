@@ -1,6 +1,7 @@
 package unibz.cs.semint.kprime.usecase
 
 import unibz.cs.semint.kprime.domain.*
+import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.usecase.repository.IMetaSchemaRepository
 import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
 import java.util.*

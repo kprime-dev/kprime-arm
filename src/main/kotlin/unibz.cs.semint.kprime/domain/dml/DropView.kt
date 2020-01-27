@@ -1,9 +1,9 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.dml
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText
 
-class CreateView() {
+class DropView() {
 
     @JacksonXmlProperty(isAttribute = true)
     var path: String = ""
@@ -11,6 +11,16 @@ class CreateView() {
     var schemaName: String = ""
     @JacksonXmlProperty(isAttribute = true)
     var viewName: String = ""
-    @JacksonXmlText
-    var text:String = ""
+
+    infix fun withPath(path: String ) = apply {
+        this.path = path
+    }
+
+    infix fun withSchema(schemaName: String) = apply {
+        this.schemaName = schemaName
+    }
+
+    infix fun withView(viewName: String) = apply {
+        this.viewName = viewName
+    }
 }

@@ -1,9 +1,9 @@
 package unibz.cs.semint.kprime.usecase
 
-import unibz.cs.semint.kprime.domain.ChangeSet
-import unibz.cs.semint.kprime.domain.Constraint
-import unibz.cs.semint.kprime.domain.CreateView
-import unibz.cs.semint.kprime.domain.Database
+import unibz.cs.semint.kprime.domain.dml.ChangeSet
+import unibz.cs.semint.kprime.domain.ddl.Constraint
+import unibz.cs.semint.kprime.domain.dml.CreateView
+import unibz.cs.semint.kprime.domain.ddl.Database
 
 class VJoinUseCase {
 
@@ -18,7 +18,7 @@ class VJoinUseCase {
 
         // if there is a double inclusion in tab1 and tab2 and a primary key on colJoin
         for (const in database.schema.constraints) {
-            if (const.type==Constraint.TYPE.DOUBLE_INCLUSION.name) {
+            if (const.type== Constraint.TYPE.DOUBLE_INCLUSION.name) {
                 tab1 = const.source.table
                 tab2= const.target.table
                 colJoin1 = const.source.columns[0].name

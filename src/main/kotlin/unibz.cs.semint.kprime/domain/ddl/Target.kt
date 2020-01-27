@@ -1,29 +1,17 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.ddl
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import unibz.cs.semint.kprime.domain.ddl.Column
 
-@JacksonXmlRootElement(localName = "table")
-class Table () {
-
+@JacksonXmlRootElement(localName = "target")
+class Target () {
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""
-
     @JacksonXmlProperty(isAttribute = true)
     var id: String=""
-
     @JacksonXmlProperty(isAttribute = true)
-    var view: String =""
-
-    @JacksonXmlProperty(isAttribute = true)
-    var condition: String =""
+    var table: String=""
 
     var columns= ArrayList<Column>()
-
-    fun hasNullable(): Boolean {
-        for (col in columns) {
-            if (col.nullable) return true
-        }
-        return false
-    }
 }

@@ -1,10 +1,10 @@
 package unibz.cs.semint.kprime.scenario
 
 import org.junit.Test
-import unibz.cs.semint.kprime.domain.Column
-import unibz.cs.semint.kprime.domain.Constraint
-import unibz.cs.semint.kprime.domain.Database
-import unibz.cs.semint.kprime.domain.Table
+import unibz.cs.semint.kprime.domain.ddl.Column
+import unibz.cs.semint.kprime.domain.ddl.Constraint
+import unibz.cs.semint.kprime.domain.ddl.Database
+import unibz.cs.semint.kprime.domain.ddl.Table
 import unibz.cs.semint.kprime.usecase.HSplitUseCase
 
 class PersonHSplitScenarioTI {

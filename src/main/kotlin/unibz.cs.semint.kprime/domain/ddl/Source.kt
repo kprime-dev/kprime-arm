@@ -1,7 +1,8 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.ddl
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import unibz.cs.semint.kprime.domain.ddl.Column
 
 @JacksonXmlRootElement(localName = "source")
 class Source () {

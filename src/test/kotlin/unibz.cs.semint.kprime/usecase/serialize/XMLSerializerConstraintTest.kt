@@ -4,9 +4,9 @@ import org.junit.Assert
 import org.junit.Test
 import org.xmlunit.builder.DiffBuilder
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.Column
-import unibz.cs.semint.kprime.domain.Constraint
-import unibz.cs.semint.kprime.domain.Source
+import unibz.cs.semint.kprime.domain.ddl.Column
+import unibz.cs.semint.kprime.domain.ddl.Constraint
+import unibz.cs.semint.kprime.domain.ddl.Source
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
 import java.io.File
 
@@ -65,7 +65,7 @@ class XMLSerializerConstraintTest {
         val serializer = XMLSerializeUseCase(XMLSerializerJacksonAdapter())
         val constraint = Constraint()
         constraint.id="idconst1"
-        constraint.type=Constraint.TYPE.FOREIGN_KEY.name
+        constraint.type= Constraint.TYPE.FOREIGN_KEY.name
         constraint.source.columns.add(Column())
         constraint.target.columns.add(Column())
         // when
@@ -88,7 +88,7 @@ class XMLSerializerConstraintTest {
         val serializer = XMLSerializeUseCase(XMLSerializerJacksonAdapter())
         val constraint = Constraint()
         constraint.id="idconst1"
-        constraint.type=Constraint.TYPE.PRIMARY_KEY.name
+        constraint.type= Constraint.TYPE.PRIMARY_KEY.name
         constraint.source.columns.add(Column())
         constraint.source.columns.add(Column())
         constraint.source.columns.add(Column())
