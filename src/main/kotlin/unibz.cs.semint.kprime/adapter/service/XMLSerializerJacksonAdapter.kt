@@ -8,6 +8,8 @@ import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.ddl.Table
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
+import unibz.cs.semint.kprime.domain.dql.Query
+import unibz.cs.semint.kprime.domain.dql.Select
 import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
 
 class XMLSerializerJacksonAdapter : IXMLSerializerService {
@@ -98,6 +100,14 @@ class XMLSerializerJacksonAdapter : IXMLSerializerService {
         val mapper = XmlMapper()
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         return mapper.readValue(transformerXml,Transformer::class.java)
+    }
+
+    // query
+
+    fun prettyQuery(query: Query): String {
+        val mapper = XmlMapper().registerModule(KotlinModule())
+        val writer = mapper.writerWithDefaultPrettyPrinter()
+        return writer.writeValueAsString(query)
     }
 
 }
