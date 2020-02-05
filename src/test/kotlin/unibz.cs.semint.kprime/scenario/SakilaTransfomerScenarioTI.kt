@@ -1,35 +1,46 @@
 package unibz.cs.semint.kprime.scenario
 
 import org.junit.Test
+import unibz.cs.semint.kprime.adapter.repository.QueryJdbcAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
+import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.Xrule
+import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
 import unibz.cs.semint.kprime.usecase.XPathTransformUseCase
 import java.io.OutputStreamWriter
 import java.io.StringWriter
 import java.util.*
-import kotlin.test.assertEquals
 
-class PersonTransfomerScenarioTI {
+class SakilaTransfomerScenarioTI {
 
     @Test
-    fun test_xpath_vertical_decomposition_on_person_db() {
+    fun test_xpath_vertical_decomposition_on_sakila_db() {
         // given
-        val dbFilePath = "db/person.xml"
-        val transfomerXml = PersonTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
+        val dbFilePath = "db/sakila_film_functional.xml"
+        val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/sakilaVTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.splitter.template.filename
         val xrules = toProperties(vTransfomer!!.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters["table"]="person"
+        tranformerParmeters["table"]="film"
         println(templateFilePath)
         // when
-        val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
+        val newdb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
         // then
-        val lineage = newDb.lineage("person1")
-        assertEquals(lineage.size,2)
-        assertEquals(lineage.last(),"person")
-        assertEquals(lineage.first(),"person1")
+        val simpleQuery = Query.simpleQueryFixture(newdb, "film2")
+
+        val type = "psql"
+        val name = "sakila-source"
+        val driver = "org.postgresql.Driver"
+        val path = "jdbc:postgresql://localhost:5432/sakila"
+        val user = "npedot"
+        val pass = "password"
+        //val user = "sammy"
+        //val pass = "pass"
+        val sakilaSource = DataSource(type,name,driver,path,user,pass)
+
+        val result = QueryJdbcAdapter().query(sakilaSource, simpleQuery)
         // print to console output
     }
 

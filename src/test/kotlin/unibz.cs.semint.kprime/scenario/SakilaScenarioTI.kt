@@ -33,8 +33,10 @@ class SakilaScenarioTI {
         val name = "sakila-source"
         val driver = "org.postgresql.Driver"
         val path = "jdbc:postgresql://localhost:5432/sakila"
-        val user = "sammy"
-        val pass = "pass"
+        //val user = "sammy"
+        val user = "npedot"
+        //val pass = "pass"
+        val pass = "password"
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         val result = MetaSchemaReadUseCase().doit(sakilaSource,
                 "read-meta-schema sakila-source",

@@ -1,0 +1,921 @@
+<database name="sourceName" id="5dca90a2-5dd6-4791-b4b8-b82d26f8a7f3">
+    <schema name="sourceName" id="1a2e31f0-6501-4316-8568-231ddec2c4b7">
+        <tables>
+            <tables name="actor" id="" view="" condition="">
+                <columns>
+                    <columns name="actor_id" id="" dbname="actor_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="first_name" id="" dbname="first_name" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="last_name" id="" dbname="last_name" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="address" id="" view="" condition="">
+                <columns>
+                    <columns name="address_id" id="" dbname="address_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="address" id="" dbname="address" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="address2" id="" dbname="address2" nullable="true" dbtype="VARCHAR"/>
+                    <columns name="district" id="" dbname="district" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="city_id" id="" dbname="city_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="postal_code" id="" dbname="postal_code" nullable="true" dbtype="VARCHAR"/>
+                    <columns name="phone" id="" dbname="phone" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="category" id="" view="" condition="">
+                <columns>
+                    <columns name="category_id" id="" dbname="category_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="name" id="" dbname="name" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="city" id="" view="" condition="">
+                <columns>
+                    <columns name="city_id" id="" dbname="city_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="city" id="" dbname="city" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="country_id" id="" dbname="country_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="country" id="" view="" condition="">
+                <columns>
+                    <columns name="country_id" id="" dbname="country_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="country" id="" dbname="country" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="customer" id="" view="" condition="">
+                <columns>
+                    <columns name="customer_id" id="" dbname="customer_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="store_id" id="" dbname="store_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="first_name" id="" dbname="first_name" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="last_name" id="" dbname="last_name" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="email" id="" dbname="email" nullable="true" dbtype="VARCHAR"/>
+                    <columns name="address_id" id="" dbname="address_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="activebool" id="" dbname="activebool" nullable="false" dbtype="BIT"/>
+                    <columns name="create_date" id="" dbname="create_date" nullable="false" dbtype="DATE"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="true" dbtype="TIMESTAMP"/>
+                    <columns name="active" id="" dbname="active" nullable="true" dbtype="INTEGER"/>
+                </columns>
+            </tables>
+            <tables name="film" id="" view="" condition="">
+                <columns>
+                    <columns name="film_id" id="" dbname="film_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="title" id="" dbname="title" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="description" id="" dbname="description" nullable="true" dbtype="VARCHAR"/>
+                    <columns name="release_year" id="" dbname="release_year" nullable="true" dbtype="DISTINCT"/>
+                    <columns name="language_id" id="" dbname="language_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="original_language_id" id="" dbname="original_language_id" nullable="true"
+                             dbtype="SMALLINT"/>
+                    <columns name="rental_duration" id="" dbname="rental_duration" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="rental_rate" id="" dbname="rental_rate" nullable="false" dbtype="NUMERIC"/>
+                    <columns name="length" id="" dbname="length" nullable="true" dbtype="SMALLINT"/>
+                    <columns name="replacement_cost" id="" dbname="replacement_cost" nullable="false" dbtype="NUMERIC"/>
+                    <columns name="rating" id="" dbname="rating" nullable="true" dbtype="VARCHAR"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                    <columns name="special_features" id="" dbname="special_features" nullable="true" dbtype="ARRAY"/>
+                    <columns name="fulltext" id="" dbname="fulltext" nullable="false" dbtype="OTHER"/>
+                </columns>
+            </tables>
+            <tables name="film_actor" id="" view="" condition="">
+                <columns>
+                    <columns name="actor_id" id="" dbname="actor_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="film_id" id="" dbname="film_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="film_category" id="" view="" condition="">
+                <columns>
+                    <columns name="film_id" id="" dbname="film_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="category_id" id="" dbname="category_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="inventory" id="" view="" condition="">
+                <columns>
+                    <columns name="inventory_id" id="" dbname="inventory_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="film_id" id="" dbname="film_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="store_id" id="" dbname="store_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="language" id="" view="" condition="">
+                <columns>
+                    <columns name="language_id" id="" dbname="language_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="name" id="" dbname="name" nullable="false" dbtype="CHAR"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="payment" id="" view="" condition="">
+                <columns>
+                    <columns name="payment_id" id="" dbname="payment_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="customer_id" id="" dbname="customer_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="staff_id" id="" dbname="staff_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="rental_id" id="" dbname="rental_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="amount" id="" dbname="amount" nullable="false" dbtype="NUMERIC"/>
+                    <columns name="payment_date" id="" dbname="payment_date" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="payment_p2007_01" id="" view="" condition="">
+                <columns>
+                    <columns name="payment_id" id="" dbname="payment_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="customer_id" id="" dbname="customer_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="staff_id" id="" dbname="staff_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="rental_id" id="" dbname="rental_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="amount" id="" dbname="amount" nullable="false" dbtype="NUMERIC"/>
+                    <columns name="payment_date" id="" dbname="payment_date" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="payment_p2007_02" id="" view="" condition="">
+                <columns>
+                    <columns name="payment_id" id="" dbname="payment_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="customer_id" id="" dbname="customer_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="staff_id" id="" dbname="staff_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="rental_id" id="" dbname="rental_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="amount" id="" dbname="amount" nullable="false" dbtype="NUMERIC"/>
+                    <columns name="payment_date" id="" dbname="payment_date" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="payment_p2007_03" id="" view="" condition="">
+                <columns>
+                    <columns name="payment_id" id="" dbname="payment_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="customer_id" id="" dbname="customer_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="staff_id" id="" dbname="staff_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="rental_id" id="" dbname="rental_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="amount" id="" dbname="amount" nullable="false" dbtype="NUMERIC"/>
+                    <columns name="payment_date" id="" dbname="payment_date" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="payment_p2007_04" id="" view="" condition="">
+                <columns>
+                    <columns name="payment_id" id="" dbname="payment_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="customer_id" id="" dbname="customer_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="staff_id" id="" dbname="staff_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="rental_id" id="" dbname="rental_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="amount" id="" dbname="amount" nullable="false" dbtype="NUMERIC"/>
+                    <columns name="payment_date" id="" dbname="payment_date" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="payment_p2007_05" id="" view="" condition="">
+                <columns>
+                    <columns name="payment_id" id="" dbname="payment_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="customer_id" id="" dbname="customer_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="staff_id" id="" dbname="staff_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="rental_id" id="" dbname="rental_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="amount" id="" dbname="amount" nullable="false" dbtype="NUMERIC"/>
+                    <columns name="payment_date" id="" dbname="payment_date" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="payment_p2007_06" id="" view="" condition="">
+                <columns>
+                    <columns name="payment_id" id="" dbname="payment_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="customer_id" id="" dbname="customer_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="staff_id" id="" dbname="staff_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="rental_id" id="" dbname="rental_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="amount" id="" dbname="amount" nullable="false" dbtype="NUMERIC"/>
+                    <columns name="payment_date" id="" dbname="payment_date" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="rental" id="" view="" condition="">
+                <columns>
+                    <columns name="rental_id" id="" dbname="rental_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="rental_date" id="" dbname="rental_date" nullable="false" dbtype="TIMESTAMP"/>
+                    <columns name="inventory_id" id="" dbname="inventory_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="customer_id" id="" dbname="customer_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="return_date" id="" dbname="return_date" nullable="true" dbtype="TIMESTAMP"/>
+                    <columns name="staff_id" id="" dbname="staff_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+            <tables name="staff" id="" view="" condition="">
+                <columns>
+                    <columns name="staff_id" id="" dbname="staff_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="first_name" id="" dbname="first_name" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="last_name" id="" dbname="last_name" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="address_id" id="" dbname="address_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="email" id="" dbname="email" nullable="true" dbtype="VARCHAR"/>
+                    <columns name="store_id" id="" dbname="store_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="active" id="" dbname="active" nullable="false" dbtype="BIT"/>
+                    <columns name="username" id="" dbname="username" nullable="false" dbtype="VARCHAR"/>
+                    <columns name="password" id="" dbname="password" nullable="true" dbtype="VARCHAR"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                    <columns name="picture" id="" dbname="picture" nullable="true" dbtype="BINARY"/>
+                </columns>
+            </tables>
+            <tables name="store" id="" view="" condition="">
+                <columns>
+                    <columns name="store_id" id="" dbname="store_id" nullable="false" dbtype="INTEGER"/>
+                    <columns name="manager_staff_id" id="" dbname="manager_staff_id" nullable="false"
+                             dbtype="SMALLINT"/>
+                    <columns name="address_id" id="" dbname="address_id" nullable="false" dbtype="SMALLINT"/>
+                    <columns name="last_update" id="" dbname="last_update" nullable="false" dbtype="TIMESTAMP"/>
+                </columns>
+            </tables>
+        </tables>
+        <constraints>
+            <constraints name="actor_pkey" id="" type="PRIMARY_KEY">
+                <source name="actor" id="" table="actor">
+                    <columns>
+                        <columns name="actor_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="address_pkey" id="" type="PRIMARY_KEY">
+                <source name="address" id="" table="address">
+                    <columns>
+                        <columns name="address_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="category_pkey" id="" type="PRIMARY_KEY">
+                <source name="category" id="" table="category">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="city_pkey" id="" type="PRIMARY_KEY">
+                <source name="city" id="" table="city">
+                    <columns>
+                        <columns name="city_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="country_pkey" id="" type="PRIMARY_KEY">
+                <source name="country" id="" table="country">
+                    <columns>
+                        <columns name="country_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="customer_pkey" id="" type="PRIMARY_KEY">
+                <source name="customer" id="" table="customer">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="film_pkey" id="" type="PRIMARY_KEY">
+                <source name="film" id="" table="film">
+                    <columns>
+                        <columns name="film_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="film_actor_pkey" id="" type="PRIMARY_KEY">
+                <source name="film_actor" id="" table="film_actor">
+                    <columns>
+                        <columns name="actor_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="film_actor_pkey" id="" type="PRIMARY_KEY">
+                <source name="film_actor" id="" table="film_actor">
+                    <columns>
+                        <columns name="film_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="film_category_pkey" id="" type="PRIMARY_KEY">
+                <source name="film_category" id="" table="film_category">
+                    <columns>
+                        <columns name="film_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="film_category_pkey" id="" type="PRIMARY_KEY">
+                <source name="film_category" id="" table="film_category">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="inventory_pkey" id="" type="PRIMARY_KEY">
+                <source name="inventory" id="" table="inventory">
+                    <columns>
+                        <columns name="inventory_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="language_pkey" id="" type="PRIMARY_KEY">
+                <source name="language" id="" table="language">
+                    <columns>
+                        <columns name="language_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="payment_pkey" id="" type="PRIMARY_KEY">
+                <source name="payment" id="" table="payment">
+                    <columns>
+                        <columns name="payment_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="rental_pkey" id="" type="PRIMARY_KEY">
+                <source name="rental" id="" table="rental">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="staff_pkey" id="" type="PRIMARY_KEY">
+                <source name="staff" id="" table="staff">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="store_pkey" id="" type="PRIMARY_KEY">
+                <source name="store" id="" table="store">
+                    <columns>
+                        <columns name="store_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="city.city_id" id="" type="FOREIGN_KEY">
+                <source name="address" id="" table="">
+                    <columns>
+                        <columns name="city_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="city" id="" table="">
+                    <columns>
+                        <columns name="city_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="country.country_id" id="" type="FOREIGN_KEY">
+                <source name="city" id="" table="">
+                    <columns>
+                        <columns name="country_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="country" id="" table="">
+                    <columns>
+                        <columns name="country_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="address.address_id" id="" type="FOREIGN_KEY">
+                <source name="customer" id="" table="">
+                    <columns>
+                        <columns name="address_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="address" id="" table="">
+                    <columns>
+                        <columns name="address_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="store.store_id" id="" type="FOREIGN_KEY">
+                <source name="customer" id="" table="">
+                    <columns>
+                        <columns name="store_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="store" id="" table="">
+                    <columns>
+                        <columns name="store_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="language.language_id" id="" type="FOREIGN_KEY">
+                <source name="film" id="" table="">
+                    <columns>
+                        <columns name="language_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="language" id="" table="">
+                    <columns>
+                        <columns name="language_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="language.language_id" id="" type="FOREIGN_KEY">
+                <source name="film" id="" table="">
+                    <columns>
+                        <columns name="original_language_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="language" id="" table="">
+                    <columns>
+                        <columns name="language_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="actor.actor_id" id="" type="FOREIGN_KEY">
+                <source name="film_actor" id="" table="">
+                    <columns>
+                        <columns name="actor_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="actor" id="" table="">
+                    <columns>
+                        <columns name="actor_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="film.film_id" id="" type="FOREIGN_KEY">
+                <source name="film_actor" id="" table="">
+                    <columns>
+                        <columns name="film_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="film" id="" table="">
+                    <columns>
+                        <columns name="film_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="category.category_id" id="" type="FOREIGN_KEY">
+                <source name="film_category" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="category" id="" table="">
+                    <columns>
+                        <columns name="category_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="film.film_id" id="" type="FOREIGN_KEY">
+                <source name="film_category" id="" table="">
+                    <columns>
+                        <columns name="film_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="film" id="" table="">
+                    <columns>
+                        <columns name="film_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="film.film_id" id="" type="FOREIGN_KEY">
+                <source name="inventory" id="" table="">
+                    <columns>
+                        <columns name="film_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="film" id="" table="">
+                    <columns>
+                        <columns name="film_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="store.store_id" id="" type="FOREIGN_KEY">
+                <source name="inventory" id="" table="">
+                    <columns>
+                        <columns name="store_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="store" id="" table="">
+                    <columns>
+                        <columns name="store_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="customer.customer_id" id="" type="FOREIGN_KEY">
+                <source name="payment" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="customer" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="rental.rental_id" id="" type="FOREIGN_KEY">
+                <source name="payment" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="rental" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="staff.staff_id" id="" type="FOREIGN_KEY">
+                <source name="payment" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="staff" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="customer.customer_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_01" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="customer" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="rental.rental_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_01" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="rental" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="staff.staff_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_01" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="staff" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="customer.customer_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_02" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="customer" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="rental.rental_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_02" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="rental" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="staff.staff_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_02" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="staff" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="customer.customer_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_03" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="customer" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="rental.rental_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_03" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="rental" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="staff.staff_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_03" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="staff" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="customer.customer_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_04" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="customer" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="rental.rental_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_04" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="rental" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="staff.staff_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_04" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="staff" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="customer.customer_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_05" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="customer" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="rental.rental_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_05" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="rental" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="staff.staff_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_05" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="staff" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="customer.customer_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_06" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="customer" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="rental.rental_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_06" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="rental" id="" table="">
+                    <columns>
+                        <columns name="rental_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="staff.staff_id" id="" type="FOREIGN_KEY">
+                <source name="payment_p2007_06" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="staff" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="customer.customer_id" id="" type="FOREIGN_KEY">
+                <source name="rental" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="customer" id="" table="">
+                    <columns>
+                        <columns name="customer_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="inventory.inventory_id" id="" type="FOREIGN_KEY">
+                <source name="rental" id="" table="">
+                    <columns>
+                        <columns name="inventory_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="inventory" id="" table="">
+                    <columns>
+                        <columns name="inventory_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="staff.staff_id" id="" type="FOREIGN_KEY">
+                <source name="rental" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="staff" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="address.address_id" id="" type="FOREIGN_KEY">
+                <source name="staff" id="" table="">
+                    <columns>
+                        <columns name="address_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="address" id="" table="">
+                    <columns>
+                        <columns name="address_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="store.store_id" id="" type="FOREIGN_KEY">
+                <source name="staff" id="" table="">
+                    <columns>
+                        <columns name="store_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="store" id="" table="">
+                    <columns>
+                        <columns name="store_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="address.address_id" id="" type="FOREIGN_KEY">
+                <source name="store" id="" table="">
+                    <columns>
+                        <columns name="address_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="address" id="" table="">
+                    <columns>
+                        <columns name="address_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="staff.staff_id" id="" type="FOREIGN_KEY">
+                <source name="store" id="" table="">
+                    <columns>
+                        <columns name="manager_staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="staff" id="" table="">
+                    <columns>
+                        <columns name="staff_id" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="functional.film" id="" type="FUNCTIONAL">
+                <source name="" id="" table="film">
+                    <columns>
+                        <columns name="film_id" id="" dbname="film_id" nullable="false" dbtype="INTEGER"/>
+                    </columns>
+                </source>
+                <target name="" id="" table="film">
+                    <columns>
+                        <columns name="length" id="" dbname="length" nullable="true" dbtype="SMALLINT"/>
+                        <columns name="rating" id="" dbname="rating" nullable="true" dbtype="VARCHAR"/>
+                        <columns name="description" id="" dbname="description" nullable="true" dbtype="VARCHAR"/>
+                        <columns name="release_year" id="" dbname="release_year" nullable="true" dbtype="DISTINCT"/>
+                        <columns name="original_language_id" id="" dbname="original_language_id" nullable="true"
+                                 dbtype="SMALLINT"/>
+                        <columns name="special_features" id="" dbname="special_features" nullable="true"
+                                 dbtype="ARRAY"/>
+                    </columns>
+                </target>
+            </constraints>
+
+        </constraints>
+    </schema>
+</database>

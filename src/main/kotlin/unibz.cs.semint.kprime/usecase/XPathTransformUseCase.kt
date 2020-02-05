@@ -4,6 +4,7 @@ import freemarker.cache.ClassTemplateLoader
 import freemarker.template.Configuration
 import org.w3c.dom.NodeList
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
+import unibz.cs.semint.kprime.domain.ddl.Database
 import java.io.FileInputStream
 import java.io.InputStream
 import java.io.OutputStreamWriter
@@ -15,7 +16,7 @@ import javax.xml.xpath.XPathFactory
 
 class XPathTransformUseCase {
 
-    fun transform(dbFilePath: String, trasformerName: String, trasformerDirection: String, trasformerVersion: String, tranformerParmeters: MutableMap<String, Any>,outWriter: Writer) {
+    fun transform(dbFilePath: String, trasformerName: String, trasformerDirection: String, trasformerVersion: String, tranformerParmeters: MutableMap<String, Any>,outWriter: Writer) :Database {
         val vdecomposeFilePath = "/transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.paths"
         val vdecomposeTemplatePath = "transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.template"
         val personProperties = XPathTransformUseCase::class.java.getResourceAsStream(vdecomposeFilePath)
@@ -24,7 +25,7 @@ class XPathTransformUseCase {
         return transform(dbFilePath,vdecomposeTemplatePath,xPaths, tranformerParmeters,outWriter)
     }
 
-    fun transform(dbFilePath: String, templateFilePath: String, xPaths: Properties, tranformerParmeters: MutableMap<String, Any>,outWriter:Writer) {
+    fun transform(dbFilePath: String, templateFilePath: String, xPaths: Properties, tranformerParmeters: MutableMap<String, Any>,outWriter:Writer): Database {
         var dbStream : InputStream
         if (dbFilePath.startsWith("/"))
                 dbStream = FileInputStream(dbFilePath)
@@ -63,7 +64,7 @@ class XPathTransformUseCase {
         }
         if (!goon) {
             println("Condition Failure")
-            return
+            return Database()
         }
         // compute derived list sum and minus
         for (entryNameas in xPaths.propertyNames()) {
@@ -86,7 +87,7 @@ class XPathTransformUseCase {
         println(changeSetXml)
         val serializer = XMLSerializerJacksonAdapter()
         val changeSet = XMLSerializeUseCase(serializer).deserializeChangeSet(changeSetXml).ok
-        if (changeSet==null) { println("changeset null"); return }
+        if (changeSet==null) { println("changeset null"); return Database()}
 
         val dbXml = XPathTransformUseCase::class.java.getResource("/${dbFilePath}").readText()
         val db = serializer.deserializeDatabase(dbXml)
@@ -94,7 +95,7 @@ class XPathTransformUseCase {
 
         println("-----------------------NEW-DB---------------")
         println(serializer.prettyDatabase(newdb))
-
+        return newdb
     }
 
     private fun parametrized(line: String, tranformerParmeters: MutableMap<String, Any>): String {

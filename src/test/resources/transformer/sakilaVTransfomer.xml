@@ -1,0 +1,23 @@
+<transformer name="">
+    <composer>
+        <xman>
+            <xrules>
+                <xrules name="all">/database/schema/tables/tables[@name='%%table%%']/columns/columns/@name</xrules>
+            </xrules>
+        </xman>
+        <template filename=""/>
+    </composer>
+    <splitter>
+        <xman>
+            <xrules>
+                <xrules name="all">/database/schema/tables/tables[@name='%%table%%']/columns/columns/@name > 0</xrules>
+                <xrules name="keys">/database/schema/constraints/constraints[@type='PRIMARY_KEY']/source[@table='%%table%%']/columns/columns/@name > 0</xrules>
+                <xrules name="lhss">/database/schema/constraints/constraints[@type='FUNCTIONAL']/source[@table='%%table%%']/columns/columns/@name</xrules>
+                <xrules name="rhss">/database/schema/constraints/constraints[@type='FUNCTIONAL']/target[@table='%%table%%']/columns/columns/@name</xrules>
+                <xrules name="rests">- all keys lhss rhss</xrules>
+                <xrules name="table">/database/schema/tables/tables[@name='%%table%%']/@name = 1</xrules>
+            </xrules>
+        </xman>
+        <template filename="transformer/vertical/decompose/vertical_changeset_1.template"/>
+    </splitter>
+</transformer>
