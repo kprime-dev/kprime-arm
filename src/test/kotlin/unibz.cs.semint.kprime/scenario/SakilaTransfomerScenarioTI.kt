@@ -1,5 +1,6 @@
 package unibz.cs.semint.kprime.scenario
 
+import org.junit.Rule
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.repository.QueryJdbcAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
@@ -8,7 +9,6 @@ import unibz.cs.semint.kprime.domain.Xrule
 import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
 import unibz.cs.semint.kprime.usecase.XPathTransformUseCase
-import java.io.OutputStreamWriter
 import java.io.StringWriter
 import java.util.*
 
@@ -34,8 +34,8 @@ class SakilaTransfomerScenarioTI {
         val name = "sakila-source"
         val driver = "org.postgresql.Driver"
         val path = "jdbc:postgresql://localhost:5432/sakila"
-        val user = "npedot"
-        val pass = "password"
+        val user = System.getenv()["sakila_user"]?:""//"npedot"
+        val pass = System.getenv()["sakila_pass"]?:""//"password"
         //val user = "sammy"
         //val pass = "pass"
         val sakilaSource = DataSource(type,name,driver,path,user,pass)

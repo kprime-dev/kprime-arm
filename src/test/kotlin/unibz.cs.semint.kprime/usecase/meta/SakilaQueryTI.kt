@@ -14,17 +14,18 @@ import kotlin.test.assertEquals
 
 class SakilaQueryTI {
 
+    val type = "psql"
+    val name = "sakila-source"
+    val driver = "org.postgresql.Driver"
+    val path = "jdbc:postgresql://localhost:5432/sakila"
+    val user = System.getenv()["sakila_user"]?:""//"npedot"
+    val pass = System.getenv()["sakila_pass"]?:""//"password"
+    //val user = "sammy"
+    //val pass = "pass"
+
     @Test
     fun test_read_sakila_query_string() {
         //given
-        val type = "psql"
-        val name = "sakila-source"
-        val driver = "org.postgresql.Driver"
-        val path = "jdbc:postgresql://localhost:5432/sakila"
-        val user = "npedot"
-        val pass = "password"
-        //val user = "sammy"
-        //val pass = "pass"
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
         val result = QueryJdbcAdapter().query(sakilaSource,"select * from film")
@@ -36,14 +37,6 @@ class SakilaQueryTI {
     @Test
     fun test_read_sakila_query_films() {
         //given
-        val type = "psql"
-        val name = "sakila-source"
-        val driver = "org.postgresql.Driver"
-        val path = "jdbc:postgresql://localhost:5432/sakila"
-        val user = "npedot"
-        val pass = "password"
-        //val user = "sammy"
-        //val pass = "pass"
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
         val sqlquery = Query.simpleFilmQueryFixture("film")
@@ -56,14 +49,6 @@ class SakilaQueryTI {
     @Test
     fun test_read_sakila_query_italian_films() {
         //given
-        val type = "psql"
-        val name = "sakila-source"
-        val driver = "org.postgresql.Driver"
-        val path = "jdbc:postgresql://localhost:5432/sakila"
-        val user = "npedot"
-        val pass = "password"
-        //val user = "sammy"
-        //val pass = "pass"
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
         val condition = "language_id=2"
