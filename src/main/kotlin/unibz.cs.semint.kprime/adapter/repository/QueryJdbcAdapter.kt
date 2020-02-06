@@ -36,9 +36,10 @@ class QueryJdbcAdapter {
         val resultSet = prepareStatement.executeQuery()
         printResultSet(resultSet)
         resultSet.close()
+        conn.close()
     }
 
-    private fun printResultSet(resultSet: ResultSet) {
+    fun printResultSet(resultSet: ResultSet) {
         val metaData = resultSet.metaData
         val columnCount = metaData.columnCount
         while( resultSet.next()) {
@@ -49,4 +50,30 @@ class QueryJdbcAdapter {
             println()
         }
     }
+
+    fun create(datasource: DataSource, sqlcreate: String) {
+        val source = datasource
+        val user = source.user
+        val pass = source.pass
+        val path = source.path
+
+        val connectionProps = Properties()
+        connectionProps.put("user", user)
+        connectionProps.put("password", pass)
+        println("Looking for driver [${source.driver}] for connection [$path] with user [$user].")
+        Class.forName(source.driver).newInstance()
+        val conn = DriverManager.getConnection(
+                path, connectionProps)
+
+
+        conn.autoCommit=true
+        val createStatement = conn.createStatement()
+        val resultSet = createStatement.executeUpdate(sqlcreate)
+        println(" Create result : $resultSet")
+        createStatement.close()
+        conn.close()
+    }
+
+
+
 }

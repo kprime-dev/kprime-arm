@@ -39,6 +39,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             } else {
                 tableNames = readTables(metaData,db)
             }
+            readViews(metaData,db)
             readColumns(metaData, tableNames,db)
             readPrimaryKeys(metaData, tableNames,db)
             readForeignKeys(metaData, tableNames,db)
@@ -57,6 +58,22 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             db.schema.tables.add(table)
         }
         return tableNames
+    }
+
+    private fun readViews(metaData: DatabaseMetaData, db: Database):List<String> {
+        val views = metaData.getTables(null, null, null, arrayOf("VIEW"))
+        val viewNames = mutableListOf<String>()
+        println("++++++++++++++++++++++++++++++++++++++++++++++++")
+        QueryJdbcAdapter().printResultSet(views)
+        println("++++++++++++++++++++++++++++++++++++++++++++++++")
+        while (views.next()) {
+            val viewName = "${views.getString("TABLE_NAME")}"
+            viewNames.add(viewName)
+            val table = Table()
+            table.name=viewName
+            db.schema.tables.add(table)
+        }
+        return viewNames
     }
 
     private fun readColumns(metaData: DatabaseMetaData, tableNames: List<String>, db: Database) {

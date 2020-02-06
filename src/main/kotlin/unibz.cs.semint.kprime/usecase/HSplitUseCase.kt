@@ -18,7 +18,6 @@ class HSplitUseCase {
                 printDb(applied.ok)
                 printSql(SQLizeUseCase().sqlize(applied.ok))
             }
-
         }
     }
 

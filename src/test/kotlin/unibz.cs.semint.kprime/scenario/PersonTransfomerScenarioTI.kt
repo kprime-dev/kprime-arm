@@ -1,8 +1,12 @@
 package unibz.cs.semint.kprime.scenario
 
 import org.junit.Test
+import unibz.cs.semint.kprime.adapter.repository.QueryJdbcAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
+import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.Xrule
+import unibz.cs.semint.kprime.domain.ddl.Database
+import unibz.cs.semint.kprime.usecase.SQLizeUseCase
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
 import unibz.cs.semint.kprime.usecase.XPathTransformUseCase
 import java.io.OutputStreamWriter
@@ -13,7 +17,7 @@ import kotlin.test.assertEquals
 class PersonTransfomerScenarioTI {
 
     @Test
-    fun test_xpath_vertical_decomposition_on_person_db() {
+    fun test_xpath_vertical_decomposition_on_person_db(): Database {
         // given
         val dbFilePath = "db/person.xml"
         val transfomerXml = PersonTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
@@ -31,6 +35,7 @@ class PersonTransfomerScenarioTI {
         assertEquals(lineage.last(),"person")
         assertEquals(lineage.first(),"person1")
         // print to console output
+        return newDb
     }
 
     private fun toProperties(xrules: ArrayList<Xrule>): Properties {
