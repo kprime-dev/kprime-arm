@@ -85,19 +85,21 @@ class SakilaTransfomerScenarioTI {
 
     @Test
     fun test_xpath_horizontal_decomposition_on_person_db() {
-        /*
         // given
-        val dbFilePath = "db/person.xml"
-        val trasformerName = "horizontal"
-        val trasformerDirection = "decompose"
-        val trasformerVersion = "1"
+        val dbFilePath = "db/sakila_film_functional.xml"
+        val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/sakilaHTransfomer.xml").readText()
+        val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
+        val templateFilePath = vTransfomer!!.splitter.template.filename
+        val xrules = toProperties(vTransfomer!!.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters["table"]="person"
+        tranformerParmeters["table"]="film"
+        tranformerParmeters["condition"]="select * from film where language_id=2"
+        println(templateFilePath)
         // when
-        XPathTransformUseCase().transform(dbFilePath, trasformerName, trasformerDirection, trasformerVersion,tranformerParmeters,OutputStreamWriter(System.out))
+        val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
         // then
         // print to console output
-         */
+
     }
 
 
