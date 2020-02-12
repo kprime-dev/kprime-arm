@@ -43,6 +43,12 @@ class Schema () {
         return first[0].source.columns.toSet()
     }
 
+    fun functionals(): Set<Constraint> {
+        var resultCols = mutableSetOf<Column>()
+        return constraints.filter { c ->
+            c.type == Constraint.TYPE.FUNCTIONAL.name }.toSet()
+    }
+
     fun functionalRHS(tableName: String): Set<Column> {
         var resultCols = mutableSetOf<Column>()
         val first = constraints.filter { c ->
@@ -74,4 +80,66 @@ class Schema () {
 
     }
 
+    companion object {
+
+        fun <T> reducedPowerSet(originalSet: Set<T>): Set<Set<T>> {
+            var result = powerSet(originalSet)
+            result = result.minus(HashSet<T>()) as Set<Set<T>>
+            return result
+        }
+
+        private fun <T> powerSet(originalSet: Set<T>): Set<Set<T>> {
+            val sets = HashSet<Set<T>>()
+            if (originalSet.isEmpty()) {
+                sets.add(HashSet<T>())
+                return  sets
+            }
+            val list = ArrayList<T>(originalSet)
+            val head = list.get(0)
+            val rest = HashSet<T>(list.subList(1,list.size))
+            for (set in powerSet(rest)) {
+                val newSet = HashSet<T>()
+                newSet.add(head)
+                newSet.addAll(set)
+                sets.add(newSet)
+                sets.add(set)
+            }
+            return sets
+        }
+
+
+        fun superkeys(attrs: Set<Column>, fds:Set<Constraint>): Set<Set<Column>> {
+            val keys = HashSet<Set<Column>>()
+            val  powerset = reducedPowerSet(attrs)
+            for (sa in powerset) {
+                if (closure(sa, fds).equals(attrs)) {
+                    keys.add(sa)
+                }
+            }
+            return keys
+        }
+
+        fun closure(attrs: Set<Column>,fds:Set<Constraint>): Set<Column> {
+            val result = HashSet<Column>(attrs)
+            println("RESULT = $result")
+            var found = true
+            while(found) {
+                found= false
+                for (fd in fds) {
+                    println("FD ${fd.left()} == ${fd.right()}")
+                    if (result.containsAll(fd.left())
+                            && !result.containsAll(fd.right())) {
+                        result.addAll(fd.right())
+                        found = true
+                        println("FOUND")
+                    }
+                }
+            }
+            return result
+        }
+    }
+
+    fun keys(attrs: Set<Column>, fds:Set<Constraint>): Set<Set<Column>> {
+        return superkeys(attrs,fds)
+    }
 }

@@ -2,6 +2,7 @@ package unibz.cs.semint.kprime.domain.ddl
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const
 
 fun key(alfa:Constraint.()->Unit):Constraint {
     val constraint = Constraint()
@@ -35,6 +36,13 @@ fun doubleInclusion(alfa:Constraint.()->Unit):Constraint {
 
 @JacksonXmlRootElement(localName = "constraint")
 class Constraint () {
+    fun left(): Collection<Column> {
+        return source.columns
+    }
+
+    fun right(): Collection<Column> {
+        return target.columns
+    }
 
     enum class TYPE {
         FOREIGN_KEY,PRIMARY_KEY,FUNCTIONAL,DOUBLE_INCLUSION,INCLUSION,DISJUNCTION,COVER
@@ -49,4 +57,49 @@ class Constraint () {
     var source = Source()
     var target = Target()
 
+
+
+    companion object {
+
+        fun set(exprs : String ):Set<Constraint> {
+            if (exprs.equals("")) return HashSet<Constraint>()
+            val replace = exprs.replace("\\s+", "")
+            return set(exprs.split(";"))
+        }
+
+        fun set(exprs : List<String>):Set<Constraint> {
+            val fds = HashSet<Constraint>()
+            for (s in exprs) {
+                fds.add(of(s))
+            }
+            return fds
+        }
+
+        fun of(expr:String):Constraint {
+            val split = expr.split("-->")
+            return of(split[0],split[1])
+        }
+
+        fun of(left:String, right:String):Constraint {
+            var left = left.replace("\\s+","")
+            var right = right.replace("\\s+","")
+            val lefts = left.split(",")
+            val rights = right.split(",")
+            val c = Constraint()
+            c.source.columns = cols(lefts)
+            c.target.columns = cols(rights)
+            return c
+        }
+
+        private fun cols(names:List<String>):ArrayList<Column> {
+            val result = ArrayList<Column>()
+            for (name in names) {
+                val c = Column()
+                c.name = name.trim()
+                result.add(c)
+            }
+            return result
+        }
+
+    }
 }
