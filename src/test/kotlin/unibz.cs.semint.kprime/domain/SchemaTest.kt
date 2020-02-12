@@ -1,6 +1,7 @@
 package unibz.cs.semint.kprime.domain
 
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import org.junit.Test
 import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.Constraint
@@ -73,5 +74,12 @@ class SchemaTest {
         println(constraints)
         val result= Schema.removeTrivial(constraints)
         println(result)
+    }
+
+    @Test
+    fun test_equivalent() {
+        val setA = Constraint.set("A-->C; A,C-->D; E-->A,D; E-->H")
+        val setB = Constraint.set("A-->C,D; E-->A,H")
+        assertTrue(Schema.equivalent(setA,setB))
     }
 }
