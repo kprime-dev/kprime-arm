@@ -29,4 +29,15 @@ class ConstraintTest {
                 )
     }
 
+    @Test
+    fun test_find_keys() {
+        val constraints = Constraint.set("A, B --> C; C, D --> E; C --> A; C --> D; D --> B")
+        val columns = Column.set("A, B, C, D, E")
+        val keys = Schema.keys(columns, constraints)
+        println(keys)
+        assertEquals(
+                "[[A, B], [C], [A, D]]",
+                keys.toString()
+        )
+    }
 }

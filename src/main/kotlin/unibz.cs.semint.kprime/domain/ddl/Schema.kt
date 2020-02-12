@@ -121,25 +121,40 @@ class Schema () {
 
         fun closure(attrs: Set<Column>,fds:Set<Constraint>): Set<Column> {
             val result = HashSet<Column>(attrs)
-            println("RESULT = $result")
+            //println("RESULT = $result")
             var found = true
             while(found) {
                 found= false
                 for (fd in fds) {
-                    println("FD ${fd.left()} == ${fd.right()}")
+                    //println("FD ${fd.left()} == ${fd.right()}")
                     if (result.containsAll(fd.left())
                             && !result.containsAll(fd.right())) {
                         result.addAll(fd.right())
                         found = true
-                        println("FOUND")
+                        //println("FOUND")
                     }
                 }
             }
             return result
         }
+
+        fun keys(attrs: Set<Column>, fds:Set<Constraint>): Set<Set<Column>> {
+            var superkeys = superkeys(attrs, fds)
+            var toremove = HashSet<Set<Column>>()
+            for (key in superkeys) {
+                for (col in key) {
+                    var remaining = HashSet<Column>(key)
+                    remaining.remove(col)
+                    if (superkeys.contains(remaining)) {
+                        toremove.add(key)
+                        break
+                    }
+                }
+
+            }
+            superkeys = superkeys.minus(toremove)
+            return superkeys
+        }
     }
 
-    fun keys(attrs: Set<Column>, fds:Set<Constraint>): Set<Set<Column>> {
-        return superkeys(attrs,fds)
-    }
 }
