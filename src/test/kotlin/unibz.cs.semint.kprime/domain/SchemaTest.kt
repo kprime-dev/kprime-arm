@@ -116,4 +116,15 @@ class SchemaTest {
         println(" Removed ${removed.size}")
         println(removed)
     }
+
+    @Test
+    fun test_projection() {
+        // given
+        val attrs = Column.set("name, location, favAppl, appl")
+        val fds = Constraint.set("name-->location,favAppl; appl-->provider")
+        // when
+        val result : Set<Constraint> = Schema.projection(attrs,fds)
+        // then
+        for (fd in result) println(fd)
+    }
 }
