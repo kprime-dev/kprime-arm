@@ -107,8 +107,6 @@ class Constraint () {
             }
             return result
         }
-
-
     }
 
     override fun toString(): String {

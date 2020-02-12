@@ -127,4 +127,14 @@ class SchemaTest {
         // then
         for (fd in result) println(fd)
     }
+
+    @Test
+    fun test_minimalbasis() {
+        // given
+        val fds = Constraint.set("name --> location;name --> favAppl;appl, name --> favAppl")
+        // when
+        val basis = Schema.minimalBasis(fds)
+        // then
+        for (fd in basis) println(fd)
+    }
 }

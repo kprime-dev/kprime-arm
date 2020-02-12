@@ -267,7 +267,7 @@ class Schema () {
             return minimalBasis(result)
         }
 
-        private fun minimalBasis(fds: HashSet<Constraint>): Set<Constraint> {
+        fun minimalBasis(fds: Set<Constraint>): Set<Constraint> {
             var result = HashSet<Constraint>(fds)
             result = splitRight(result)
             result = removeTrivial(result)
