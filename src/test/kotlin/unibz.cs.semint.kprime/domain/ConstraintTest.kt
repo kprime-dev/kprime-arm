@@ -40,4 +40,13 @@ class ConstraintTest {
                 keys.toString()
         )
     }
+
+    @Test
+    fun test_closure() {
+        val columns = Column.set("C,S")
+        val constraints = Constraint.set("C-->T;H,R-->C;H,T-->R;C,S-->G;H,S-->R")
+
+        val closure = Schema.closure(columns, constraints)
+        println(closure)
+    }
 }

@@ -119,9 +119,9 @@ class Schema () {
             return keys
         }
 
-        fun closure(attrs: Set<Column>,fds:Set<Constraint>): Set<Column> {
+        fun closure(attrs: Set<Column>, fds:Set<Constraint>): Set<Column> {
             val result = HashSet<Column>(attrs)
-            //println("RESULT = $result")
+            //println("RESULT X = $result")
             var found = true
             while(found) {
                 found= false
