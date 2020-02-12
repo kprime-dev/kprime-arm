@@ -82,13 +82,13 @@ class Schema () {
 
     companion object {
 
-        fun <T> reducedPowerSet(originalSet: Set<T>): Set<Set<T>> {
+        private fun <T> reducedPowerSet(originalSet: Set<T>): Set<Set<T>> {
             var result = powerSet(originalSet)
             result = result.minus(HashSet<T>()) as Set<Set<T>>
             return result
         }
 
-        private fun <T> powerSet(originalSet: Set<T>): Set<Set<T>> {
+        fun <T> powerSet(originalSet: Set<T>): Set<Set<T>> {
             val sets = HashSet<Set<T>>()
             if (originalSet.isEmpty()) {
                 sets.add(HashSet<T>())
@@ -106,7 +106,6 @@ class Schema () {
             }
             return sets
         }
-
 
         fun superkeys(attrs: Set<Column>, fds:Set<Constraint>): Set<Set<Column>> {
             val keys = HashSet<Set<Column>>()

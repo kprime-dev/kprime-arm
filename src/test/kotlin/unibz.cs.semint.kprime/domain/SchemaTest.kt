@@ -82,4 +82,27 @@ class SchemaTest {
         val setB = Constraint.set("A-->C,D; E-->A,H")
         assertTrue(Schema.equivalent(setA,setB))
     }
+
+
+    @Test
+    fun test_powerset() {
+        // given
+        val attrs = Column.set("A,B,C")
+        val notin = Column.set("D,E")
+        val fds = Constraint.set("A-->B,C;C,D-->E;E-->A;B-->D")
+        // when
+        val powerSet = Schema.powerSet(attrs)
+        // then
+        val map = HashMap<Set<Column>,Set<Column>>()
+        for (sa in powerSet) {
+            map.put(sa,Schema.closure(sa,fds))
+        }
+        for (k in map.keys) {
+            var v = map.get(k)
+            if (v!=null) {
+                v = v.minus(notin)
+                println(" $k = $v ")
+            }
+        }
+    }
 }
