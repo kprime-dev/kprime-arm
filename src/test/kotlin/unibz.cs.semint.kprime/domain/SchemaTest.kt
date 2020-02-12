@@ -6,7 +6,7 @@ import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Schema
 
-class ConstraintTest {
+class SchemaTest {
 
 
     @Test
@@ -18,7 +18,7 @@ class ConstraintTest {
 
         println(" $time , $classroom , $course")
         println(" $fd")
-        assertEquals("Time , Classroom --> Course",fd.toString())
+        assertEquals("Time , Classroom --> Course ; ",fd.toString())
     }
 
     @Test
@@ -61,5 +61,17 @@ class ConstraintTest {
 
         val closure = Schema.closure(columns, constraints)
         println(closure)
+    }
+
+    @Test
+    fun test_remove_trivials() {
+        val constraints = Constraint.set("A-->B;"
+                + "A,B-->B;"
+                + "A,B-->A;"
+                + "C-->C;"
+                + "C,D,E,F-->C,D,F")
+        println(constraints)
+        val result= Schema.removeTrivial(constraints)
+        println(result)
     }
 }

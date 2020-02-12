@@ -91,6 +91,13 @@ class Constraint () {
             return c
         }
 
+        fun of(left:Collection<Column>, right:Collection<Column>):Constraint {
+            val c = Constraint()
+            c.source.columns.addAll(left)
+            c.target.columns.addAll(right)
+            return c
+        }
+
         private fun cols(names:List<String>):ArrayList<Column> {
             val result = ArrayList<Column>()
             for (name in names) {
@@ -111,6 +118,7 @@ class Constraint () {
         result +=" --> "
         for(col in target.columns)
             result += col.toString()
+        result +=" ; "
         return result
     }
 
