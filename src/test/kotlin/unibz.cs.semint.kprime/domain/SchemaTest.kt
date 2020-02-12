@@ -105,4 +105,15 @@ class SchemaTest {
             }
         }
     }
+
+    @Test
+    fun test_removeUnnecessaryEntireFD() {
+        var fds = Constraint.set("A-->B,C;B-->C;A-->B;A,B-->C")
+        println(fds)
+        fds = Schema.splitRight(fds)
+        println("splitted")
+        val removed = Schema.removeUnnecessaryEntireFD(fds)
+        println(" Removed ${removed.size}")
+        println(removed)
+    }
 }

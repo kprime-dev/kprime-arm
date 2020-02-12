@@ -201,6 +201,51 @@ class Schema () {
             }
             return true
         }
+
+        fun removeUnnecessaryEntireFD(fds: Set<Constraint>): HashSet<Constraint> {
+            var temp = HashSet<Constraint>(fds)
+            var count = 0
+            while(true) {
+                lateinit var toRemove : Constraint
+                var found = false
+                for (fd in temp) {
+                    val remaining = HashSet<Constraint>(temp)
+                    remaining.remove(fd)
+                    //println("REMOVE ")
+                    if (equivalent(remaining, temp)) {
+                        println("EQUIVALENT $count")
+                        ++count
+                        found = true
+                        toRemove = fd
+                        break;
+                    }
+                }
+                if(!found) { break; }
+                else {
+                    if (toRemove!=null)
+                        temp = temp.minus(toRemove) as HashSet<Constraint>
+                }
+            }
+            return temp
+        }
+
+        fun splitRight(fds: Set<Constraint>): HashSet<Constraint> {
+            val result = HashSet<Constraint>(fds)
+            val toRemove = HashSet<Constraint>()
+            val toAdd = HashSet<Constraint>()
+            for(fd in fds) {
+                if (fd.right().size > 1) {
+                    for (a in fd.right()) {
+                        toAdd.add(Constraint.of(fd.left(), listOf(a)))
+                    }
+                    toRemove.add(fd)
+                }
+            }
+            result.addAll(toAdd)
+            result.removeAll(toRemove)
+            return result
+        }
+
     }
 
 }
