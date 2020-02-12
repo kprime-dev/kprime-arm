@@ -8,6 +8,19 @@ import unibz.cs.semint.kprime.domain.ddl.Schema
 
 class ConstraintTest {
 
+
+    @Test
+    fun test_basic() {
+        val time = Column.of("Time")
+        val classroom = Column.of("Classroom")
+        val course = Column.of("Course")
+        val fd = Constraint.of("${time.name},${classroom.name}","${course.name}")
+
+        println(" $time , $classroom , $course")
+        println(" $fd")
+        assertEquals("Time , Classroom --> Course",fd.toString())
+    }
+
     @Test
     fun test_find_superkeys() {
         val exprs = listOf(

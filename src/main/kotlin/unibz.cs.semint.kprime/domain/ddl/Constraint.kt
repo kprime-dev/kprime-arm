@@ -101,5 +101,17 @@ class Constraint () {
             return result
         }
 
+
     }
+
+    override fun toString(): String {
+        var result = source.columns[0].toString()
+        for(col in source.columns.drop(1))
+            result += " , " + col.toString()
+        result +=" --> "
+        for(col in target.columns)
+            result += col.toString()
+        return result
+    }
+
 }
