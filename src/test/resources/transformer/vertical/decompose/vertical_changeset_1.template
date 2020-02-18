@@ -1,5 +1,5 @@
 <changeSet id="234">
-  <createTable name="${table[0]}1" id="" view="${table[0]}" condition="">
+  <createTable name="${targetTable1[0]}" id="" view="${table[0]}" condition="">
     <columns>
         <#list keys as key>
         <columns name="${key}" id="id.${key}" dbname="" nullable="false" dbtype=""/>
@@ -12,7 +12,7 @@
         </#list>
     </columns>
   </createTable>
-  <createTable name="${table[0]}2" id="" view="${table[0]}" condition="">
+  <createTable name="${targetTable2[0]}" id="" view="${table[0]}" condition="">
     <columns>
         <#list lhss as lhs>
         <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
@@ -23,14 +23,14 @@
     </columns>
   </createTable>
   <createConstraint name="${table[0]}.doubleInclusion" id="" type="DOUBLE_INCLUSION">
-    <source name="" id="" table="${table[0]}1">
+    <source name="" id="" table="${targetTable1[0]}">
         <columns>
             <#list lhss as lhs>
             <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
             </#list>
         </columns>
     </source>
-    <target name="" id="" table="${table[0]}2">
+    <target name="" id="" table="${targetTable2[0]}">
         <columns>
             <#list lhss as lhs>
             <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
@@ -38,8 +38,8 @@
         </columns>
     </target>
   </createConstraint>
-  <createConstraint name="${table[0]}2.primaryKey" id="" type="PRIMARY_KEY">
-    <source name="" id="" table="${table[0]}2">
+  <createConstraint name="${targetTable2[0]}.primaryKey" id="" type="PRIMARY_KEY">
+    <source name="" id="" table="${targetTable2[0]}">
         <columns>
             <#list lhss as lhs>
             <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
@@ -52,8 +52,8 @@
         </columns>
     </target>
   </createConstraint>
-  <createConstraint name="${table[0]}1.primaryKey" id="" type="PRIMARY_KEY">
-    <source name="" id="" table="${table[0]}1">
+  <createConstraint name="${targetTable1[0]}.primaryKey" id="" type="PRIMARY_KEY">
+    <source name="" id="" table="${targetTable1[0]}">
         <columns>
             <#list keys as key>
             <columns name="${key}" id="id.${key}" dbname="" nullable="false" dbtype=""/>

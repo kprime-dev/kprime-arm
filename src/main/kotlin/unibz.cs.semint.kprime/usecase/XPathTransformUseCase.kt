@@ -66,6 +66,10 @@ class XPathTransformUseCase {
             println("Condition Failure")
             return Database()
         }
+        // adds all input parameters as template parameters
+        for (parCouple in tranformerParmeters) {
+            templModel.put(parCouple.key, listOf(parCouple.value.toString()))
+        }
         // compute derived list sum and minus
         for (entryNameas in xPaths.propertyNames()) {
             val name = entryNameas as String

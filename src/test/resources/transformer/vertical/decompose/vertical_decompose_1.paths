@@ -1,6 +1,6 @@
-all=/database/schema/tables/tables[@name='%%table%%']/columns/columns/@name = 4
-keys=/database/schema/constraints/constraints[@type='PRIMARY_KEY']/source[@table='%%table%%']/columns/columns/@name > 0
-lhss=/database/schema/constraints/constraints[@type='FUNCTIONAL']/source[@table='%%table%%']/columns/columns/@name
-rhss=/database/schema/constraints/constraints[@type='FUNCTIONAL']/target[@table='%%table%%']/columns/columns/@name
+all=/database/schema/tables/tables[@name='%%originTable%%']/columns/columns/@name
+keys=/database/schema/constraints/constraints[@type='PRIMARY_KEY']/source[@table='%%originTable%%']/columns/columns/@name
+lhss=/database/schema/constraints/constraints[@type='FUNCTIONAL']/source[@table='%%originTable%%']/columns/columns/@name > 0
+rhss=/database/schema/constraints/constraints[@type='FUNCTIONAL']/target[@table='%%originTable%%']/columns/columns/@name > 0
 rests=- all keys lhss rhss
-table=/database/schema/tables/tables[@name='%%table%%']/@name = 1
+table=/database/schema/tables/tables[@name='%%originTable%%']/@name

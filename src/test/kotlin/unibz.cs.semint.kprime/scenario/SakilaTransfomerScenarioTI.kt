@@ -17,15 +17,21 @@ import java.util.*
 class SakilaTransfomerScenarioTI {
 
     @Test
-    fun test_xpath_vertical_decomposition_on_sakila_db() {
+    /*
+        Executes a query to sakila after split table in views.
+        Without changing the database.
+     */
+    fun test_query_xpath_vertical_decomposition_on_sakila_db() {
         // given
         val dbFilePath = "db/sakila_film_functional.xml"
         val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/sakilaVTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.splitter.template.filename
-        val xrules = toProperties(vTransfomer!!.splitter.xman.xrules)
+        val xrules = Xrule.toProperties(vTransfomer!!.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters["table"]="film"
+        tranformerParmeters["originTable"]="film"
+        tranformerParmeters["targetTable1"]="film1"
+        tranformerParmeters["targetTable2"]="film2"
         println(templateFilePath)
         // when
         val newdb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
@@ -47,15 +53,21 @@ class SakilaTransfomerScenarioTI {
     }
 
     @Test
+            /*
+                Execute a schema manipulation applying changeset to sakila after split table in views.
+                Changes the database.
+             */
     fun test_create_sakila_film_split_views() {
         // given
         val dbFilePath = "db/sakila_film_functional.xml"
         val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/sakilaVTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.splitter.template.filename
-        val xrules = toProperties(vTransfomer!!.splitter.xman.xrules)
+        val xrules = Xrule.toProperties(vTransfomer!!.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters["table"]="film"
+        tranformerParmeters["originTable"]="film"
+        tranformerParmeters["targetTable1"]="film1"
+        tranformerParmeters["targetTable2"]="film2"
         println(templateFilePath)
         val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
         // create the db views
@@ -75,24 +87,23 @@ class SakilaTransfomerScenarioTI {
     }
 
 
-    private fun toProperties(xrules: ArrayList<Xrule>): Properties {
-        var pros = Properties()
-        for (xrule in xrules) {
-            pros[xrule.name]=xrule.rule
-        }
-        return pros
-    }
 
     @Test
+    /*  TODO: test_xpath_horizontal_decomposition_on_person_db
+        Executes a query to sakila after split horizontal table in views.
+        Without changing the database.
+     */
     fun test_xpath_horizontal_decomposition_on_person_db() {
         // given
         val dbFilePath = "db/sakila_film_functional.xml"
         val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/sakilaHTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.splitter.template.filename
-        val xrules = toProperties(vTransfomer!!.splitter.xman.xrules)
+        val xrules = Xrule.toProperties(vTransfomer!!.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters["table"]="film"
+        tranformerParmeters["originTable"]="film"
+        tranformerParmeters["targetTable1"]="film1"
+        tranformerParmeters["targetTable2"]="film2"
         tranformerParmeters["condition"]="select * from film where language_id=2"
         println(templateFilePath)
         // when
