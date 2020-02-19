@@ -14,7 +14,9 @@ class PersonXPathScenarioTI {
         val trasformerDirection = "decompose"
         val trasformerVersion = "1"
         val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters["table"]="person"
+        tranformerParmeters["originTable"]="person"
+        tranformerParmeters["targetTable1"]="person1"
+        tranformerParmeters["targetTable2"]="person2"
         // when
         XPathTransformUseCase().transform(dbFilePath, trasformerName, trasformerDirection, trasformerVersion,tranformerParmeters, OutputStreamWriter(System.out))
         // then

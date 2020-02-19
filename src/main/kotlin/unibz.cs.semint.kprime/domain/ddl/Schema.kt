@@ -2,11 +2,6 @@ package unibz.cs.semint.kprime.domain.ddl
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
-import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.Xrule
-import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
-import unibz.cs.semint.kprime.usecase.XPathTransformUseCase
-import java.io.StringWriter
 
 @JacksonXmlRootElement(localName = "schema")
 class Schema () {
@@ -85,25 +80,14 @@ class Schema () {
 
     }
 
-    fun addFunctionals(s: String): Schema {
-        val constraintsToAdd = Constraint.set(s)
+    fun addFunctionals(tableName:String, setExpression: String): Schema {
+        val constraintsToAdd = Constraint.set(setExpression)
+        for (constraint in constraintsToAdd) {
+            constraint.type=Constraint.TYPE.FUNCTIONAL.name
+            constraint.source.table=tableName
+            constraint.target.table=tableName
+        }
         constraints.addAll(constraintsToAdd)
-        return this
-    }
-
-    fun vdecompose(originTable: String, targetTable1: String, targetTable2: String): Schema {
-        val transfomerXml = Schema::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
-        val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
-        val templateFilePath = vTransfomer!!.splitter.template.filename
-        val xrules = Xrule.toProperties(vTransfomer!!.splitter.xman.xrules)
-        val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters["originTable"]=originTable
-        tranformerParmeters["targetTable1"]=targetTable1
-        tranformerParmeters["targetTable2"]=targetTable2
-        println(templateFilePath)
-        // when
-        //val newdb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
-        //return newdb.schema
         return this
     }
 

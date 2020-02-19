@@ -1,11 +1,13 @@
 package unibz.cs.semint.kprime.scenario
 
 import org.junit.Test
+import unibz.cs.semint.kprime.adapter.file.FileIOAdapter
 import unibz.cs.semint.kprime.adapter.repository.MetaSchemaJdbcAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.usecase.MetaSchemaReadUseCase
+import unibz.cs.semint.kprime.usecase.TransformerVUseCase
 
 /*
 	>show-meta sakila-source film
@@ -35,17 +37,20 @@ import unibz.cs.semint.kprime.usecase.MetaSchemaReadUseCase
 
  */
 class SakilaRefactTI {
+
     @Test
     fun test_api() {
-        val db = readSakilaMeta()
+        var db = readMeta(sakilaDataSource())
         if (db==null) {
             println("sakila meta db not open")
             return
         }
-        val newdb = db.schema
+        db.schema
                 //.checkBcnf()
-                .addFunctionals("film_id --> replacement_cost, rental_duration, rental_rate")
-                .vdecompose("film","film_catalog","film_rental")		// detect lossy
+                .addFunctionals("film","film_id --> replacement_cost, rental_duration, rental_rate")
+
+        db = TransformerVUseCase(XMLSerializerJacksonAdapter(),FileIOAdapter()).decompose(
+                db,"film","film_catalog","film_rental")		// detect lossy
 //                .hdecompose("film_core","film_ita","film_not_ita","select * where language='IT'") // detect lossy
 //                .genarm()
 //                .alias("film_ita","film_italiani")
@@ -59,19 +64,23 @@ class SakilaRefactTI {
 
     }
 
-    private fun readSakilaMeta(): Database? {
-        val type = "psql"
-        val name = "sakila-source"
-        val driver = "org.postgresql.Driver"
-        val path = "jdbc:postgresql://localhost:5432/sakila"
-        val user = System.getenv()["sakila_user"]?:""//"npedot"
-        val pass = System.getenv()["sakila_pass"]?:""//"password"
-        val sakilaSource = DataSource(type,name,driver,path,user,pass)
+    private fun readMeta(sakilaSource: DataSource): Database? {
         val result = MetaSchemaReadUseCase().doit(sakilaSource,
                 "read-meta-schema sakila-source",
                 MetaSchemaJdbcAdapter(),
                 XMLSerializerJacksonAdapter())
         return result.ok
+    }
+
+    private fun sakilaDataSource(): DataSource {
+        val user = System.getenv()["sakila_user"] ?: ""//"npedot"
+        val pass = System.getenv()["sakila_pass"] ?: ""//"password"
+        val sakilaSource = DataSource(
+                "psql",
+                "sakila-source",
+                "org.postgresql.Driver",
+                "jdbc:postgresql://localhost:5432/sakila", user, pass)
+        return sakilaSource
     }
 
 }

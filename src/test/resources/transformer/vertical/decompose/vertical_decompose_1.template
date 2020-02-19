@@ -1,7 +1,7 @@
 <database name="" id="">
     <schema name="" id="">
         <tables>
-            <tables name="${}1" id="" view="" condition="">
+            <tables name="${table[0]}1" id="" view="" condition="">
                 <columns>
                     <#list keys as key>
                     <columns name="${key}" id="id.${key}" nullable="false" dbtype=""/>

@@ -1,5 +1,6 @@
 package unibz.cs.semint.kprime.domain.ddl
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const
@@ -55,6 +56,8 @@ class Constraint () {
     var type: String=""
 
     var source = Source()
+    @JacksonXmlProperty(isAttribute = false)
+    @JacksonXmlElementWrapper()
     var target = Target()
 
 

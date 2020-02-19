@@ -17,14 +17,14 @@ import java.util.*
 class SakilaTransfomerScenarioTI {
 
     @Test
-    /*
-        Executes a query to sakila after split table in views.
-        Without changing the database.
-     */
+/*
+    Executes a query to sakila after split table in views.
+    Without changing the database.
+ */
     fun test_query_xpath_vertical_decomposition_on_sakila_db() {
         // given
         val dbFilePath = "db/sakila_film_functional.xml"
-        val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/sakilaVTransfomer.xml").readText()
+        val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.splitter.template.filename
         val xrules = Xrule.toProperties(vTransfomer!!.splitter.xman.xrules)
@@ -53,21 +53,21 @@ class SakilaTransfomerScenarioTI {
     }
 
     @Test
-            /*
-                Execute a schema manipulation applying changeset to sakila after split table in views.
-                Changes the database.
-             */
+/*
+    Execute a schema manipulation applying changeset to sakila after split table in views.
+    Changes the database.
+ */
     fun test_create_sakila_film_split_views() {
         // given
         val dbFilePath = "db/sakila_film_functional.xml"
-        val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/sakilaVTransfomer.xml").readText()
+        val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.splitter.template.filename
         val xrules = Xrule.toProperties(vTransfomer!!.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters["originTable"]="film"
-        tranformerParmeters["targetTable1"]="film1"
-        tranformerParmeters["targetTable2"]="film2"
+        tranformerParmeters["targetTable1"]="film_core"
+        tranformerParmeters["targetTable2"]="film_nullable"
         println(templateFilePath)
         val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
         // create the db views
@@ -102,8 +102,8 @@ class SakilaTransfomerScenarioTI {
         val xrules = Xrule.toProperties(vTransfomer!!.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters["originTable"]="film"
-        tranformerParmeters["targetTable1"]="film1"
-        tranformerParmeters["targetTable2"]="film2"
+        tranformerParmeters["targetTable1"]="film_italiano"
+        tranformerParmeters["targetTable2"]="film_non_italiano"
         tranformerParmeters["condition"]="select * from film where language_id=2"
         println(templateFilePath)
         // when

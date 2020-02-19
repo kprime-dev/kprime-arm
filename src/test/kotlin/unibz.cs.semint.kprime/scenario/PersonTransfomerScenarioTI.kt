@@ -17,7 +17,7 @@ import kotlin.test.assertEquals
 class PersonTransfomerScenarioTI {
 
     @Test
-    fun test_xpath_vertical_decomposition_on_person_db(): Database {
+    fun test_xpath_vertical_decomposition_on_person_db() {
         // given
         val dbFilePath = "db/person.xml"
         val transfomerXml = PersonTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
@@ -25,7 +25,9 @@ class PersonTransfomerScenarioTI {
         val templateFilePath = vTransfomer!!.splitter.template.filename
         val xrules = toProperties(vTransfomer!!.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters["table"]="person"
+        tranformerParmeters["originTable"]="person"
+        tranformerParmeters["targetTable1"]="person1"
+        tranformerParmeters["targetTable2"]="person2"
         println(templateFilePath)
         // when
         val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
@@ -35,7 +37,7 @@ class PersonTransfomerScenarioTI {
         assertEquals(lineage.last(),"person")
         assertEquals(lineage.first(),"person1")
         // print to console output
-        return newDb
+        println(newDb)
     }
 
     private fun toProperties(xrules: ArrayList<Xrule>): Properties {
