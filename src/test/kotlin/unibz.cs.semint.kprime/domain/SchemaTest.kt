@@ -137,4 +137,19 @@ class SchemaTest {
         // then
         for (fd in basis) println(fd)
     }
+
+    @Test
+    fun test_combineRight() {
+        // given
+        var fds = Constraint.set("A-->B;"
+                + "A,B-->B,C;"
+                + "A-->C;"
+                + "B,C-->D;"
+                + "B,C-->C,E")
+        // when
+        fds = Schema.combineRight(fds)
+        fds = Schema.removeTrivial(fds)
+        // then
+        for (fd in fds) println(fd)
+    }
 }
