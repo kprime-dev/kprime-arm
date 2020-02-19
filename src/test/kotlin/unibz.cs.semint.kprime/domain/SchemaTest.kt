@@ -17,8 +17,8 @@ class SchemaTest {
         val course = Column.of("Course")
         val fd = Constraint.of("${time.name},${classroom.name}","${course.name}")
 
-        println(" $time , $classroom , $course")
-        println(" $fd")
+        assertEquals(" Time , Classroom , Course"," $time , $classroom , $course")
+        assertEquals(" Time , Classroom --> Course ; "," $fd")
         assertEquals("Time , Classroom --> Course ; ",fd.toString())
     }
 
@@ -36,7 +36,6 @@ class SchemaTest {
         val fds = Constraint.set(exprs)
         val attrs = Column.set("A, B, C, D, E")
         val keys = Schema.superkeys(attrs,fds)
-        println(keys)
         assertEquals(
                 "[[A, B], [C], [A, C], [A, D], [B, C], [A, B, C], [A, B, D], [C, D], [A, B, E], [A, C, D], [C, E], [A, C, E], [B, C, D], [A, B, C, D], [A, D, E], [B, C, E], [A, B, C, E], [A, B, D, E], [C, D, E], [A, C, D, E], [B, C, D, E], [A, B, C, D, E]]"
                 ,keys.toString()
@@ -48,7 +47,6 @@ class SchemaTest {
         val constraints = Constraint.set("A, B --> C; C, D --> E; C --> A; C --> D; D --> B")
         val columns = Column.set("A, B, C, D, E")
         val keys = Schema.keys(columns, constraints)
-        println(keys)
         assertEquals(
                 "[[A, B], [C], [A, D]]",
                 keys.toString()
@@ -61,7 +59,7 @@ class SchemaTest {
         val constraints = Constraint.set("C-->T;H,R-->C;H,T-->R;C,S-->G;H,S-->R")
 
         val closure = Schema.closure(columns, constraints)
-        println(closure)
+        assertEquals("[C, S, T, G]",closure.toString())
     }
 
     @Test
@@ -71,9 +69,8 @@ class SchemaTest {
                 + "A,B-->A;"
                 + "C-->C;"
                 + "C,D,E,F-->C,D,F")
-        println(constraints)
         val result= Schema.removeTrivial(constraints)
-        println(result)
+        assertEquals("[A --> B ; ]",result.toString())
     }
 
     @Test
@@ -97,24 +94,32 @@ class SchemaTest {
         for (sa in powerSet) {
             map.put(sa,Schema.closure(sa,fds))
         }
+        var result = ""
         for (k in map.keys) {
             var v = map.get(k)
             if (v!=null) {
                 v = v.minus(notin)
-                println(" $k = $v ")
+                result+="$k = $v "+System.lineSeparator()
             }
         }
+        assertEquals("""
+             [] = [] 
+             [A] = [A, B, C] 
+             [B] = [B] 
+             [A, B] = [A, B, C] 
+             [C] = [C] 
+             [A, C] = [A, B, C] 
+             [B, C] = [A, B, C] 
+             [A, B, C] = [A, B, C]
+        """.trimIndent(),result.trim())
     }
 
     @Test
     fun test_removeUnnecessaryEntireFD() {
         var fds = Constraint.set("A-->B,C;B-->C;A-->B;A,B-->C")
-        println(fds)
         fds = Schema.splitRight(fds)
-        println("splitted")
         val removed = Schema.removeUnnecessaryEntireFD(fds)
-        println(" Removed ${removed.size}")
-        println(removed)
+        assertEquals("[B --> C ; , A --> B ; ]",removed.toString())
     }
 
     @Test
@@ -125,7 +130,9 @@ class SchemaTest {
         // when
         val result : Set<Constraint> = Schema.projection(attrs,fds)
         // then
-        for (fd in result) println(fd)
+        assertEquals(2,result.size)
+        assertTrue(result.contains(Constraint.of("name --> favAppl")))
+        assertTrue(result.contains(Constraint.of("name --> location")))
     }
 
     @Test
@@ -135,8 +142,10 @@ class SchemaTest {
         // when
         val basis = Schema.minimalBasis(fds)
         // then
-        for (fd in basis) println(fd)
-    }
+        assertEquals(2,basis.size)
+        assertTrue(basis.contains(Constraint.of("name --> favAppl")))
+        assertTrue(basis.contains(Constraint.of("name --> location")))
+}
 
     @Test
     fun test_combineRight() {
@@ -150,6 +159,9 @@ class SchemaTest {
         fds = Schema.combineRight(fds)
         fds = Schema.removeTrivial(fds)
         // then
-        for (fd in fds) println(fd)
+        assertEquals(3,fds.size)
+        assertTrue(fds.contains(Constraint.of("A , B --> C")))
+        assertTrue(fds.contains(Constraint.of("B , C --> D , E")))
+        assertTrue(fds.contains(Constraint.of("A --> B, C")))
     }
 }

@@ -1,5 +1,6 @@
 package unibz.cs.semint.kprime.domain
 
+import junit.framework.Assert.assertEquals
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
@@ -20,7 +21,9 @@ class ChangeSetTest  {
         // when
         val serializedChangeSet = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).serializeChangeSet(changeSet)
         // then
-        println(serializedChangeSet)
+        assertEquals("""
+            UseCaseResult(message=done, ok=<changeSet id=""><createView path="" schemaName="" viewName="">select * from table</createView><createView path="" schemaName="" viewName="">select * from table</createView></changeSet>, ko=kotlin.Unit)
+        """.trimIndent(),serializedChangeSet.toString())
     }
 
     @Test
@@ -43,6 +46,10 @@ class ChangeSetTest  {
         val xmlSerializeUseCase = XMLSerializeUseCase(XMLSerializerJacksonAdapter())
         val changeSet = xmlSerializeUseCase.deserializeChangeSet(changesetXml)
         // then
-        println(xmlSerializeUseCase.prettyChangeSet(changeSet.ok!!))
+        assertEquals("""
+            UseCaseResult(message=done, ok=<changeSet id="createView-example">
+              <createView path="A String" schemaName="public" viewName="v_person">select id, name from person where id > 10</createView>
+            </changeSet>, ko=kotlin.Unit)
+        """.trimIndent(),xmlSerializeUseCase.prettyChangeSet(changeSet.ok!!).toString())
     }
 }

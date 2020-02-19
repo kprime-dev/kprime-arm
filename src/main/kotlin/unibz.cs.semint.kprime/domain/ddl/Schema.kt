@@ -224,7 +224,7 @@ class Schema () {
                     remaining.remove(fd)
                     //println("REMOVE ")
                     if (equivalent(remaining, temp)) {
-                        println("EQUIVALENT $count")
+                        //println("EQUIVALENT $count")
                         ++count
                         found = true
                         toRemove = fd

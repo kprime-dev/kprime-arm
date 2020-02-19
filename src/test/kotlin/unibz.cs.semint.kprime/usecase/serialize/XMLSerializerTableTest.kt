@@ -54,10 +54,8 @@ class XMLSerializerTableTest {
         table.columns.add(Column(name = "col2", id = "id2", dbname = "dbname2"))
         // when
         val result = serializer.prettyTable(table).ok
-        print(result)
         // then
         val file1 = File("target/test-classes/table_two_columns.xml")
-        println(file1.absoluteFile)
         val fileContent = file1.readLines().joinToString(System.lineSeparator())
 
         val myDiff = DiffBuilder.compare(fileContent)
@@ -96,7 +94,6 @@ class XMLSerializerTableTest {
         // given
         val serializer = XMLSerializeUseCase(XMLSerializerJacksonAdapter())
         val file1 = File("target/test-classes/table_minimal.xml")
-        println(file1.absoluteFile)
         val fileContent = file1.readLines().joinToString(System.lineSeparator())
         // when
         val result = serializer.deserializeTable(fileContent).ok

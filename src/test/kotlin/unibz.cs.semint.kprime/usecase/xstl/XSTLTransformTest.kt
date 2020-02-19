@@ -11,7 +11,6 @@ class XSTLTransformTest {
         // given
         val transformer = XSLTrasformUseCase(XSLTransformerJaxpAdapter())
         //val path = XSTLTransformTest::class.java.getResource("xslt/stylesheet.xsl").path
-        //println(path)
         // when
         transformer.transform(
             "target/test-classes/xslt/stylesheet.xsl",

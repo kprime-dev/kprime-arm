@@ -48,7 +48,6 @@ class PersonVSplitScenarioTI {
         // when
         val changeSet = personVSplitUseCase.compute(database)
         // then
-        // prints changeset
         println(XMLSerializeUseCase(XMLSerializerJacksonAdapter()).prettyChangeSet(changeSet))
     }
 

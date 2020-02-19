@@ -45,6 +45,9 @@ class Constraint () {
         return target.columns
     }
 
+    fun withName(newname:String) {
+        this.name=newname
+    }
     enum class TYPE {
         FOREIGN_KEY,PRIMARY_KEY,FUNCTIONAL,DOUBLE_INCLUSION,INCLUSION,DISJUNCTION,COVER
     }
@@ -121,10 +124,22 @@ class Constraint () {
         for(col in source.columns.drop(1))
             result += " , " + col.toString()
         result +=" --> "
-        for(col in target.columns)
-            result += col.toString()
+        if (target.columns.size>0) {
+            result+= target.columns[0].toString()
+            for (col in target.columns.drop(1))
+                result += "," + col.toString()
+        }
         result +=" ; "
         return result
     }
+
+    override fun equals(other: Any?): Boolean {
+        return this.toString().equals((other as Constraint).toString())
+    }
+
+    override fun hashCode(): Int {
+        return this.toString().hashCode()
+    }
+
 
 }

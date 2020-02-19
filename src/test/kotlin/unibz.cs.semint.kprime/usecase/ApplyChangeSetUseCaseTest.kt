@@ -54,7 +54,6 @@ class ApplyChangeSetUseCaseTest {
         // checks identity
         val serializeDb = serializer.serializeDatabase(db)
         val serializeNewDb = serializer.prettyDatabase(newdb)
-        println(serializer.prettyDatabase(newdb))
         val expectedDb = """
             <database name="person" id="">
               <schema name="" id="">
