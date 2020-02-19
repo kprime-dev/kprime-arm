@@ -1,8 +1,7 @@
 package unibz.cs.semint.kprime.usecase
 
 import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.domain.dql.Query
-import unibz.cs.semint.kprime.domain.dql.Select
+import unibz.cs.semint.kprime.domain.dql.*
 
 class SQLizeUseCase {
 
@@ -30,18 +29,22 @@ class SQLizeUseCase {
     fun sqlize(query: Query):String {
         var sql = ""
         sql += sqlize(query.select)
-        for (union in query.union) {
-            sql +=  "UNION" + System.lineSeparator()
+        val union = query.union
+        if (union.selects.size>0) {
             for (select in union.selects) {
+                sql += System.lineSeparator() + "UNION" + System.lineSeparator()
                 sql += sqlize(select)
             }
         }
-        for (minus in query.minus) {
-            sql +=  "MINUS" + System.lineSeparator()
+
+        val minus = query.minus
+        if (minus.selects.size>0) {
             for (select in minus.selects) {
+                sql += System.lineSeparator() + "MINUS" + System.lineSeparator()
                 sql += sqlize(select)
             }
         }
+
         return sql
     }
 
@@ -64,8 +67,62 @@ class SQLizeUseCase {
             }
         }
         if (!select.where.condition.isEmpty()) {
-            sql += "WHERE ${select.where.condition}"  + System.lineSeparator()
+            sql += "WHERE ${select.where.condition}"  //+ System.lineSeparator()
         }
         return sql
     }
+
+    fun fromsql(sqlquery : String):Query {
+        val query = Query()
+        val lines = sqlquery.split(System.lineSeparator())
+        for (line in lines){
+            val select = query.select
+            parseSelect(select,line)
+            parseFrom(select,line)
+            parseWhere(select,line)
+            parseUnionMinus(query,line)
+        }
+        if (query.union.selects.size>0) {
+            val tmp = query.select
+            query.select=query.union.selects.removeAt(0)
+            query.union.selects.add(tmp)
+        }
+        if (query.minus.selects.size>0) {
+            val tmp = query.select
+            query.select=query.minus.selects.removeAt(0)
+            query.minus.selects.add(tmp)
+        }
+        return query
+    }
+
+    private fun parseUnionMinus(query: Query, sqlline: String) {
+        if (sqlline.startsWith("UNION")) {
+            query.union.selects.add(query.select)
+            query.select= Select()
+        } else
+        if (sqlline.startsWith("MINUS")) {
+            query.minus.selects.add(query.select)
+            query.select= Select()
+        }
+    }
+
+    private fun parseSelect(select: Select, sqlline: String) {
+        if (sqlline.startsWith("SELECT ")) {
+            val split = sqlline.drop(7).split(",")
+            select.attributes= split.map { aname -> var a = Attribute(); a.name=aname; a }.toCollection(ArrayList<Attribute>())
+        }
+    }
+    private fun parseFrom(select: Select, sqlline: String) {
+        if (sqlline.startsWith("FROM ")) {
+            val split = sqlline.drop(5).split(",")
+            select.from = split.map { aname -> var a = From(); a.tableName=aname; a }.toCollection(ArrayList<From>())
+        }
+    }
+    private fun parseWhere(select: Select, sqlline: String) {
+        if (sqlline.startsWith("WHERE ")) {
+            val condition = sqlline.drop(6)
+            select.where.condition = condition
+        }
+    }
+
 }

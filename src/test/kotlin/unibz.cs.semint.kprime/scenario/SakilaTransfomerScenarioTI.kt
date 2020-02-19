@@ -1,18 +1,15 @@
 package unibz.cs.semint.kprime.scenario
 
-import org.junit.Rule
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.repository.QueryJdbcAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.Xrule
-import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.SQLizeUseCase
 import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
 import unibz.cs.semint.kprime.usecase.XPathTransformUseCase
 import java.io.StringWriter
-import java.util.*
 
 class SakilaTransfomerScenarioTI {
 
@@ -36,7 +33,7 @@ class SakilaTransfomerScenarioTI {
         // when
         val newdb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
         // then
-        val simpleQuery = Query.simpleQueryFixture(newdb, "film2")
+        val simpleQuery = Query.build(newdb, "film2")
 
         val type = "psql"
         val name = "sakila-source"

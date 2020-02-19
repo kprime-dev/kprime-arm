@@ -1,16 +1,9 @@
 package unibz.cs.semint.kprime.usecase.meta
 
 import org.junit.Test
-import unibz.cs.semint.kprime.adapter.repository.MetaSchemaJdbcAdapter
 import unibz.cs.semint.kprime.adapter.repository.QueryJdbcAdapter
-import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
-import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.domain.dql.Attribute
-import unibz.cs.semint.kprime.domain.dql.From
 import unibz.cs.semint.kprime.domain.dql.Query
-import unibz.cs.semint.kprime.usecase.MetaSchemaReadUseCase
-import kotlin.test.assertEquals
 
 class SakilaQueryTI {
 
@@ -39,7 +32,7 @@ class SakilaQueryTI {
         //given
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
-        val sqlquery = Query.simpleFilmQueryFixture("film")
+        val sqlquery = Query.build("film")
         val result = QueryJdbcAdapter().query(sakilaSource, sqlquery)
         // then
         //assertEquals("read-meta-schema done.","")
@@ -52,7 +45,7 @@ class SakilaQueryTI {
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
         val condition = "language_id=2"
-        val sqlquery = Query.simpleFilmQueryFixture("film",condition)
+        val sqlquery = Query.build("film",condition)
         val result = QueryJdbcAdapter().query(sakilaSource, sqlquery)
         // then
         //assertEquals("read-meta-schema done.","")

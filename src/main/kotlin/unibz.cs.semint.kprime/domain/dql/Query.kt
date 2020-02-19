@@ -8,12 +8,12 @@ import unibz.cs.semint.kprime.domain.ddl.Database
 class Query {
     var select = Select()
     @JacksonXmlElementWrapper(useWrapping=false)
-    var union= ArrayList<Union>()
+    var union= Union()
     @JacksonXmlElementWrapper(useWrapping=false)
-    var minus= ArrayList<Minus>()
+    var minus= Minus()
 
     companion object {
-        fun simpleFilmQueryFixture(tableName:String): Query {
+        fun build(tableName:String): Query {
             val query = Query()
             var select = query.select
             var attr = Attribute()
@@ -25,7 +25,7 @@ class Query {
             return query
         }
 
-        fun simpleFilmQueryFixture(tableName:String,condition:String): Query {
+        fun build(tableName:String, condition:String): Query {
             val query = Query()
             var select = query.select
             var attr = Attribute()
@@ -38,7 +38,7 @@ class Query {
             return query
         }
 
-        fun simpleQueryFixture(database: Database, tableName:String, condition:String): Query {
+        fun build(database: Database, tableName:String, condition:String): Query {
             val colNames = database.schema.tables.filter { t -> t.name == tableName }.first().columns.map { c -> var attr = Attribute(); attr.name=c.name; attr }
             val query = Query()
             var select = query.select
@@ -50,7 +50,7 @@ class Query {
             return query
         }
 
-        fun simpleQueryFixture(database: Database, tableName:String): Query {
+        fun build(database: Database, tableName:String): Query {
             val colNames = database.schema.tables.filter { t -> t.name == tableName }.first().columns.map { c -> var attr = Attribute(); attr.name=c.name; attr }
             val query = Query()
             var select = query.select
