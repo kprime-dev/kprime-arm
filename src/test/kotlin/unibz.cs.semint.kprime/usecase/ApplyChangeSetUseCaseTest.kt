@@ -91,6 +91,7 @@ class ApplyChangeSetUseCaseTest {
                   </constraints>
                 </constraints>
               </schema>
+              <mapping/>
             </database>
         """.trimIndent()
         assertEquals(expectedDb,serializeNewDb)
@@ -113,6 +114,10 @@ class ApplyChangeSetUseCaseTest {
         val column = Column()
         table.columns.add(column)
         db.schema.tables.add(table)
+//        db.mapping.put("amico", SQLizeUseCase().fromsql("""
+//            SELECT *
+//            FROM person
+//        """.trimIndent()))
         return db
     }
 

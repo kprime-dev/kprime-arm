@@ -2,6 +2,7 @@ package unibz.cs.semint.kprime.domain.ddl
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import unibz.cs.semint.kprime.domain.dql.Query
 
 @JacksonXmlRootElement(localName = "database")
 open class Database () {
@@ -12,6 +13,7 @@ open class Database () {
     var id: String=""
 
     var schema: Schema = Schema()
+    var mapping : HashMap<String, Query>? = HashMap<String, Query>()
 
         fun lineage(tableName:String) : List<String> {
             val result = mutableListOf<String>()
