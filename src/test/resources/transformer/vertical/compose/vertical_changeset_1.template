@@ -1,0 +1,34 @@
+<changeSet id="234">
+  <createTable name="${targetTable[0]}" id="" view="" condition="">
+    <columns>
+        <#list keys as key>
+        <columns name="${key}" id="id.${key}" dbname="" nullable="false" dbtype=""/>
+        </#list>
+        <#list lhss as lhs>
+        <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
+        </#list>
+        <#list rhss as rhs>
+        <columns name="${rhs}" id="id.${rhs}" dbname="" nullable="false" dbtype=""/>
+        </#list>
+    </columns>
+  </createTable>
+  <createConstraint name="${targetTable[0]}.primaryKey" id="" type="PRIMARY_KEY">
+    <source name="" id="" table="${targetTable[0]}">
+        <columns>
+            <#list keys as key>
+            <columns name="${key}" id="id.${key}" dbname="" nullable="false" dbtype=""/>
+            </#list>
+        </columns>
+    </source>
+    <target name="" id="" table="">
+        <columns>
+            <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+        </columns>
+    </target>
+  </createConstraint>
+  <dropTable path="" schemaName="" tableName="${originTable1[0]}"/>
+  <dropTable path="" schemaName="" tableName="${originTable2[0]}"/>
+  <dropConstraint path="" schemaName="" constraintName="${originTable1[0]}.primaryKey"/>
+  <dropConstraint path="" schemaName="" constraintName="${originTable2[0]}.primaryKey"/>
+  <dropConstraint path="" schemaName="" constraintName="${targetTable[0]}.doubleInclusion"/>
+</changeSet>

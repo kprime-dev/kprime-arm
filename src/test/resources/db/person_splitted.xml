@@ -1,0 +1,90 @@
+<database name="" id="">
+    <schema name="" id="">
+        <tables>
+            <tables name="person2" id="" view="" condition="">
+                <columns>
+                    <columns name="SSN2" id="id.SSN" dbname="dbname.SSN" nullable="false" dbtype=""/>
+                    <columns name="T2" id="id.T" dbname="dbname.T" nullable="false" dbtype=""/>
+                    <columns name="S2" id="id.S" dbname="dbname.S" nullable="true" dbtype=""/>
+                    <columns name="X2" id="id.X" dbname="dbname.X" nullable="true" dbtype=""/>
+                </columns>
+            </tables>
+            <tables name="person1" id="" view="person" condition="">
+                <columns>
+                    <columns name="SSN" id="id.SSN" dbname="" nullable="false" dbtype=""/>
+                    <columns name="T" id="id.T" dbname="" nullable="false" dbtype=""/>
+                    <columns name="X" id="id.X" dbname="" nullable="true" dbtype=""/>
+                </columns>
+            </tables>
+            <tables name="person2" id="" view="person" condition="">
+                <columns>
+                    <columns name="T" id="id.T" dbname="" nullable="false" dbtype=""/>
+                    <columns name="S" id="id.S" dbname="" nullable="false" dbtype=""/>
+                </columns>
+            </tables>
+        </tables>
+        <constraints>
+            <constraints name="primaryKey.person" id="" type="PRIMARY_KEY">
+                <source name="" id="" table="person">
+                    <columns>
+                        <columns name="SSN" id="id.SSN" dbname="dbname.SSN" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="functional.person" id="" type="FUNCTIONAL">
+                <source name="" id="" table="person">
+                    <columns>
+                        <columns name="T" id="id.T" dbname="dbname.T" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="person">
+                    <columns>
+                        <columns name="S" id="id.S" dbname="dbname.S" nullable="true" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="person.doubleInclusion" id="" type="DOUBLE_INCLUSION">
+                <source name="" id="" table="person1">
+                    <columns>
+                        <columns name="T" id="id.T" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="person2">
+                    <columns>
+                        <columns name="T" id="id.T" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="person2.primaryKey" id="" type="PRIMARY_KEY">
+                <source name="" id="" table="person2">
+                    <columns>
+                        <columns name="T" id="id.T" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+            <constraints name="person1.primaryKey" id="" type="PRIMARY_KEY">
+                <source name="" id="" table="person1">
+                    <columns>
+                        <columns name="SSN" id="id.SSN" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </source>
+                <target name="" id="" table="">
+                    <columns>
+                        <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                </target>
+            </constraints>
+        </constraints>
+    </schema>
+    <mapping/>
+</database>
