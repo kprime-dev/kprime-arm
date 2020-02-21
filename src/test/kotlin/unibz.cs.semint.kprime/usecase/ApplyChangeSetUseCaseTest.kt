@@ -43,6 +43,40 @@ class ApplyChangeSetUseCaseTest {
     }
 
     @Test
+    fun test_serialize() {
+        val db = setUpPersonDb()
+        val serialized = XMLSerializerJacksonAdapter().prettyDatabase(db)
+        assertEquals("""
+            <database name="person" id="">
+              <schema name="" id="">
+                <tables>
+                  <tables name="person" id="" view="" condition="">
+                    <columns>
+                      <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+                    </columns>
+                  </tables>
+                </tables>
+                <constraints>
+                  <constraints name="person.primaryKey" id="" type="PRIMARY_KEY">
+                    <source name="" id="" table="">
+                      <columns>
+                        <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+                      </columns>
+                    </source>
+                    <target name="" id="" table="">
+                      <columns>
+                        <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+                      </columns>
+                    </target>
+                  </constraints>
+                </constraints>
+              </schema>
+              <mapping/>
+            </database>
+        """.trimIndent(), serialized)
+    }
+
+    @Test
     fun test_apply_changeset_to_person_db() {
         //given
         val db = setUpPersonDb()
@@ -114,7 +148,8 @@ class ApplyChangeSetUseCaseTest {
         val column = Column()
         table.columns.add(column)
         db.schema.tables.add(table)
-//        db.mapping.put("amico", SQLizeUseCase().fromsql("""
+//        db.mapping=HashMap()
+//        db.mapping?.put("amico", SQLizeUseCase().fromsql("""
 //            SELECT *
 //            FROM person
 //        """.trimIndent()))

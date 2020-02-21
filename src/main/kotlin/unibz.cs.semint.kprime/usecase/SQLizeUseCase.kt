@@ -109,19 +109,19 @@ class SQLizeUseCase {
     private fun parseSelect(select: Select, sqlline: String) {
         if (sqlline.startsWith("SELECT ")) {
             val split = sqlline.drop(7).split(",")
-            select.attributes= split.map { aname -> var a = Attribute(); a.name=aname; a }.toCollection(ArrayList<Attribute>())
+            select.attributes= split.map { aname -> var a = Attribute(); a.name=aname.trim(); a }.toCollection(ArrayList<Attribute>())
         }
     }
     private fun parseFrom(select: Select, sqlline: String) {
         if (sqlline.startsWith("FROM ")) {
             val split = sqlline.drop(5).split(",")
-            select.from = split.map { aname -> var a = From(); a.tableName=aname; a }.toCollection(ArrayList<From>())
+            select.from = split.map { aname -> var a = From(); a.tableName=aname.trim(); a }.toCollection(ArrayList<From>())
         }
     }
     private fun parseWhere(select: Select, sqlline: String) {
         if (sqlline.startsWith("WHERE ")) {
             val condition = sqlline.drop(6)
-            select.where.condition = condition
+            select.where.condition = condition.trim()
         }
     }
 
