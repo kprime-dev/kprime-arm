@@ -1,14 +1,8 @@
 <changeSet id="234">
   <createTable name="${targetTable[0]}" id="" view="" condition="">
     <columns>
-        <#list keys as key>
-        <columns name="${key}" id="id.${key}" dbname="" nullable="false" dbtype=""/>
-        </#list>
-        <#list lhss as lhs>
-        <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
-        </#list>
-        <#list rhss as rhs>
-        <columns name="${rhs}" id="id.${rhs}" dbname="" nullable="false" dbtype=""/>
+        <#list all as col>
+        <columns name="${col}" id="id.${col}" dbname="" nullable="false" dbtype=""/>
         </#list>
     </columns>
   </createTable>
@@ -23,6 +17,22 @@
     <target name="" id="" table="">
         <columns>
             <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+        </columns>
+    </target>
+  </createConstraint>
+  <createConstraint name="${targetTable[0]}.functional" id="" type="FUNCTIONAL">
+    <source name="" id="" table="${targetTable[0]}">
+        <columns>
+            <#list fds as fd>
+            <columns name="${fd}" id="id.${fd}" dbname="" nullable="false" dbtype=""/>
+            </#list>
+        </columns>
+    </source>
+    <target name="" id="" table="">
+        <columns>
+            <#list fds_target as fdt>
+            <columns name="${fdt}" id="id.${fdt}" dbname="" nullable="false" dbtype=""/>
+            </#list>
         </columns>
     </target>
   </createConstraint>

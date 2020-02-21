@@ -68,4 +68,5 @@
   </createConstraint>
   <dropTable path="" schemaName="" tableName="${table[0]}"/>
   <dropConstraint path="" schemaName="" constraintName="${table[0]}.primaryKey"/>
+  <dropConstraint path="" schemaName="" constraintName="${table[0]}.functional"/>
 </changeSet>

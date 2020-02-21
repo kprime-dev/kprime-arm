@@ -49,6 +49,8 @@ class PersonTransfomerScenarioTI {
     }
 
     @Test
+    // FIXME rimuovere attributi doppi dalla tabella
+    // FIXME drop della primary key person1
     fun test_xpath_horizontal_decomposition_on_person_db() {
         // given
         val dbFilePath = "db/person_splitted.xml"
@@ -68,4 +70,8 @@ class PersonTransfomerScenarioTI {
     }
 
 
+    @Test
+    fun test_roundtrip_vertical_transformation() {
+
+    }
 }

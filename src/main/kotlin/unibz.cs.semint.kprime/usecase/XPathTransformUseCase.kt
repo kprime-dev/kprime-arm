@@ -87,7 +87,7 @@ class XPathTransformUseCase {
             println(" $derivedList")
         }
         // if derivationRule starts with - then compute intersection
-        return derivedList
+        return derivedList.toSet().toList()
     }
 
     private fun asValueList(xpathResultNodes: NodeList): MutableList<String> {
@@ -125,14 +125,15 @@ class XPathTransformUseCase {
                 templModel[name] = asValueList(xpath.compile(value).evaluate(doc, XPathConstants.NODESET) as NodeList)
                 println(" ${name} = ${value}")
                 println(" ${name} = ${templModel[name]}")
-            }
-            if (pathTokens.size == 3) {
-                val pathCondition = pathTokens[1]
-                val pathSize = pathTokens[2].toInt()
-                if (pathCondition == ">")
-                    if ((templModel[name])!!.size <= pathSize) goon = false
-                if (pathCondition == "=")
-                    if ((templModel[name])!!.size != pathSize) goon = false
+                if (pathTokens.size == 3) {
+                    println(pathTokens)
+                    val pathCondition = pathTokens[1]
+                    val pathSize = pathTokens[2].toInt()
+                    if (pathCondition == ">")
+                        if ((templModel[name])!!.size <= pathSize) goon = false
+                    if (pathCondition == "=")
+                        if ((templModel[name])!!.size != pathSize) goon = false
+                }
             }
         }
         if (!goon) {

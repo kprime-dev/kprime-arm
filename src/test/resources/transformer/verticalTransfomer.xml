@@ -5,6 +5,9 @@
                 <xrules name="keys">/database/schema/constraints/constraints[@type='PRIMARY_KEY']/source[@table='%%originTable1%%']/columns/columns/@name</xrules>
                 <xrules name="lhss">/database/schema/tables/tables[@name='%%originTable1%%']/columns/columns/@name</xrules>
                 <xrules name="rhss">/database/schema/tables/tables[@name='%%originTable2%%']/columns/columns/@name</xrules>
+                <xrules name="fds">/database/schema/constraints/constraints[@type='DOUBLE_INCLUSION']/source[@table='%%originTable1%%']/columns/columns/@name</xrules>
+                <xrules name="fds_target">- rhss fds</xrules>
+                <xrules name="all">+ keys lhss rhss</xrules>
             </xrules>
         </xman>
         <template filename="transformer/vertical/compose/vertical_changeset_1.template"/>
