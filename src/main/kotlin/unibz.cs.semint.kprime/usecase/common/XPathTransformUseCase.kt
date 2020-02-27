@@ -1,13 +1,12 @@
-package unibz.cs.semint.kprime.usecase
+package unibz.cs.semint.kprime.usecase.common
 
 import freemarker.cache.ClassTemplateLoader
 import freemarker.template.Configuration
 import org.w3c.dom.NodeList
-import unibz.cs.semint.kprime.adapter.file.FileIOAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
-import java.io.FileInputStream
+import unibz.cs.semint.kprime.usecase.service.FileIOService
 import java.io.InputStream
 import java.io.StringWriter
 import java.io.Writer
@@ -40,11 +39,13 @@ class XPathTransformUseCase {
     }
 
     fun transform(dbFilePath: String, templateFilePath: String, xPaths: Properties, tranformerParmeters: MutableMap<String, Any>,outWriter:Writer): Database {
-        val changeSet = compute(dbFilePath, templateFilePath, xPaths, tranformerParmeters,outWriter)
-        if (changeSet==null) { println("changeset null"); return Database()}
+        val changeSet = compute(dbFilePath, templateFilePath, xPaths, tranformerParmeters, outWriter)
+        if (changeSet == null) {
+            println("changeset null"); return Database()
+        }
 
         //val dbXml = XPathTransformUseCase::class.java.getResource("/${dbFilePath}").readText()
-        val  dbXml = FileIOAdapter.readString(FileIOAdapter.inputStreamFromPath(dbFilePath))
+        val dbXml = FileIOService.readString(FileIOService.inputStreamFromPath(dbFilePath))
         val serializer = XMLSerializerJacksonAdapter()
         val db = serializer.deserializeDatabase(dbXml)
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet);
@@ -101,7 +102,7 @@ class XPathTransformUseCase {
     }
 
     fun compute(dbFilePath: String, templateFilePath: String, xPaths: Properties, tranformerParmeters: MutableMap<String, Any>,outWriter:Writer): ChangeSet {
-        var dbInputStream: InputStream = FileIOAdapter.inputStreamFromPath(dbFilePath)
+        var dbInputStream: InputStream = FileIOService.inputStreamFromPath(dbFilePath)
 
         val docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         val doc = docBuilder.parse(dbInputStream)

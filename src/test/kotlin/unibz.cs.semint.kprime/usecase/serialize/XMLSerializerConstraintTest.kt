@@ -7,7 +7,7 @@ import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Source
-import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
+import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import java.io.File
 
 class XMLSerializerConstraintTest {

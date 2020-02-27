@@ -2,7 +2,7 @@ package unibz.cs.semint.kprime.adapter.repository
 
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.dql.Query
-import unibz.cs.semint.kprime.usecase.SQLizeUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.util.*

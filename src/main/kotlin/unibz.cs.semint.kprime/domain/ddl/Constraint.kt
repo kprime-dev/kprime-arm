@@ -60,7 +60,7 @@ class Constraint () {
 
     var source = Source()
     @JacksonXmlProperty(isAttribute = false)
-    @JacksonXmlElementWrapper()
+    @JacksonXmlElementWrapper(useWrapping = false)
     var target = Target()
 
 
@@ -119,7 +119,7 @@ class Constraint () {
         if (source==null) return "no source"
         if (source.columns==null || source.columns.isEmpty()) return "no source columns"
         if (target==null) return "no target"
-        if (target.columns==null || target.columns.isEmpty()) return "no target columns"
+        if (target.columns==null || right().isEmpty()) return "no target columns"
         var result = source.columns[0].toString()
         for(col in source.columns.drop(1))
             result += " , " + col.toString()

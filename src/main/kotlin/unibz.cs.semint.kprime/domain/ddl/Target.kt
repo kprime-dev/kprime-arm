@@ -13,5 +13,5 @@ class Target () {
     @JacksonXmlProperty(isAttribute = true)
     var table: String=""
 
-    var columns= ArrayList<Column>()
+    var columns = ArrayList<Column>()
 }

@@ -5,7 +5,7 @@ import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 import unibz.cs.semint.kprime.domain.dml.CreateView
-import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
+import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 
 class ChangeSetTest  {
 

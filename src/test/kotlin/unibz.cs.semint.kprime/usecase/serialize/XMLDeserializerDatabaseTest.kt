@@ -3,8 +3,8 @@ package unibz.cs.semint.kprime.usecase.serialize
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.usecase.SQLizeUseCase
-import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
+import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -83,7 +83,7 @@ class XMLDeserializerDatabaseTest {
 
         val db = deserialized.ok!!
 
-        db.mapping!!["query2"]=SQLizeUseCase().fromsql("""
+        db.mapping!!["query2"]= SQLizeUseCase().fromsql("""
             SELECT *  
             FROM alias 
         """.trimIndent())

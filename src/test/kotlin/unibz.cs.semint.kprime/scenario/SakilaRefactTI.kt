@@ -6,8 +6,8 @@ import unibz.cs.semint.kprime.adapter.repository.MetaSchemaJdbcAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.usecase.MetaSchemaReadUseCase
-import unibz.cs.semint.kprime.usecase.TransformerVUseCase
+import unibz.cs.semint.kprime.usecase.common.MetaSchemaReadUseCase
+import unibz.cs.semint.kprime.usecase.current.TransformerVUseCase
 
 /*
 	>show-meta sakila-source film
@@ -49,8 +49,12 @@ class SakilaRefactTI {
                 //.checkBcnf()
                 .addFunctionals("film","film_id --> replacement_cost, rental_duration, rental_rate")
 
-        db = TransformerVUseCase(XMLSerializerJacksonAdapter(),FileIOAdapter()).decompose(
-                db,"film","film_catalog","film_rental")		// detect lossy
+
+        // val workingDir = "/home/nicola/Tmp/"
+        val workingDir = "/home/nipe/Temp/"
+
+        db = TransformerVUseCase(XMLSerializerJacksonAdapter(), FileIOAdapter()).decompose(
+                db,"film","film_catalog","film_rental", workingDir).newdb		// detect lossy
 //                .hdecompose("film_core","film_ita","film_not_ita","select * where language='IT'") // detect lossy
 //                .genarm()
 //                .alias("film_ita","film_italiani")

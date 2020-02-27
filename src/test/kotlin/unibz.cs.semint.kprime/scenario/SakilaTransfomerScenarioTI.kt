@@ -6,9 +6,9 @@ import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.Xrule
 import unibz.cs.semint.kprime.domain.dql.Query
-import unibz.cs.semint.kprime.usecase.SQLizeUseCase
-import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
-import unibz.cs.semint.kprime.usecase.XPathTransformUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
+import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
+import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
 import java.io.StringWriter
 
 class SakilaTransfomerScenarioTI {

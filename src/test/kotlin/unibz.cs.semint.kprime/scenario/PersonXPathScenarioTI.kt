@@ -1,7 +1,7 @@
 package unibz.cs.semint.kprime.scenario
 
 import org.junit.Test
-import unibz.cs.semint.kprime.usecase.XPathTransformUseCase
+import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
 import java.io.OutputStreamWriter
 
 class PersonXPathScenarioTI {

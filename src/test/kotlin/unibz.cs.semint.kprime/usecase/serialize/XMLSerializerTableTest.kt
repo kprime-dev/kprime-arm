@@ -6,7 +6,7 @@ import org.xmlunit.builder.DiffBuilder
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.Table
-import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
+import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull

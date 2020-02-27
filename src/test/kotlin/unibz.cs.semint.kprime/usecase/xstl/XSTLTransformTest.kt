@@ -2,7 +2,7 @@ package unibz.cs.semint.kprime.usecase.xstl
 
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XSLTransformerJaxpAdapter
-import unibz.cs.semint.kprime.usecase.XSLTrasformUseCase
+import unibz.cs.semint.kprime.usecase.common.XSLTrasformUseCase
 
 class XSTLTransformTest {
 

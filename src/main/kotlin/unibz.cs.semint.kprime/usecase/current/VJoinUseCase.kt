@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.usecase
+package unibz.cs.semint.kprime.usecase.current
 
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 import unibz.cs.semint.kprime.domain.ddl.Constraint

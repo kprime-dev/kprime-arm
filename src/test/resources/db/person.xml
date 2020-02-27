@@ -19,7 +19,7 @@
             </tables>
         </tables>
         <constraints>
-            <constraints name="primaryKey.person" id="" type="PRIMARY_KEY">
+            <constraints name="person.primaryKey" id="" type="PRIMARY_KEY">
                 <source name="" id="" table="person">
                     <columns>
                         <columns name="SSN" id="id.SSN" dbname="dbname.SSN" nullable="false" dbtype=""/>
@@ -31,7 +31,7 @@
                     </columns>
                 </target>
             </constraints>
-            <constraints name="functional.person" id="" type="FUNCTIONAL">
+            <constraints name="person.functional" id="" type="FUNCTIONAL">
                 <source name="" id="" table="person">
                     <columns>
                         <columns name="T" id="id.T" dbname="dbname.T" nullable="false" dbtype=""/>

@@ -5,8 +5,8 @@ import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.ddl.Table
-import unibz.cs.semint.kprime.usecase.VJoinUseCase
-import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
+import unibz.cs.semint.kprime.usecase.current.VJoinUseCase
+import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 
 class PersonVJoinScenarioTI {
 

@@ -4,6 +4,7 @@ import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.ddl.*
 import unibz.cs.semint.kprime.domain.dml.*
+import unibz.cs.semint.kprime.usecase.common.ApplyChangeSetUseCase
 import kotlin.test.assertEquals
 
 class ApplyChangeSetUseCaseTest {

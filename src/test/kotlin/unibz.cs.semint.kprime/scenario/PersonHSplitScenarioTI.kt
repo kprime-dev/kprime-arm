@@ -5,7 +5,7 @@ import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.ddl.Table
-import unibz.cs.semint.kprime.usecase.HSplitUseCase
+import unibz.cs.semint.kprime.usecase.current.HSplitUseCase
 
 class PersonHSplitScenarioTI {
 

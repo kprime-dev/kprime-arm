@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.usecase
+package unibz.cs.semint.kprime.usecase.current
 
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.*
@@ -6,6 +6,8 @@ import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.ddl.Table
+import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
+import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 
 class HSplitUseCase {
 

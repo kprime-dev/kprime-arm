@@ -11,7 +11,7 @@ import unibz.cs.semint.kprime.domain.ddl.Table
 import unibz.cs.semint.kprime.domain.dql.Attribute
 import unibz.cs.semint.kprime.domain.dql.From
 import unibz.cs.semint.kprime.domain.dql.Query
-import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
+import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import java.io.File
 
 class XMLSerializerDatabaseTest {

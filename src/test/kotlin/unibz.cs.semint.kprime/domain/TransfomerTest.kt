@@ -3,7 +3,7 @@ package unibz.cs.semint.kprime.domain
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.usecase.XMLSerializeUseCase
+import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 
 class TransfomerTest {
 

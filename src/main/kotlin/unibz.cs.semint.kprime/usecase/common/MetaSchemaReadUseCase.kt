@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.usecase
+package unibz.cs.semint.kprime.usecase.common
 
 import unibz.cs.semint.kprime.domain.*
 import unibz.cs.semint.kprime.domain.ddl.Database

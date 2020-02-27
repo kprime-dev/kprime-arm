@@ -4,7 +4,7 @@ import junit.framework.Assert.assertEquals
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.dql.*
-import unibz.cs.semint.kprime.usecase.SQLizeUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
 import kotlin.test.assertEquals as assertEquals1
 
 class QueryTest {
