@@ -19,12 +19,12 @@ class TransformerHUseCase : TransformerUseCase {
 
     override fun decomposeApplicable(): Applicability {
         // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        return Applicability(true,"TransformerHUseCase.decomposeApplicable")
+        return Applicability(false,"TransformerHUseCase.decomposeApplicable")
     }
 
     override fun composeApplicable(): Applicability {
         // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        return Applicability(true,"TransformerHUseCase.composeApplicable")
+        return Applicability(false,"TransformerHUseCase.composeApplicable")
     }
 
 }

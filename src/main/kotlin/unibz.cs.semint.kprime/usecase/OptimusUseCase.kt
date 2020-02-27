@@ -7,6 +7,8 @@ import unibz.cs.semint.kprime.usecase.current.TransformerHUseCase
 import unibz.cs.semint.kprime.usecase.current.TransformerVUseCase
 import unibz.cs.semint.kprime.usecase.service.FileIOService
 import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
+import java.util.*
+import kotlin.collections.ArrayList
 
 class OptimusUseCase {
 
@@ -56,7 +58,12 @@ class OptimusUseCase {
         return Pair(dbTrasformable11, trasformable11)
     }
 
-    private fun userAknowledge(message: Any): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    private fun userAknowledge(message: String): Boolean {
+        println()
+        println(message)
+        println("Y/N")
+        val reader = Scanner(System.`in`)
+        val response = reader.next()
+        return response.toUpperCase().equals("Y")
     }
 }

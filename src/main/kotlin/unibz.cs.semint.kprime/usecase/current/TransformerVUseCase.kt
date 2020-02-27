@@ -32,16 +32,17 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
 
     override fun compose(db: Database, vararg params:String): Transformation {
         val changeSet = VJoinUseCase().compute(db)
-        return Transformation(changeSet, ApplyChangeSetUseCase(serializer).apply(db,changeSet))
+        val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
+        return Transformation(changeSet, newdb)
     }
 
     override fun decomposeApplicable(): Applicability {
-        // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // TODO("not implemented decompose applicable logic.")
         return Applicability(true,"TransformerVUseCase.decomposeApplicable")
     }
 
     override fun composeApplicable(): Applicability {
-        // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // TODO("not implemented compose applicable logic.")
         return Applicability(true,"TransformerVUseCase.composeApplicable")
     }
 
