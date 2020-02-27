@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.scenario
+package unibz.cs.semint.kprime.scenario.person
 
 import org.junit.Test
 import unibz.cs.semint.kprime.domain.ddl.Column

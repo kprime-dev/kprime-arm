@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.usecase.meta
+package unibz.cs.semint.kprime.scenario.sakila
 
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.repository.QueryJdbcAdapter

@@ -1,12 +1,10 @@
-package unibz.cs.semint.kprime.scenario
+package unibz.cs.semint.kprime.scenario.sakila
 
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.file.FileIOAdapter
-import unibz.cs.semint.kprime.adapter.repository.MetaSchemaJdbcAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.DataSource
-import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.usecase.common.MetaSchemaReadUseCase
+import unibz.cs.semint.kprime.scenario.sakila.readMeta
+import unibz.cs.semint.kprime.scenario.sakila.sakilaDataSource
 import unibz.cs.semint.kprime.usecase.current.TransformerVUseCase
 
 /*

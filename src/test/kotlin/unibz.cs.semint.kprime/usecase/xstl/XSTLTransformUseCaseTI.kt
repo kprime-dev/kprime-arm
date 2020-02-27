@@ -4,7 +4,7 @@ import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XSLTransformerJaxpAdapter
 import unibz.cs.semint.kprime.usecase.common.XSLTrasformUseCase
 
-class XSTLTransformTest {
+class XSTLTransformUseCaseTI {
 
     @Test
     fun test_xstl() {

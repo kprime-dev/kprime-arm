@@ -81,7 +81,7 @@ class ApplyChangeSetUseCaseTest {
     fun test_apply_changeset_to_person_db() {
         //given
         val db = setUpPersonDb()
-        val changeset = setUpChangeSet()
+        val changeset = setUpPersonChangeSet()
         val serializer = XMLSerializerJacksonAdapter()
         // when
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeset)
@@ -133,7 +133,7 @@ class ApplyChangeSetUseCaseTest {
 
     }
 
-    fun setUpPersonDb(): Database {
+    private fun setUpPersonDb(): Database {
         val db = Database()
         db.name="person"
         val constraint = Constraint()
@@ -157,7 +157,8 @@ class ApplyChangeSetUseCaseTest {
         return db
     }
 
-    fun setUpChangeSet(): ChangeSet {
+
+    private fun setUpPersonChangeSet(): ChangeSet {
         val dropPersonTable = DropTable()  name "person"
         val dropPrimaryKeyConstraint = DropConstraint() name "person.primaryKey"
         val vsplitChangeSet = initChangeSet {} withId  "234"

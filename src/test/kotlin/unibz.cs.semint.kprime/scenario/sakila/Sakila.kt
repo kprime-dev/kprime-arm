@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.scenario
+package unibz.cs.semint.kprime.scenario.sakila
 
 import unibz.cs.semint.kprime.adapter.repository.MetaSchemaJdbcAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
