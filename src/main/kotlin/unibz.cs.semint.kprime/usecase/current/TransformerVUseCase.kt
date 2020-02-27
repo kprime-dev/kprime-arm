@@ -3,6 +3,7 @@ package unibz.cs.semint.kprime.usecase.current
 import unibz.cs.semint.kprime.adapter.file.FileIOAdapter
 import unibz.cs.semint.kprime.domain.Applicability
 import unibz.cs.semint.kprime.domain.Transformation
+import unibz.cs.semint.kprime.domain.TransformationStrategy
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.usecase.common.ApplyChangeSetUseCase
 import unibz.cs.semint.kprime.usecase.TransformerUseCase
@@ -36,12 +37,12 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
         return Transformation(changeSet, newdb)
     }
 
-    override fun decomposeApplicable(): Applicability {
+    override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
         // TODO("not implemented decompose applicable logic.")
         return Applicability(true,"TransformerVUseCase.decomposeApplicable")
     }
 
-    override fun composeApplicable(): Applicability {
+    override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
         // TODO("not implemented compose applicable logic.")
         return Applicability(true,"TransformerVUseCase.composeApplicable")
     }

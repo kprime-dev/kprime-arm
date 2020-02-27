@@ -2,6 +2,7 @@ package unibz.cs.semint.kprime.usecase
 
 import unibz.cs.semint.kprime.domain.Applicability
 import unibz.cs.semint.kprime.domain.Transformation
+import unibz.cs.semint.kprime.domain.TransformationStrategy
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.usecase.current.TransformerHUseCase
 import unibz.cs.semint.kprime.usecase.current.TransformerVUseCase
@@ -13,49 +14,61 @@ import kotlin.collections.ArrayList
 class OptimusUseCase {
 
     val transfomers : MutableList<TransformerUseCase> = ArrayList<TransformerUseCase>()
+    val transformationStrategy : TransformationStrategy
 
-    constructor(serializer : IXMLSerializerService, fileIOService: FileIOService) {
+    constructor(serializer : IXMLSerializerService, fileIOService: FileIOService, transformationStrategy: TransformationStrategy) {
         transfomers.add(TransformerHUseCase())
         transfomers.add(TransformerVUseCase(serializer,fileIOService))
+        this.transformationStrategy = transformationStrategy
     }
 
-    fun transfom(db: Database):Database {
+    fun transfom(db: Database):List<Transformation> {
+        val transformationPath = transfomers
+                .filter { t -> t.decomposeApplicable(db,transformationStrategy).ok }
+                .map { t -> t.decompose(db) }.toList()
+        return transformationPath
+    }
+
+
+    fun oldtransfom(db: Database):Database {
         var dbTrasformable = db
-        var trasformable = true
-        while (trasformable) {
-            trasformable = false
-            val pair = tryUseTransfomers(db, dbTrasformable, trasformable)
+        var moreTrasformable = true
+        while (moreTrasformable) {
+            moreTrasformable = false
+            val pair = tryUseAnyTransfomers(db, dbTrasformable, moreTrasformable)
             dbTrasformable = pair.first
-            trasformable = pair.second
+            moreTrasformable = pair.second
         }
         return dbTrasformable
     }
 
-    private fun tryUseTransfomers(db: Database, dbTrasformable: Database, trasformable: Boolean): Pair<Database, Boolean> {
+    private fun tryUseAnyTransfomers(db: Database, dbTrasformable: Database, trasformable: Boolean): Pair<Database, Boolean> {
         var dbTrasformable1 = dbTrasformable
-        var trasformable1 = trasformable
+        var moreTrasformable = trasformable
         for (transfomer in transfomers) {
-            val pair = checkAndTransform(transfomer, db, dbTrasformable1, trasformable1)
+            val pair = checkDecomposabilityUserAknowledgeAndTransform(
+                    transfomer, db, dbTrasformable1, moreTrasformable)
             dbTrasformable1 = pair.first
-            trasformable1 = pair.second
+            moreTrasformable = pair.second
         }
-        return Pair(dbTrasformable1, trasformable1)
+        return Pair(dbTrasformable1, moreTrasformable)
     }
 
-    private fun checkAndTransform(transfomer: TransformerUseCase, db: Database, dbTrasformable1: Database, trasformable1: Boolean): Pair<Database, Boolean> {
+    private fun checkDecomposabilityUserAknowledgeAndTransform(
+            transfomer: TransformerUseCase, db: Database, dbTrasformable1: Database, trasformable1: Boolean): Pair<Database, Boolean> {
         var dbTrasformable11 = dbTrasformable1
-        var trasformable11 = trasformable1
-        val decomposability : Applicability = transfomer.decomposeApplicable()
+        var moreTrasformable = trasformable1
+        val decomposability : Applicability = transfomer.decomposeApplicable(db,transformationStrategy)
+        moreTrasformable = decomposability.ok
         if (decomposability.ok) {
-            if (userAknowledge(decomposability.message)) {
+            if (mockedUserAknowledge(decomposability.message)) {
                 val transformation: Transformation = transfomer.decompose(db)
                 print(transformation.changeset)
                 print(transformation.newdb)
                 dbTrasformable11 = transformation.newdb
-                trasformable11 = true
             }
         }
-        return Pair(dbTrasformable11, trasformable11)
+        return Pair(dbTrasformable11, moreTrasformable)
     }
 
     private fun userAknowledge(message: String): Boolean {
@@ -65,5 +78,12 @@ class OptimusUseCase {
         val reader = Scanner(System.`in`)
         val response = reader.next()
         return response.toUpperCase().equals("Y")
+    }
+
+    private fun mockedUserAknowledge(message: String): Boolean {
+        println()
+        println(message)
+        println("Y/N")
+        return true
     }
 }

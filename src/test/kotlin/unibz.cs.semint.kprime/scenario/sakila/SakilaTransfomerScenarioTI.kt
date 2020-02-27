@@ -52,7 +52,7 @@ class SakilaTransfomerScenarioTI {
     @Test
 /*
     Execute a schema manipulation applying changeset to sakila after split table in views.
-    Changes the database.
+    WARNING Changes the database.
  */
     fun test_create_sakila_film_split_views() {
         // given
@@ -86,14 +86,14 @@ class SakilaTransfomerScenarioTI {
 
 
     @Test
-    /*  TODO: test_xpath_horizontal_decomposition_on_person_db
+    /*
         Executes a query to sakila after split horizontal table in views.
         Without changing the database.
      */
     fun test_xpath_horizontal_decomposition_on_person_db() {
         // given
         val dbFilePath = "db/sakila_film_functional.xml"
-        val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/sakilaHTransfomer.xml").readText()
+        val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/horizontalTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.splitter.template.filename
         val xrules = Xrule.toProperties(vTransfomer!!.splitter.xman.xrules)
