@@ -57,4 +57,9 @@ class ChangeSet() {
     infix fun minus(dropconstraint:DropConstraint) = apply {
         this.dropConstraint.add(dropconstraint)
     }
+
+    fun size(): Int {
+        return createView.size +createTable.size + createConstraint.size
+            + dropView.size + dropTable.size + dropConstraint.size
+    }
 }

@@ -10,12 +10,12 @@ import unibz.cs.semint.kprime.usecase.TransformerUseCase
 class TransformerHUseCase : TransformerUseCase {
     override fun decompose(db: Database, params:Map<String,Any>): Transformation {
         // TODO("not implemented")
-        return Transformation(ChangeSet(), Database())
+        return Transformation(ChangeSet(), Database(), "TransformerHUseCase.decompose")
     }
 
     override fun compose(db: Database, params:Map<String,Any>): Transformation {
         // TODO("not implemented")
-        return Transformation(ChangeSet(), Database())
+        return Transformation(ChangeSet(), Database(), "TransformerHUseCase.compose")
     }
 
     override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
@@ -29,5 +29,10 @@ class TransformerHUseCase : TransformerUseCase {
         val tranformerParmeters = mutableMapOf<String,Any>()
         return Applicability(false, "TransformerHUseCase.composeApplicable", tranformerParmeters)
     }
+
+    override fun toString(): String {
+        return "TransformerHUseCase()"
+    }
+
 
 }

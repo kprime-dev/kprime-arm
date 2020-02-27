@@ -42,6 +42,10 @@ class OptimusUseCaseTI {
         database.schema
                 .addFunctionals("film","film_id --> replacement_cost, rental_duration, rental_rate")
 
+        val params = mapOf(
+                "workingDir" to ""
+        )
+
         // when
         val serializerService = XMLSerializerJacksonAdapter()
         val fileIOService = FileIOAdapter()
@@ -50,14 +54,16 @@ class OptimusUseCaseTI {
         ).addTrasnsformers(listOf(
                 TransformerHUseCase(),
                 TransformerVUseCase(serializerService,fileIOService)
-        )).transfom(database)
+        )).transfom(database, params)
         // then
         assertNotNull(transformationPath)
+        println(transformationPath)
         doPhysicalTransformation(sakilaDataSource(), transformationPath)
+
     }
 
     private fun doPhysicalTransformation(sakilaDataSource: DataSource, transformationPath: List<Transformation>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

@@ -17,9 +17,12 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
 
     override fun decompose(db: Database, params:Map<String,Any>): Transformation {
         val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters["originTable"]=params["originTable"]!!
-        tranformerParmeters["targetTable1"]=params["targetTable1"]!!
-        tranformerParmeters["targetTable2"]=params["targetTable2"]!!
+        tranformerParmeters.putAll(params)
+
+        if (tranformerParmeters["originTable"]==null) return errorTransformation(db,"ERROR: TransformerVUseCase originTable null")
+        if (tranformerParmeters["targetTable1"]==null) return errorTransformation(db,"ERROR: TransformerVUseCase targetTable1 null")
+        if (tranformerParmeters["targetTable2"]==null) return errorTransformation(db,"ERROR: TransformerVUseCase targetTable2 null")
+        if (params["workingDir"]==null) return errorTransformation(db,"ERROR: TransformerVUseCase workingDir null")
         val workingDir = params["workingDir"] as String
         val changeSet = XPathTransformUseCase().compute(fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(db), workingDir+"db.xml"),
                 "vertical",
@@ -27,13 +30,13 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
                 "1",
                 tranformerParmeters,
                 StringWriter())
-        return Transformation(changeSet, ApplyChangeSetUseCase(serializer).apply(db,changeSet))
+        return Transformation(changeSet, ApplyChangeSetUseCase(serializer).apply(db,changeSet), "TransformerVUseCase.decompose")
     }
 
     override fun compose(db: Database, params: Map<String,Any>): Transformation {
         val changeSet = VJoinUseCase().compute(db)
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
-        return Transformation(changeSet, newdb)
+        return Transformation(changeSet, newdb, "TransformerVUseCase.compose")
     }
 
     override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
@@ -55,4 +58,7 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
         return Applicability(true, "TransformerVUseCase.composeApplicable", tranformerParmeters)
     }
 
+    override fun toString(): String {
+        return "TransformerVUseCase"
+    }
 }
