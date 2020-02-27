@@ -6,8 +6,12 @@ import org.junit.Test
 import unibz.cs.semint.kprime.adapter.file.FileIOAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.adapter.strategy.TransformationStrategyYesAdapter
+import unibz.cs.semint.kprime.domain.DataSource
+import unibz.cs.semint.kprime.domain.Transformation
 import unibz.cs.semint.kprime.scenario.sakila.readMeta
 import unibz.cs.semint.kprime.scenario.sakila.sakilaDataSource
+import unibz.cs.semint.kprime.usecase.current.TransformerHUseCase
+import unibz.cs.semint.kprime.usecase.current.TransformerVUseCase
 
 /**
  * Applies Optimus to local Sakila Postgres Example.
@@ -39,14 +43,21 @@ class OptimusUseCaseTI {
                 .addFunctionals("film","film_id --> replacement_cost, rental_duration, rental_rate")
 
         // when
+        val serializerService = XMLSerializerJacksonAdapter()
+        val fileIOService = FileIOAdapter()
         val transformationPath = OptimusUseCase(
-                XMLSerializerJacksonAdapter(),
-                FileIOAdapter(),
                 TransformationStrategyYesAdapter()
-        ).transfom(database)
+        ).addTrasnsformers(listOf(
+                TransformerHUseCase(),
+                TransformerVUseCase(serializerService,fileIOService)
+        )).transfom(database)
         // then
         assertNotNull(transformationPath)
-        //doPhysicalTransformation(sakilaDataSource(), trasformationPath)
+        doPhysicalTransformation(sakilaDataSource(), transformationPath)
+    }
+
+    private fun doPhysicalTransformation(sakilaDataSource: DataSource, transformationPath: List<Transformation>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

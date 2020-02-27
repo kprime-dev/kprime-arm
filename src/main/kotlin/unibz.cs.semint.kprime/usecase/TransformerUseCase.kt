@@ -6,8 +6,8 @@ import unibz.cs.semint.kprime.domain.TransformationStrategy
 import unibz.cs.semint.kprime.domain.ddl.Database
 
 interface TransformerUseCase {
-    fun decompose(db: Database, vararg params:String): Transformation
-    fun compose(db: Database, vararg params:String): Transformation
+    fun decompose(db: Database, params:Map<String,Any>): Transformation
+    fun compose(db: Database, params:Map<String,Any>): Transformation
     fun decomposeApplicable(db: Database, transformationStrategy : TransformationStrategy): Applicability
     fun composeApplicable(db: Database, transformationStrategy : TransformationStrategy): Applicability
 }

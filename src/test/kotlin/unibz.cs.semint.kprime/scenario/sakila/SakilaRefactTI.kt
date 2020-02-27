@@ -37,6 +37,7 @@ import unibz.cs.semint.kprime.usecase.current.TransformerVUseCase
 class SakilaRefactTI {
 
     @Test
+    // TODO work in progress...
     fun test_api() {
         var db = readMeta(sakilaDataSource())
         if (db==null) {
@@ -51,8 +52,13 @@ class SakilaRefactTI {
         // val workingDir = "/home/nicola/Tmp/"
         val workingDir = "/home/nipe/Temp/"
 
-        db = TransformerVUseCase(XMLSerializerJacksonAdapter(), FileIOAdapter()).decompose(
-                db,"film","film_catalog","film_rental", workingDir).newdb		// detect lossy
+        val params = mapOf(
+                "originTable" to "film",
+                "targetTable1" to "film_catalog",
+                "targetTable2" to "film_rental",
+                "workingDir" to workingDir
+        )
+        db = TransformerVUseCase(XMLSerializerJacksonAdapter(), FileIOAdapter()).decompose(db,params).newdb		// detect lossy
 //                .hdecompose("film_core","film_ita","film_not_ita","select * where language='IT'") // detect lossy
 //                .genarm()
 //                .alias("film_ita","film_italiani")

@@ -10,27 +10,37 @@ import unibz.cs.semint.kprime.usecase.service.FileIOService
 import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.mapOf
 
-class OptimusUseCase {
+class OptimusUseCase(transformationStrategy: TransformationStrategy) {
 
     val transfomers : MutableList<TransformerUseCase> = ArrayList<TransformerUseCase>()
-    val transformationStrategy : TransformationStrategy
+    val transformationStrategy = transformationStrategy
 
-    constructor(serializer : IXMLSerializerService, fileIOService: FileIOService, transformationStrategy: TransformationStrategy) {
-        transfomers.add(TransformerHUseCase())
-        transfomers.add(TransformerVUseCase(serializer,fileIOService))
-        this.transformationStrategy = transformationStrategy
+
+    fun addTrasnsformers(transformers : List<TransformerUseCase>): OptimusUseCase {
+        this.transfomers.addAll(transformers)
+        return this
     }
 
     fun transfom(db: Database):List<Transformation> {
+        if (transfomers.size==0) {
+            println("Required at least one transformer. Use addTrasnsformers().")
+        }
         val transformationPath = transfomers
                 .filter { t -> t.decomposeApplicable(db,transformationStrategy).ok }
-                .map { t -> t.decompose(db) }.toList()
+                .map { t ->
+                    val params = mapOf(
+                            "workingDir" to ""
+                    )
+                    t.decompose(db, params)
+                }.toList()
         return transformationPath
     }
 
 
-    fun oldtransfom(db: Database):Database {
+    // FIXME deprecated
+    private fun oldtransfom(db: Database):Database {
         var dbTrasformable = db
         var moreTrasformable = true
         while (moreTrasformable) {
@@ -42,6 +52,7 @@ class OptimusUseCase {
         return dbTrasformable
     }
 
+    // FIXME deprecated
     private fun tryUseAnyTransfomers(db: Database, dbTrasformable: Database, trasformable: Boolean): Pair<Database, Boolean> {
         var dbTrasformable1 = dbTrasformable
         var moreTrasformable = trasformable
@@ -54,6 +65,7 @@ class OptimusUseCase {
         return Pair(dbTrasformable1, moreTrasformable)
     }
 
+    // FIXME deprecated
     private fun checkDecomposabilityUserAknowledgeAndTransform(
             transfomer: TransformerUseCase, db: Database, dbTrasformable1: Database, trasformable1: Boolean): Pair<Database, Boolean> {
         var dbTrasformable11 = dbTrasformable1
@@ -62,7 +74,10 @@ class OptimusUseCase {
         moreTrasformable = decomposability.ok
         if (decomposability.ok) {
             if (mockedUserAknowledge(decomposability.message)) {
-                val transformation: Transformation = transfomer.decompose(db)
+                val params = mapOf(
+                        "" to ""
+                )
+                val transformation: Transformation = transfomer.decompose(db, params)
                 print(transformation.changeset)
                 print(transformation.newdb)
                 dbTrasformable11 = transformation.newdb
@@ -71,6 +86,7 @@ class OptimusUseCase {
         return Pair(dbTrasformable11, moreTrasformable)
     }
 
+    // FIXME deprecated by strategy
     private fun userAknowledge(message: String): Boolean {
         println()
         println(message)
@@ -80,6 +96,7 @@ class OptimusUseCase {
         return response.toUpperCase().equals("Y")
     }
 
+    // FIXME deprecated
     private fun mockedUserAknowledge(message: String): Boolean {
         println()
         println(message)

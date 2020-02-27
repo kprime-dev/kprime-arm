@@ -1,6 +1,5 @@
 package unibz.cs.semint.kprime.usecase.current
 
-import unibz.cs.semint.kprime.adapter.file.FileIOAdapter
 import unibz.cs.semint.kprime.domain.Applicability
 import unibz.cs.semint.kprime.domain.Transformation
 import unibz.cs.semint.kprime.domain.TransformationStrategy
@@ -16,12 +15,12 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
     val serializer = serializer
     val fileIOAdapter = fileIOAdapter
 
-    override fun decompose(db: Database, vararg params:String): Transformation {
+    override fun decompose(db: Database, params:Map<String,Any>): Transformation {
         val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters["originTable"]=params[0]
-        tranformerParmeters["targetTable1"]=params[1]
-        tranformerParmeters["targetTable2"]=params[2]
-        val workingDir = params[3]
+        tranformerParmeters["originTable"]=params["originTable"]!!
+        tranformerParmeters["targetTable1"]=params["targetTable1"]!!
+        tranformerParmeters["targetTable2"]=params["targetTable2"]!!
+        val workingDir = params["workingDir"] as String
         val changeSet = XPathTransformUseCase().compute(fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(db), workingDir+"db.xml"),
                 "vertical",
                 "decompose",
@@ -31,7 +30,7 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
         return Transformation(changeSet, ApplyChangeSetUseCase(serializer).apply(db,changeSet))
     }
 
-    override fun compose(db: Database, vararg params:String): Transformation {
+    override fun compose(db: Database, params: Map<String,Any>): Transformation {
         val changeSet = VJoinUseCase().compute(db)
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
         return Transformation(changeSet, newdb)
@@ -39,12 +38,21 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
 
     override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
         // TODO("not implemented decompose applicable logic.")
-        return Applicability(true,"TransformerVUseCase.decomposeApplicable")
+        // check if there is a functional dependency
+        // transformationStrategy.askToProceed
+        // then extract orginalTable
+        // then extract targetTable1 transformationStrategy.askParameter
+        // then extract targetTable2 transformationStrategy.askParameter
+        // then extract workingDir fileIOAdapter
+        // then extract workingFileName
+        val tranformerParmeters = mutableMapOf<String,Any>()
+        return Applicability(true,"TransformerVUseCase.decomposeApplicable", tranformerParmeters)
     }
 
     override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
         // TODO("not implemented compose applicable logic.")
-        return Applicability(true,"TransformerVUseCase.composeApplicable")
+        val tranformerParmeters = mutableMapOf<String,Any>()
+        return Applicability(true, "TransformerVUseCase.composeApplicable", tranformerParmeters)
     }
 
 }

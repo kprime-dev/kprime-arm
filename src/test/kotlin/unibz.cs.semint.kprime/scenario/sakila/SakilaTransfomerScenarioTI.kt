@@ -90,6 +90,7 @@ class SakilaTransfomerScenarioTI {
         Executes a query to sakila after split horizontal table in views.
         Without changing the database.
      */
+    // TODO work in progress...
     fun test_xpath_horizontal_decomposition_on_person_db() {
         // given
         val dbFilePath = "db/sakila_film_functional.xml"
