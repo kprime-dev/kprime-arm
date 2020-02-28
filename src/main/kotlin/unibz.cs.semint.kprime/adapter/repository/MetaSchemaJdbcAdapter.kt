@@ -110,6 +110,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
                 val colSource = Column()
                 colSource.name=primaryKeys.getString("COLUMN_NAME")
                 constr.source.columns.add(colSource)
+                constr.target.columns.add(colSource)
                 //constr.target= Target()
                 db.schema.constraints.add(constr)
             }

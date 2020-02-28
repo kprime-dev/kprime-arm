@@ -2,6 +2,7 @@ package unibz.cs.semint.kprime.usecase.common
 
 import unibz.cs.semint.kprime.domain.*
 import unibz.cs.semint.kprime.domain.ddl.Database
+import unibz.cs.semint.kprime.usecase.UseCaseResult
 import unibz.cs.semint.kprime.usecase.repository.IMetaSchemaRepository
 import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
 import java.util.*
@@ -35,7 +36,7 @@ class MetaSchemaReadUseCase() {
         val tokens = tokenize(line)
         if (tokens.size<2) { return UseCaseResult("Usage:" + usage(), null);}
         if (tokens[1] == "?") { return UseCaseResult(oneline(), null);}
-        if (tokens[1] == "??") { return UseCaseResult(description(),null);}
+        if (tokens[1] == "??") { return UseCaseResult(description(), null);}
         lateinit var db : Database
         if (tokens[0] == name()) {
             val sourceName = tokens[1]
@@ -45,7 +46,7 @@ class MetaSchemaReadUseCase() {
             db = metaSchemaRepository.metaDatabase(datasource)
             print(xmlSerializer.prettyDatabase(db))
         }
-        return UseCaseResult("${name()} done.",db)
+        return UseCaseResult("${name()} done.", db)
     }
 
     fun tokenize(line: String): List<String> {

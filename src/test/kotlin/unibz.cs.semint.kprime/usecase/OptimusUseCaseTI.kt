@@ -43,7 +43,10 @@ class OptimusUseCaseTI {
                 .addFunctionals("film","film_id --> replacement_cost, rental_duration, rental_rate")
 
         val params = mapOf(
-                "workingDir" to ""
+                "workingDir" to "/home/nipe/Temp/",
+                "originTable" to "film",
+                "targetTable1" to "film_core",
+                "targetTable2" to "film_rental"
         )
 
         // when

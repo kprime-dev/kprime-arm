@@ -64,6 +64,7 @@ class Schema () {
         primaryConstraint.name="primaryKey.$tableName"
         primaryConstraint.source.table="$tableName"
         primaryConstraint.source.columns.addAll(k)
+        primaryConstraint.target.columns.addAll(k)
         primaryConstraint.type= Constraint.TYPE.PRIMARY_KEY.name
         constraints.add(primaryConstraint)
     }

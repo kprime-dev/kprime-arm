@@ -7,7 +7,9 @@ import java.time.LocalDateTime
 data class Transformation(val changeset: ChangeSet, val newdb: Database, val message: String) {
     val timestamp = LocalDateTime.now()
     override fun toString(): String {
-        return "Transformation(timestamp=$timestamp, changeset=$changeset, newdb=$newdb, message='$message')"
+        var flag = ""
+        if (changeset==null || changeset.size()==0) flag = "EMPTY"
+        return "Transformation(timestamp=$timestamp, $flag changeset=$changeset, newdb=$newdb, message='$message')"
     }
 
 
