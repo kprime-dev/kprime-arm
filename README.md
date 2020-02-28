@@ -95,9 +95,9 @@ a xml transfomer descriptor
 
 ### to fix
 
-* xml with constraint and empty columns (as primary keys).
-* use case API transform/scenario , must output database, input database to let iterate.
-* PROBLEM: xpath uses doc database file as source, must use string not file OR write database to file as output.
+* film_id doppio nella tabella film_core.
+* redirect FOREIGN_KEY from splitted table.
+* remove select PRIMARY KEY not by name, but by source table.
 
 ### to do
 

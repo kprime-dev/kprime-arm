@@ -9,7 +9,10 @@ import unibz.cs.semint.kprime.usecase.TransformerUseCase
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
 import unibz.cs.semint.kprime.usecase.service.FileIOService
 import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
+import java.io.File
 import java.io.StringWriter
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: FileIOService) : TransformerUseCase {
     val serializer = serializer
@@ -17,20 +20,41 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
 
     override fun decompose(db: Database, params:Map<String,Any>): Transformation {
         val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters.putAll(params)
 
-        if (tranformerParmeters["originTable"]==null) return errorTransformation(db,"ERROR: TransformerVUseCase originTable null")
-        if (tranformerParmeters["targetTable1"]==null) return errorTransformation(db,"ERROR: TransformerVUseCase targetTable1 null")
-        if (tranformerParmeters["targetTable2"]==null) return errorTransformation(db,"ERROR: TransformerVUseCase targetTable2 null")
+        val functionals = db.schema.functionals()
+        if (functionals.size==0) return errorTransformation(db,"ERROR: TransformerVUseCase no functionals")
+
+        val tableToSplit = functionals.first().source.table
+        tranformerParmeters["originTable"] = tableToSplit
+        tranformerParmeters["targetTable1"] = tableToSplit +"_1"
+        tranformerParmeters["targetTable2"] = tableToSplit +"_2"
+
         if (params["workingDir"]==null) return errorTransformation(db,"ERROR: TransformerVUseCase workingDir null")
         val workingDir = params["workingDir"] as String
-        val changeSet = XPathTransformUseCase().compute(fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(db), workingDir+"db.xml"),
+
+        val timestamp = LocalDateTime.now()
+
+        val dbFilePath = fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(db), workingDir + "db_worked.xml")
+        println("Updated db file db_worked.xml")
+
+        val changeSet = XPathTransformUseCase().compute(dbFilePath,
                 "vertical",
                 "decompose",
                 "1",
                 tranformerParmeters,
                 StringWriter())
-        return Transformation(changeSet, ApplyChangeSetUseCase(serializer).apply(db,changeSet), "TransformerVUseCase.decompose")
+        if (changeSet.size()!=0) {
+            val csFileName = workingDir + "cs_${timestamp.format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}.xml"
+            println("Written cs file $tableToSplit : $csFileName ")
+            fileIOAdapter.writeOnWorkingFilePath(serializer.prettyChangeSet(changeSet), csFileName)
+        }
+
+        val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
+        val newDbFileName = workingDir + "db_${timestamp.format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}.xml"
+        fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(newdb), newDbFileName)
+        println("Written db files $tableToSplit : $newDbFileName")
+
+        return Transformation(changeSet, newdb, "TransformerVUseCase.decompose ($tableToSplit)")
     }
 
     override fun compose(db: Database, params: Map<String,Any>): Transformation {
@@ -48,8 +72,9 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
         // then extract targetTable2 transformationStrategy.askParameter
         // then extract workingDir fileIOAdapter
         // then extract workingFileName
+        val applicability = db.schema.functionals().size > 0
         val tranformerParmeters = mutableMapOf<String,Any>()
-        return Applicability(true,"TransformerVUseCase.decomposeApplicable", tranformerParmeters)
+        return Applicability(applicability,"TransformerVUseCase.decomposeApplicable", tranformerParmeters)
     }
 
     override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {

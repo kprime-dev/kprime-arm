@@ -12,6 +12,9 @@ import unibz.cs.semint.kprime.scenario.sakila.readMeta
 import unibz.cs.semint.kprime.scenario.sakila.sakilaDataSource
 import unibz.cs.semint.kprime.usecase.current.TransformerHUseCase
 import unibz.cs.semint.kprime.usecase.current.TransformerVUseCase
+import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * Applies Optimus to local Sakila Postgres Example.
@@ -42,16 +45,25 @@ class OptimusUseCaseTI {
         database.schema
                 .addFunctionals("film","film_id --> replacement_cost, rental_duration, rental_rate")
 
+        database.schema
+                .addFunctionals("address", "address_id --> address2")
+
+        val rootWorkingDir = "/home/nipe/Temp/"
+        val timestampSuffix =  LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))
+        val workingDir = rootWorkingDir + timestampSuffix + "/"
+        File(workingDir).mkdirs()
+
         val params = mapOf(
-                "workingDir" to "/home/nipe/Temp/",
-                "originTable" to "film",
-                "targetTable1" to "film_core",
-                "targetTable2" to "film_rental"
+                "workingDir" to workingDir
         )
 
-        // when
         val serializerService = XMLSerializerJacksonAdapter()
         val fileIOService = FileIOAdapter()
+
+
+        fileIOService.writeOnWorkingFilePath(serializerService.prettyDatabase(database), workingDir + "db_original.xml")
+
+        // when
         val transformationPath = OptimusUseCase(
                 TransformationStrategyYesAdapter()
         ).addTrasnsformers(listOf(

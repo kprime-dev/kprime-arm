@@ -44,7 +44,7 @@ class MetaSchemaReadUseCase() {
             if (tokens.size==3)
                 table = tokens[2]
             db = metaSchemaRepository.metaDatabase(datasource)
-            print(xmlSerializer.prettyDatabase(db))
+            //print(xmlSerializer.prettyDatabase(db))
         }
         return UseCaseResult("${name()} done.", db)
     }

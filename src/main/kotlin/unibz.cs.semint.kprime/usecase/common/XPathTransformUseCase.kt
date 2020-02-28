@@ -51,7 +51,7 @@ class XPathTransformUseCase {
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet);
 
         println("-----------------------NEW-DB---------------")
-        println(serializer.prettyDatabase(newdb))
+        //println(serializer.prettyDatabase(newdb))
         return newdb
     }
 
