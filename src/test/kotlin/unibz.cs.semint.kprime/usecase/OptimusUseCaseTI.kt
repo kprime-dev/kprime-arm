@@ -48,7 +48,7 @@ class OptimusUseCaseTI {
         database.schema
                 .addFunctionals("address", "address_id --> address2")
 
-        val rootWorkingDir = "/home/nipe/Temp/"
+        val rootWorkingDir = System.getenv()["tmp_dir"] ?: "" // "/home/nipe/Temp/"
         val timestampSuffix =  LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))
         val workingDir = rootWorkingDir + timestampSuffix + "/"
         File(workingDir).mkdirs()

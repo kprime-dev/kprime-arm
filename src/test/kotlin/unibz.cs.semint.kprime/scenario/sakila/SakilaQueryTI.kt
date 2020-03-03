@@ -1,9 +1,13 @@
 package unibz.cs.semint.kprime.scenario.sakila
 
+import junit.framework.Assert.assertEquals
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.repository.QueryJdbcAdapter
+import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.dql.Query
+import unibz.cs.semint.kprime.domain.dql.Select
+import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
 
 class SakilaQueryTI {
 
@@ -49,6 +53,45 @@ class SakilaQueryTI {
         val result = QueryJdbcAdapter().query(sakilaSource, sqlquery)
         // then
         //assertEquals("read-meta-schema done.","")
+    }
+
+
+    @Test
+    fun test_sakila_film1_query_to_xml() {
+        // given
+        val query = SQLizeUseCase().fromsql("""
+            SELECT film_id,title,description,release_year,release_year,original_language_id,length,rating
+            FROM film
+        """.trimIndent())
+        // when
+        var queryXml = XMLSerializerJacksonAdapter().prettyQuery(query) as String
+        // then
+        assertEquals("""
+            <query>
+              <select>
+                <attributes>
+                  <attributes name="film_id"/>
+                  <attributes name="title"/>
+                  <attributes name="description"/>
+                  <attributes name="release_year"/>
+                  <attributes name="release_year"/>
+                  <attributes name="original_language_id"/>
+                  <attributes name="length"/>
+                  <attributes name="rating"/>
+                </attributes>
+                <from>
+                  <from tableName="film" alias="" joinOn=""/>
+                </from>
+                <where condition=""/>
+              </select>
+              <union>
+                <selects/>
+              </union>
+              <minus>
+                <selects/>
+              </minus>
+            </query>
+        """.trimIndent(),queryXml)
     }
 
 

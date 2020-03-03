@@ -68,33 +68,15 @@ technology depenent packages
 * A domain component has to depends on nothing. 
 
 
-## v0.1.0
+## v1.0.0
 
-from object database meta representation as input
-apply kotlin transformer vertical or horizontal
-obtain a second database meta representation as output
-
-
-## v0.2.0
-
-from xml object database meta representation as input
-apply kotlin transformer vertical or horizontal
-obtain a changeset representation as output
-
-
-## v0.3.0
-
-from xml object database meta representation as input
-a generic xpath engine extraction plus freemarker template to generate
-obtain a database meta representation as output
-
-## v0.4.0
-
-from xml object database meta representation as input
-a xml transfomer descriptor
+SQL-based migrations
+add liquibase adapter
+add flyway adapter
 
 ### to fix
 
+* jdbc read views metainfo 
 * film_id doppio nella tabella film_core.
 * redirect FOREIGN_KEY from splitted table.
 * remove select PRIMARY KEY not by name, but by source table.

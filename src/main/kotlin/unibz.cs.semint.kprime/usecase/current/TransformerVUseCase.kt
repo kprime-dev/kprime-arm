@@ -44,13 +44,13 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
                 tranformerParmeters,
                 StringWriter())
         if (changeSet.size()!=0) {
-            val csFileName = workingDir + "cs_${timestamp.format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}.xml"
+            val csFileName = workingDir + "${timestamp.format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_cs.xml"
             println("Written cs file $tableToSplit : $csFileName ")
             fileIOAdapter.writeOnWorkingFilePath(serializer.prettyChangeSet(changeSet), csFileName)
         }
 
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
-        val newDbFileName = workingDir + "db_${timestamp.format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}.xml"
+        val newDbFileName = workingDir + "${timestamp.format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_db.xml"
         fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(newdb), newDbFileName)
         println("Written db files $tableToSplit : $newDbFileName")
 
