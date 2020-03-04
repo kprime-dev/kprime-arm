@@ -28,7 +28,7 @@ class PersonVJoinScenarioTI {
 
         db.schema.key("person1", mutableSetOf(colSSN))
 
-        db.schema.tables.add(personTable1)
+        db.schema.tables().add(personTable1)
 
         val personTable2 = Table()
         personTable2.name= "person2"
@@ -43,7 +43,7 @@ class PersonVJoinScenarioTI {
 
         db.schema.key("person2", mutableSetOf(colT2))
 
-        db.schema.tables.add(personTable2)
+        db.schema.tables().add(personTable2)
         return db
     }
 

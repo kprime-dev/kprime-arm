@@ -33,7 +33,7 @@ class PersonVSplitScenarioTI {
         db.schema.key("person", mutableSetOf(colSSN))
         db.schema.functional("person", mutableSetOf(colT), mutableSetOf(colS))
 
-        db.schema.tables.add(personTable)
+        db.schema.tables().add(personTable)
 
         return db
     }

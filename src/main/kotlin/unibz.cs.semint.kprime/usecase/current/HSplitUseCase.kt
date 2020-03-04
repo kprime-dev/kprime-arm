@@ -38,11 +38,11 @@ class HSplitUseCase {
     private fun detect(personMetadata: Database): UseCaseResult<Database> {
         val dbDetected = Database()
         // Check if it has nullable column.
-        for (table in personMetadata.schema.tables) {
+        for (table in personMetadata.schema.tables()) {
             if (table.hasNullable()) {
                 // then this table has to be partitioned to remove nullable.
                 // adds this table to db to apply vertical partitioning.
-                dbDetected.schema.tables.add(table)
+                dbDetected.schema.tables().add(table)
             }
         }
         return UseCaseResult("done detect", dbDetected)
@@ -54,7 +54,7 @@ class HSplitUseCase {
         table.name= "pure_person"
         table.view="person"
         table.condition="person.T=null AND person.S=null"
-        personMetadata.schema.tables.add(table)
+        personMetadata.schema.tables().add(table)
         val colSSN = Column("SSN", "id.SSN", "dbname.SSN")
         colSSN.nullable=false
         table.columns.add(colSSN)
@@ -64,7 +64,7 @@ class HSplitUseCase {
         tableWithT.view="person"
         tableWithT.name= "person_with_T"
         tableWithT.condition="person.T NOT null AND person.S=null"
-        personMetadata.schema.tables.add(tableWithT)
+        personMetadata.schema.tables().add(tableWithT)
         val colT = Column("T", "id.T", "dbname.T")
         colT.nullable=false
         tableWithT.columns.add(colSSN)
@@ -75,7 +75,7 @@ class HSplitUseCase {
         tableWithS.view="person"
         tableWithS.name= "person_with_TS"
         tableWithS.condition="person.T = null AND person.S NOT null"
-        personMetadata.schema.tables.add(tableWithS)
+        personMetadata.schema.tables().add(tableWithS)
         val colS = Column("S", "id.S", "dbname.S")
         colS.nullable=false
         tableWithS.columns.add(colSSN)
@@ -87,18 +87,18 @@ class HSplitUseCase {
         tableWithTS.view="person"
         tableWithTS.name= "person_with_S"
         tableWithTS.condition="person.T NOT null AND person.S NOT null"
-        personMetadata.schema.tables.add(tableWithTS)
+        personMetadata.schema.tables().add(tableWithTS)
         tableWithTS.columns.add(colSSN)
         tableWithTS.columns.add(colT)
         tableWithTS.columns.add(colS)
 
         // removes table person
         val personTable = personMetadata.schema.table("person")
-        personMetadata.schema.tables.remove(personTable)
+        personMetadata.schema.tables().remove(personTable)
 
         // removes constraints from/to person
         var contraintsToRemove = mutableSetOf<Constraint>()
-        for (contraint in personMetadata.schema.constraints) {
+        for (contraint in personMetadata.schema.constraints()) {
             if (contraint.source.table=="person") {
                 contraintsToRemove.add(contraint)
             }
@@ -106,7 +106,7 @@ class HSplitUseCase {
                 contraintsToRemove.add(contraint)
             }
         }
-        personMetadata.schema.constraints.removeAll(contraintsToRemove)
+        personMetadata.schema.constraints().removeAll(contraintsToRemove)
 
         // add constraint partition
         return UseCaseResult("done apply", personMetadata)

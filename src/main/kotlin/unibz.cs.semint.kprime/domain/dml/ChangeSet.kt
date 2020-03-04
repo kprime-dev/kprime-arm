@@ -26,6 +26,9 @@ class ChangeSet() {
     var createConstraint= ArrayList<CreateConstraint>()
 
     @JacksonXmlElementWrapper(useWrapping=false)
+    var createMapping= ArrayList<CreateMapping>()
+
+    @JacksonXmlElementWrapper(useWrapping=false)
     var dropView= ArrayList<DropView>()
 
     @JacksonXmlElementWrapper(useWrapping=false)
@@ -34,21 +37,26 @@ class ChangeSet() {
     @JacksonXmlElementWrapper(useWrapping=false)
     var dropConstraint= ArrayList<DropConstraint>()
 
+    @JacksonXmlElementWrapper(useWrapping=false)
+    var dropMapping= ArrayList<DropMapping>()
+
     infix fun withId(id:String) = apply {
         this.id=id
     }
 
-    infix fun plusView(createView: CreateView)= apply{
+    infix fun plus(createView: CreateView)= apply{
         this.createView.add(createView)
     }
-
-    infix fun plusTable(createTable: CreateTable)= apply{
+    infix fun plus(createTable: CreateTable)= apply{
         this.createTable.add(createTable)
     }
-    infix fun plusConstraint(createConstraint: CreateConstraint)= apply{
+    infix fun plus(createConstraint: CreateConstraint)= apply{
         this.createConstraint.add(createConstraint)
     }
-    infix fun minusView(view: DropView)= apply{
+    infix fun plus(createMapping: CreateMapping)= apply{
+        this.createMapping.add(createMapping)
+    }
+    infix fun minus(view: DropView)= apply{
         this.dropView.add(view)
     }
     infix fun minus(droptable:DropTable) = apply {
@@ -57,9 +65,12 @@ class ChangeSet() {
     infix fun minus(dropconstraint:DropConstraint) = apply {
         this.dropConstraint.add(dropconstraint)
     }
-
+    infix fun minus(dropMapping: DropMapping) = apply {
+        this.dropMapping.add(dropMapping)
+    }
     fun size(): Int {
         return createView.size +createTable.size + createConstraint.size
             + dropView.size + dropTable.size + dropConstraint.size
+            + dropMapping.size
     }
 }

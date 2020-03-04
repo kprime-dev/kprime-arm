@@ -1,8 +1,10 @@
 package unibz.cs.semint.kprime.adapter.service
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
+import com.thoughtworks.xstream.XStream
 import unibz.cs.semint.kprime.domain.*
 import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Database
@@ -38,12 +40,17 @@ class XMLSerializerJacksonAdapter : IXMLSerializerService {
 
     override fun serializeDatabase(database: Database): String {
         val mapper = XmlMapper().registerModule(KotlinModule())
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
         return mapper.writeValueAsString(database)
     }
 
     override fun deserializeDatabase(s: String): Database {
         val mapper = XmlMapper()
-        return mapper.readValue(s, Database::class.java)
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        val newdb = mapper.readValue(s, Database::class.java)
+        if (newdb.schema.tables==null) newdb.schema.tables= ArrayList<Table>()
+        if (newdb.mappings==null) newdb.mappings = mutableListOf()
+        return newdb
     }
 
     override fun prettyDatabase(db: Database): String {

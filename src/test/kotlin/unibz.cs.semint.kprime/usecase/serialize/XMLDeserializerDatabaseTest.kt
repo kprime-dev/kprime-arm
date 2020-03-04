@@ -21,7 +21,7 @@ class XMLDeserializerDatabaseTest {
         val deserialized = serializer.deserializeDatabase(fileContent)
         // then
         assertNotNull(deserialized)
-        assertEquals("univ",deserialized.ok!!.schema.tables[0].name)
+        assertEquals("univ",deserialized.ok!!.schema.tables()[0].name)
 
     }
 
@@ -57,8 +57,8 @@ class XMLDeserializerDatabaseTest {
                     </constraints>
                 </constraints>
               </schema>
-              <mapping>
-                <query1>
+              <mappings>
+                <query name="query1">
                   <select>
                     <attributes>
                       <attributes name="name"/>
@@ -68,8 +68,19 @@ class XMLDeserializerDatabaseTest {
                     </from>
                     <where condition=""/>
                   </select>
-                </query1>
-              </mapping>
+                </query>
+                <query name="query3">
+                  <select>
+                    <attributes>
+                      <attributes name="name"/>
+                    </attributes>
+                    <from>
+                      <from tableName="people" alias="" joinOn=""/>
+                    </from>
+                    <where condition=""/>
+                  </select>
+                </query>
+              </mappings>
             </database>
         """.trimIndent()
         // when
@@ -77,20 +88,24 @@ class XMLDeserializerDatabaseTest {
         // then
         assertNotNull(deserialized)
         assertNotNull(deserialized.ok)
-        assertNotNull((deserialized.ok as Database).mapping)
-        assertNotNull((deserialized.ok as Database).mapping!!.get("query1"))
-        assertEquals("people",deserialized!!.ok!!.mapping!!.get("query1")!!.select!!.from[0]?.tableName)
+        val database = deserialized.ok as Database
+        assertNotNull(database.mappings)
+        assertEquals(database.mappings().size,2)
+        assertNotNull(database.mapping("query1"))
+        assertEquals("people",deserialized!!.ok!!.mapping("query1")!!.select!!.from[0]?.tableName)
 
         val db = deserialized.ok!!
 
-        db.mapping!!["query2"]= SQLizeUseCase().fromsql("""
+        db.mappings().add(SQLizeUseCase().fromsql("query2","""
             SELECT *  
             FROM alias 
-        """.trimIndent())
+        """.trimIndent()))
 
-        assertNotNull((deserialized.ok as Database).mapping!!.get("query2"))
-        assertEquals("*",deserialized!!.ok!!.mapping!!.get("query2")!!.select!!.attributes[0]?.name)
-        assertEquals("alias",deserialized!!.ok!!.mapping!!.get("query2")!!.select!!.from[0]?.tableName)
+        println(serializer.prettyDatabase(db))
+        assertEquals(3, db.mappings().size)
+        assertNotNull(database.mapping("query2"))
+        assertEquals("*",deserialized!!.ok!!.mapping("query2")!!.select!!.attributes[0]?.name)
+        assertEquals("alias",deserialized!!.ok!!.mapping("query2")!!.select!!.from[0]?.tableName)
 
     }
 

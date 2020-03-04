@@ -17,7 +17,7 @@ class VJoinUseCase {
         var colJoin2 = ""
 
         // if there is a double inclusion in tab1 and tab2 and a primary key on colJoin
-        for (const in database.schema.constraints) {
+        for (const in database.schema.constraints()) {
             if (const.type== Constraint.TYPE.DOUBLE_INCLUSION.name) {
                 tab1 = const.source.table
                 tab2= const.target.table

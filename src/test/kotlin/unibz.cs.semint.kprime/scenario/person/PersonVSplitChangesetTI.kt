@@ -2,7 +2,6 @@ package unibz.cs.semint.kprime.scenario.person
 
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.doubleInclusion
 import unibz.cs.semint.kprime.domain.ddl.key
 import unibz.cs.semint.kprime.domain.dml.*
@@ -27,7 +26,7 @@ class PersonVSplitChangesetTI {
         val table2 = CreateTable() name "person2" withColumn "T" withColumn "S"
         val doubleInc = doubleInclusion {}
         val person2Key = key {  }
-        vsplitChangeSet plusTable table1 plusTable  table2 plusConstraint doubleInc plusConstraint person2Key
+        vsplitChangeSet plus table1 plus  table2 plus doubleInc plus person2Key
         val serializedChangeSet = XMLSerializerJacksonAdapter().prettyChangeSet(vsplitChangeSet)
         println(serializedChangeSet)
         //assertEquals("<ChangeSet id=\"\"/>",serializedChangeSet)

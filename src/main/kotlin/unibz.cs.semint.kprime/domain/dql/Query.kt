@@ -1,11 +1,14 @@
 package unibz.cs.semint.kprime.domain.dql
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.ddl.Database
 
 @JacksonXmlRootElement(localName = "query")
 class Query {
+    @JacksonXmlProperty(isAttribute = true)
+    var name=""
     var select = Select()
     @JacksonXmlElementWrapper(useWrapping=false)
     var union= Union()
@@ -39,7 +42,7 @@ class Query {
         }
 
         fun build(database: Database, tableName:String, condition:String): Query {
-            val colNames = database.schema.tables.filter { t -> t.name == tableName }.first().columns.map { c -> var attr = Attribute(); attr.name=c.name; attr }
+            val colNames = database.schema.tables().filter { t -> t.name == tableName }.first().columns.map { c -> var attr = Attribute(); attr.name=c.name; attr }
             val query = Query()
             var select = query.select
             select.attributes.addAll(colNames)
@@ -51,7 +54,7 @@ class Query {
         }
 
         fun build(database: Database, tableName:String): Query {
-            val colNames = database.schema.tables.filter { t -> t.name == tableName }.first().columns.map { c -> var attr = Attribute(); attr.name=c.name; attr }
+            val colNames = database.schema.tables().filter { t -> t.name == tableName }.first().columns.map { c -> var attr = Attribute(); attr.name=c.name; attr }
             val query = Query()
             var select = query.select
             select.attributes.addAll(colNames)

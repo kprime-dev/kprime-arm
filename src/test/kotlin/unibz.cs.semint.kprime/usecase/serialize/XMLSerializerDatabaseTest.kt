@@ -25,8 +25,8 @@ class XMLSerializerDatabaseTest {
         database.name="dbname"
         database.schema= Schema()
         database.schema.id="idschema"
-        database.schema.tables.add(Table())
-        database.schema.tables.add(Table())
+        database.schema.tables().add(Table())
+        database.schema.tables().add(Table())
         // when
         val serializedDatabase = serializer.serializeDatabase(database).ok
         // then
@@ -50,7 +50,7 @@ class XMLSerializerDatabaseTest {
         database.name = "dbname"
         database.schema = Schema()
         database.schema.id = "idschema"
-        database.schema.tables.add(Table())
+        database.schema.tables().add(Table())
         val query = Query()
         val attr = Attribute()
         attr.name="name"
@@ -58,7 +58,8 @@ class XMLSerializerDatabaseTest {
         val from = From()
         from.tableName="people"
         query.select.from.add(from)
-        database.mapping?.put("query1",query)
+        query.name = "query1"
+        database.mappings!!.add(query)
         // when
         val serializedDatabase = serializer.prettyDatabase(database).ok
         // then
@@ -72,8 +73,8 @@ class XMLSerializerDatabaseTest {
                 </tables>
                 <constraints/>
               </schema>
-              <mapping>
-                <query1>
+              <mappings>
+                <query name="query1">
                   <select>
                     <attributes>
                       <attributes name="name"/>
@@ -89,8 +90,8 @@ class XMLSerializerDatabaseTest {
                   <minus>
                     <selects/>
                   </minus>
-                </query1>
-              </mapping>
+                </query>
+              </mappings>
             </database>
         """.trimIndent(),serializedDatabase)
     }

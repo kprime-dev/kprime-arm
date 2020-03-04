@@ -59,7 +59,7 @@ class SakilaQueryTI {
     @Test
     fun test_sakila_film1_query_to_xml() {
         // given
-        val query = SQLizeUseCase().fromsql("""
+        val query = SQLizeUseCase().fromsql("q1",""""
             SELECT film_id,title,description,release_year,release_year,original_language_id,length,rating
             FROM film
         """.trimIndent())
@@ -67,7 +67,7 @@ class SakilaQueryTI {
         var queryXml = XMLSerializerJacksonAdapter().prettyQuery(query) as String
         // then
         assertEquals("""
-            <query>
+            <query name="q1">
               <select>
                 <attributes>
                   <attributes name="film_id"/>

@@ -55,7 +55,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             tableNames.add(tableName)
             val table = Table()
             table.name=tableName
-            db.schema.tables.add(table)
+            db.schema.tables().add(table)
         }
         return tableNames
     }
@@ -71,7 +71,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             viewNames.add(viewName)
             val table = Table()
             table.name=viewName
-            db.schema.tables.add(table)
+            db.schema.tables().add(table)
         }
         return viewNames
     }
@@ -112,7 +112,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
                 constr.source.columns.add(colSource)
                 constr.target.columns.add(colSource)
                 //constr.target= Target()
-                db.schema.constraints.add(constr)
+                db.schema.constraints().add(constr)
             }
         }
     }
@@ -135,7 +135,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
                 val colTarget = Column()
                 colTarget.name=fkeys.getString("PKCOLUMN_NAME")
                 constr.target.columns.add(colTarget)
-                db.schema.constraints.add(constr)
+                db.schema.constraints().add(constr)
             }
         }
     }

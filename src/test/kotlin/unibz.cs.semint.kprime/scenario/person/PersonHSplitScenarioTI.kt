@@ -22,7 +22,7 @@ class PersonHSplitScenarioTI {
         val colS = Column("S", "id.S", "dbname.S")
         colS.nullable=true
         personTable.columns.add(colS)
-        db.schema.tables.add(personTable)
+        db.schema.tables().add(personTable)
 
         val primaryConstraint = Constraint()
         primaryConstraint.name="primaryKey.person"
@@ -30,7 +30,7 @@ class PersonHSplitScenarioTI {
         primaryConstraint.source.columns.add(colSSN)
         primaryConstraint.source.columns.add(colT)
         primaryConstraint.type= Constraint.TYPE.PRIMARY_KEY.name
-        db.schema.constraints.add(primaryConstraint)
+        db.schema.constraints().add(primaryConstraint)
 
         return db
     }

@@ -10,7 +10,7 @@ class SQLizeUseCase {
      */
     fun sqlize(db: Database): List<String> {
         var sqlCommands = mutableListOf<String>()
-        for (table in db.schema.tables) {
+        for (table in db.schema.tables()) {
             if (table.view.isNotEmpty()) {
                 val list = table.columns.map { c -> c.name }.toSet().toList().joinToString(",")
                 var command = """
@@ -72,8 +72,9 @@ class SQLizeUseCase {
         return sql
     }
 
-    fun fromsql(sqlquery : String):Query {
+    fun fromsql(queryname: String, sqlquery : String):Query {
         val query = Query()
+        query.name = queryname
         val lines = sqlquery.split(System.lineSeparator())
         for (line in lines){
             val select = query.select

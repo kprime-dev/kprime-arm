@@ -12,7 +12,7 @@ class VSplitUseCase {
         var changeSet = ChangeSet()
 
         // precondition: check for first table with functional dep, get the name
-        var tableWithFunctionalName= metadataDatabase.schema.constraints
+        var tableWithFunctionalName= metadataDatabase.schema.constraints()
                 .filter { c -> c.type== Constraint.TYPE.FUNCTIONAL.name }
                 .map { c -> c.source.table }.first()
         if (tableWithFunctionalName.isEmpty()) return changeSet

@@ -1,8 +1,13 @@
 package unibz.cs.semint.kprime.domain.ddl
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import com.thoughtworks.xstream.annotations.XStreamAsAttribute
 import unibz.cs.semint.kprime.domain.dql.Query
+import java.util.*
+import javax.xml.bind.annotation.XmlElements
+import kotlin.collections.ArrayList
 
 @JacksonXmlRootElement(localName = "database")
 open class Database () {
@@ -13,9 +18,15 @@ open class Database () {
     var id: String=""
 
     var schema: Schema = Schema()
-    var mapping : HashMap<String, Query>? = HashMap<String, Query>()
+    @JacksonXmlElementWrapper(localName = "mappings")
+    @JacksonXmlProperty(localName = "query")
+    var mappings : MutableList<Query>? = ArrayList<Query>()
 
-        fun lineage(tableName:String) : List<String> {
+    init {
+        this.mappings = mutableListOf()
+    }
+
+    fun lineage(tableName:String) : List<String> {
             val result = mutableListOf<String>()
             var viewTable = tableName
             while (!viewTable.isEmpty()) {
@@ -26,4 +37,12 @@ open class Database () {
             return result
         }
 
+        fun mappings():MutableList<Query> {
+            if (mappings!=null) return mappings as MutableList<Query>
+            return ArrayList<Query>()
+        }
+
+        fun mapping(name:String): Query? {
+            return mappings().filter { m -> m.name.equals(name) }.firstOrNull()
+        }
 }

@@ -10,22 +10,31 @@ class Schema () {
     @JacksonXmlProperty(isAttribute = true)
     var id: String=""
 
-    var tables= ArrayList<Table>()
-    var constraints= ArrayList<Constraint>()
+    var tables: ArrayList<Table>? = ArrayList<Table>()
+    var constraints: MutableList<Constraint>? = ArrayList<Constraint>()
 
     fun table(name: String): Table? {
-        if (tables.isEmpty()) return null
-        return tables.filter { t -> t.name==name }.firstOrNull()
+        if (tables().isEmpty()) return null
+        return tables().filter { t -> t.name==name }.firstOrNull()
+    }
+
+    fun constraints(): MutableList<Constraint> {
+        if (constraints!=null) return  constraints as MutableList<Constraint>
+        return ArrayList()
+    }
+    fun tables():ArrayList<Table> {
+        if (tables!=null) return tables as ArrayList<Table>
+        return ArrayList()
     }
 
     fun constraint(name: String): Constraint? {
-        if (constraints.isEmpty()) return null
-        return constraints.filter { c -> c.name==name}.firstOrNull()
+        if (constraints().isEmpty()) return null
+        return constraints().filter { c -> c.name==name}.firstOrNull()
     }
 
     fun key(tableName: String): Set<Column> {
         var resultCols = mutableSetOf<Column>()
-        val first = constraints.filter { c ->
+        val first = constraints().filter { c ->
             c.type == Constraint.TYPE.PRIMARY_KEY.name &&
                     c.name == "primaryKey.${tableName}"
         }.toList()
@@ -35,7 +44,7 @@ class Schema () {
 
     fun functionalLHS(tableName: String): Set<Column> {
         var resultCols = mutableSetOf<Column>()
-        val first = constraints.filter { c ->
+        val first = constraints().filter { c ->
             c.type == Constraint.TYPE.FUNCTIONAL.name &&
                     c.name == "functional.${tableName}"
         }.toList()
@@ -45,13 +54,13 @@ class Schema () {
 
     fun functionals(): Set<Constraint> {
         var resultCols = mutableSetOf<Column>()
-        return constraints.filter { c ->
+        return constraints().filter { c ->
             c.type == Constraint.TYPE.FUNCTIONAL.name }.toSet()
     }
 
     fun functionalRHS(tableName: String): Set<Column> {
         var resultCols = mutableSetOf<Column>()
-        val first = constraints.filter { c ->
+        val first = constraints().filter { c ->
             c.type == Constraint.TYPE.FUNCTIONAL.name &&
                     c.name == "functional.${tableName}"
         }.toList()
@@ -66,7 +75,7 @@ class Schema () {
         primaryConstraint.source.columns.addAll(k)
         primaryConstraint.target.columns.addAll(k)
         primaryConstraint.type= Constraint.TYPE.PRIMARY_KEY.name
-        constraints.add(primaryConstraint)
+        constraints().add(primaryConstraint)
     }
 
     fun functional(tableName:String, lhs:Set<Column>, rhs:Set<Column>){
@@ -77,7 +86,7 @@ class Schema () {
         functionalConstraint.target.table="$tableName"
         functionalConstraint.target.columns.addAll(rhs)
         functionalConstraint.type= Constraint.TYPE.FUNCTIONAL.name
-        constraints.add(functionalConstraint)
+        constraints().add(functionalConstraint)
 
     }
 
@@ -89,7 +98,7 @@ class Schema () {
             constraint.source.table=tableName
             constraint.target.table=tableName
         }
-        constraints.addAll(constraintsToAdd)
+        constraints().addAll(constraintsToAdd)
         return this
     }
 
