@@ -21,6 +21,8 @@
                 <xrules name="rhss">/database/schema/constraints/constraints[@type='FUNCTIONAL']/target[@table='%%originTable%%']/columns/columns/@name</xrules>
                 <xrules name="rests">- all keys lhss rhss</xrules>
                 <xrules name="table">/database/schema/tables/tables[@name='%%originTable%%']/@name = 1</xrules>
+                <xrules name="view1">- all rhss</xrules>
+                <xrules name="view2">+ lhss rhss</xrules>
             </xrules>
         </xman>
         <template filename="transformer/vertical/decompose/vertical_changeset_1.template"/>

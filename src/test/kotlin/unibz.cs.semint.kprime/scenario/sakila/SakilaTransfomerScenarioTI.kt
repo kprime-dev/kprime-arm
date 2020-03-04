@@ -81,7 +81,7 @@ class SakilaTransfomerScenarioTI {
         val pass = System.getenv()["sakila_pass"]?:""//"password"
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
-        val createList = SQLizeUseCase().sqlize(newDb)
+        val createList = SQLizeUseCase().createViewCommands(newDb)
         for (createCommand in createList) {
             println(createCommand)
             QueryJdbcAdapter().create(sakilaSource, createCommand)

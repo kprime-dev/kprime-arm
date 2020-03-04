@@ -18,7 +18,7 @@ class HSplitUseCase {
             val applied = apply(databaseMetadata, detected)
             if (applied.ok!=null) {
                 printDb(applied.ok)
-                printSql(SQLizeUseCase().sqlize(applied.ok))
+                printSql(SQLizeUseCase().createViewCommands(applied.ok))
             }
         }
     }

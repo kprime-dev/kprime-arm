@@ -8,20 +8,14 @@ class SQLizeUseCase {
     /**
      * Given a DB will return SQL commands to create VIEWS that DB.
      */
-    fun sqlize(db: Database): List<String> {
+    fun createViewCommands(db: Database): List<String> {
         var sqlCommands = mutableListOf<String>()
-        for (table in db.schema.tables()) {
-            if (table.view.isNotEmpty()) {
-                val list = table.columns.map { c -> c.name }.toSet().toList().joinToString(",")
+        for (mapping in db.mappings()) {
                 var command = """
-                    CREATE OR REPLACE VIEW public.${table.name} AS
-                    SELECT ${list}
-                    FROM public.${table.view} 
-                """
-                if (table.condition.isNotEmpty())
-                    command += System.lineSeparator()+"WHERE ${table.condition}"
+CREATE OR REPLACE VIEW public.${mapping.name} AS
+${sqlize(mapping)}
+                """.trimIndent()
                 sqlCommands.add(command.trimIndent())
-            }
         }
         return sqlCommands
     }
