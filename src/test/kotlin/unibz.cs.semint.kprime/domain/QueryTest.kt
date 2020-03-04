@@ -30,7 +30,7 @@ class QueryTest {
         query.select = simpleQueryFixture("Table1").select
         var simple2 = simpleQueryFixture("Table2")
         val union = Union()
-        union.selects.add(simple2.select)
+        union.selects().add(simple2.select)
         query.union=union
         return query
     }
@@ -207,16 +207,17 @@ class QueryTest {
             WHERE c = d
         """.trimIndent()
         val query = SQLizeUseCase().fromsql("query1",sqlQuery)
-        assertEquals(1,query.union.selects.size)
+        assertEquals(1,query.union.selects().size)
         assertEquals("alfa",   query.select.attributes[0].name)
         assertEquals("beta",   query.select.attributes[1].name)
         assertEquals("tab1",    query.select.from[0].tableName)
         assertEquals("a = b",   query.select.where.condition)
 
-        assertEquals("gamma",    query.union.selects[0].attributes[0].name)
-        assertEquals("theta",    query.union.selects[0].attributes[1].name)
-        assertEquals("tab2",    query.union.selects[0].from[0].tableName)
-        assertEquals("c = d",    query.union.selects[0].where.condition)
+        val select = query.union.selects()[0]
+        assertEquals("gamma",    select.attributes[0].name)
+        assertEquals("theta",    select.attributes[1].name)
+        assertEquals("tab2",    select.from[0].tableName)
+        assertEquals("c = d",    select.where.condition)
     }
 
     @Test
@@ -236,21 +237,23 @@ class QueryTest {
             WHERE e = f
         """.trimIndent()
         val query = SQLizeUseCase().fromsql("query1",sqlQuery)
-        assertEquals(2,query.union.selects.size)
+        assertEquals(2,query.union.selects().size)
         assertEquals("alfa",   query.select.attributes[0].name)
         assertEquals("beta",   query.select.attributes[1].name)
         assertEquals("tab1",    query.select.from[0].tableName)
         assertEquals("a = b",   query.select.where.condition)
 
-        assertEquals("gamma",    query.union.selects[0].attributes[0].name)
-        assertEquals("theta",    query.union.selects[0].attributes[1].name)
-        assertEquals("tab2",    query.union.selects[0].from[0].tableName)
-        assertEquals("c = d",    query.union.selects[0].where.condition)
+        val select = query.union.selects()[0]
+        assertEquals("gamma",    select.attributes[0].name)
+        assertEquals("theta",    select.attributes[1].name)
+        assertEquals("tab2",    select.from[0].tableName)
+        assertEquals("c = d",    select.where.condition)
 
-        assertEquals("delta",    query.union.selects[1].attributes[0].name)
-        assertEquals("zeta",    query.union.selects[1].attributes[1].name)
-        assertEquals("tab3",    query.union.selects[1].from[0].tableName)
-        assertEquals("e = f",    query.union.selects[1].where.condition)
+        val select1 = query.union.selects()[1]
+        assertEquals("delta",    select1.attributes[0].name)
+        assertEquals("zeta",    select1.attributes[1].name)
+        assertEquals("tab3",    select1.from[0].tableName)
+        assertEquals("e = f",    select1.where.condition)
 
         val sqlize = SQLizeUseCase().sqlize(query)
         assertEquals("""

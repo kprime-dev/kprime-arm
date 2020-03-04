@@ -30,16 +30,16 @@ class SQLizeUseCase {
         var sql = ""
         sql += sqlize(query.select)
         val union = query.union
-        if (union.selects.size>0) {
-            for (select in union.selects) {
+        if (union.selects().size>0) {
+            for (select in union.selects()) {
                 sql += System.lineSeparator() + "UNION" + System.lineSeparator()
                 sql += sqlize(select)
             }
         }
 
         val minus = query.minus
-        if (minus.selects.size>0) {
-            for (select in minus.selects) {
+        if (minus.selects().size>0) {
+            for (select in minus.selects()) {
                 sql += System.lineSeparator() + "MINUS" + System.lineSeparator()
                 sql += sqlize(select)
             }
@@ -83,26 +83,26 @@ class SQLizeUseCase {
             parseWhere(select,line)
             parseUnionMinus(query,line)
         }
-        if (query.union.selects.size>0) {
+        if (query.union.selects().size>0) {
             val tmp = query.select
-            query.select=query.union.selects.removeAt(0)
-            query.union.selects.add(tmp)
+            query.select=query.union.selects().removeAt(0)
+            query.union.selects().add(tmp)
         }
-        if (query.minus.selects.size>0) {
+        if (query.minus.selects().size>0) {
             val tmp = query.select
-            query.select=query.minus.selects.removeAt(0)
-            query.minus.selects.add(tmp)
+            query.select=query.minus.selects().removeAt(0)
+            query.minus.selects().add(tmp)
         }
         return query
     }
 
     private fun parseUnionMinus(query: Query, sqlline: String) {
         if (sqlline.startsWith("UNION")) {
-            query.union.selects.add(query.select)
+            query.union.selects().add(query.select)
             query.select= Select()
         } else
         if (sqlline.startsWith("MINUS")) {
-            query.minus.selects.add(query.select)
+            query.minus.selects().add(query.select)
             query.select= Select()
         }
     }

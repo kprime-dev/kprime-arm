@@ -41,7 +41,7 @@ class Query {
             return query
         }
 
-        fun build(database: Database, tableName:String, condition:String): Query {
+        fun buildFromTable(database: Database, tableName:String, condition:String): Query {
             val colNames = database.schema.tables().filter { t -> t.name == tableName }.first().columns.map { c -> var attr = Attribute(); attr.name=c.name; attr }
             val query = Query()
             var select = query.select
@@ -53,7 +53,7 @@ class Query {
             return query
         }
 
-        fun build(database: Database, tableName:String): Query {
+        fun buildFromTable(database: Database, tableName:String): Query {
             val colNames = database.schema.tables().filter { t -> t.name == tableName }.first().columns.map { c -> var attr = Attribute(); attr.name=c.name; attr }
             val query = Query()
             var select = query.select
@@ -64,6 +64,9 @@ class Query {
             return query
         }
 
+        fun buildFromMapping(database: Database, tableName:String): Query? {
+            return database.mappings().filter { m-> m.name == tableName }.firstOrNull()
+        }
 
     }
 }

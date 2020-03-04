@@ -66,6 +66,43 @@
         </columns>
     </target>
   </createConstraint>
+
+  <createMapping name="${targetTable1[0]}">
+    <select>
+      <attributes>
+        <#list keys as key>
+        <attributes name="${key}" />
+        </#list>
+        <#list lhss as lhs>
+        <attributes name="${lhs}" />
+        </#list>
+        <#list rests as rest>
+        <attributes name="${rest}"/>
+        </#list>
+      </attributes>
+      <from>
+        <from tableName="${table[0]}" alias="" joinOn=""/>
+      </from>
+      <where condition="" />
+    </select>
+  </createMapping>
+  <createMapping name="${targetTable2[0]}">
+    <select>
+      <attributes>
+        <#list lhss as lhs>
+        <attributes name="${lhs}"/>
+        </#list>
+        <#list rhss as rhs>
+        <attributes name="${rhs}"/>
+        </#list>
+      </attributes>
+      <from>
+        <from tableName="${table[0]}" alias="" joinOn=""/>
+      </from>
+      <where condition="" />
+    </select>
+  </createMapping>
+
   <dropTable path="" schemaName="" tableName="${table[0]}"/>
   <dropConstraint path="" schemaName="" constraintName="${table[0]}.primaryKey"/>
   <dropConstraint path="" schemaName="" constraintName="${table[0]}.functional"/>

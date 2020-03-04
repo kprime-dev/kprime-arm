@@ -33,7 +33,9 @@ class SakilaTransfomerScenarioTI {
         // when
         val newdb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
         // then
-        val simpleQuery = Query.build(newdb, "film2")
+        val simpleQueryTab = Query.buildFromTable(newdb, "film2")
+        val simpleQueryMap1 = Query.buildFromMapping(newdb, "film1")!!
+        val simpleQueryMap2 = Query.buildFromMapping(newdb, "film2")!!
 
         val type = "psql"
         val name = "sakila-source"
@@ -45,7 +47,10 @@ class SakilaTransfomerScenarioTI {
         //val pass = "pass"
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
 
-        val result = QueryJdbcAdapter().query(sakilaSource, simpleQuery)
+        val sqlize = SQLizeUseCase().sqlize(simpleQueryMap1)
+        println(sqlize)
+        val result1 = QueryJdbcAdapter().query(sakilaSource, simpleQueryMap1)
+        val result2 = QueryJdbcAdapter().query(sakilaSource, simpleQueryMap2)
         // print to console output
     }
 
