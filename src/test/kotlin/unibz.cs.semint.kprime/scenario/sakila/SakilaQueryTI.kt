@@ -28,20 +28,20 @@ class SakilaQueryTI {
         val result = QueryJdbcAdapter().query(sakilaSource,"select * from film where film_id=1")
         // then
         assertEquals("""
-            1 film_id
-            ACADEMY DINOSAUR title
-            A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies description
-            2006 release_year
-            1 language_id
-            null original_language_id
-            6 rental_duration
-            0.99 rental_rate
-            86 length
-            20.99 replacement_cost
-            PG rating
-            2006-02-15 05:03:42 last_update
-            {"Deleted Scenes","Behind the Scenes"} special_features
-            'academi':1 'battl':15 'canadian':20 'dinosaur':2 'drama':5 'epic':4 'feminist':8 'mad':11 'must':14 'rocki':21 'scientist':12 'teacher':17 fulltext
+             film_id: 1
+             title: ACADEMY DINOSAUR
+             description: A Epic Drama of a Feminist And a Mad Scientist who must Battle a Teacher in The Canadian Rockies
+             release_year: 2006
+             language_id: 1
+             original_language_id: null
+             rental_duration: 6
+             rental_rate: 0.99
+             length: 86
+             replacement_cost: 20.99
+             rating: PG
+             last_update: 2006-02-15 05:03:42
+             special_features: {"Deleted Scenes","Behind the Scenes"}
+             fulltext: 'academi':1 'battl':15 'canadian':20 'dinosaur':2 'drama':5 'epic':4 'feminist':8 'mad':11 'must':14 'rocki':21 'scientist':12 'teacher':17
             
             """.trimIndent()
             ,result)

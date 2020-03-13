@@ -47,7 +47,7 @@ class QueryJdbcAdapter {
             for (i in 1..columnCount) {
                 if (i >1 ) print(",")
                 //print("${resultSet.getString(i)} ${metaData.getColumnName(i)}")
-                result += "${resultSet.getString(i)} ${metaData.getColumnName(i)}" + System.lineSeparator()
+                result += "${metaData.getColumnName(i)}: ${resultSet.getString(i)}" + System.lineSeparator()
             }
             println()
         }
