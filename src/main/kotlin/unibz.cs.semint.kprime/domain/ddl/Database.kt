@@ -3,7 +3,6 @@ package unibz.cs.semint.kprime.domain.ddl
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
-import com.thoughtworks.xstream.annotations.XStreamAsAttribute
 import unibz.cs.semint.kprime.domain.dql.Query
 import java.util.*
 import javax.xml.bind.annotation.XmlElements

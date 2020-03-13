@@ -90,6 +90,12 @@ class Schema () {
 
     }
 
+    fun addFunctionals(command:String): Schema {
+        val tableName:String = command.split(":")[0]
+        val setExpression: String= command.split(":")[1]
+        return addFunctionals(tableName,setExpression)
+    }
+
     fun addFunctionals(tableName:String, setExpression: String): Schema {
         val constraintsToAdd = Constraint.set(setExpression)
         for (constraint in constraintsToAdd) {

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.thoughtworks.xstream.XStream
 import unibz.cs.semint.kprime.domain.*
 import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Database
