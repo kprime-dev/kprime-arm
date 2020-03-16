@@ -9,7 +9,6 @@ import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
-import java.io.StringWriter
 
 class SakilaTransfomerScenarioTI {
 
@@ -24,16 +23,15 @@ class SakilaTransfomerScenarioTI {
         val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.splitter.template.filename
-        val xrules = Xrule.toProperties(vTransfomer!!.splitter.xman.xrules)
+        val xrules = Xrule.toProperties(vTransfomer.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters["originTable"]="film"
         tranformerParmeters["targetTable1"]="film1"
         tranformerParmeters["targetTable2"]="film2"
         println(templateFilePath)
         // when
-        val newdb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
+        val newdb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters)
         // then
-        val simpleQueryTab = Query.buildFromTable(newdb, "film2")
         val simpleQueryMap1 = Query.buildFromMapping(newdb, "film1")!!
         val simpleQueryMap2 = Query.buildFromMapping(newdb, "film2")!!
 
@@ -49,8 +47,8 @@ class SakilaTransfomerScenarioTI {
 
         val sqlize = SQLizeUseCase().sqlize(simpleQueryMap1)
         println(sqlize)
-        val result1 = QueryJdbcAdapter().query(sakilaSource, simpleQueryMap1)
-        val result2 = QueryJdbcAdapter().query(sakilaSource, simpleQueryMap2)
+        QueryJdbcAdapter().query(sakilaSource, simpleQueryMap1)
+        QueryJdbcAdapter().query(sakilaSource, simpleQueryMap2)
         // print to console output
     }
 
@@ -63,15 +61,15 @@ class SakilaTransfomerScenarioTI {
         // given
         val dbFilePath = "db/sakila_film_functional.xml"
         val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
-        val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
-        val templateFilePath = vTransfomer!!.splitter.template.filename
-        val xrules = Xrule.toProperties(vTransfomer!!.splitter.xman.xrules)
+        val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok!!
+        val templateFilePath = vTransfomer.splitter.template.filename
+        val xrules = Xrule.toProperties(vTransfomer.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters["originTable"]="film"
         tranformerParmeters["targetTable1"]="film_core"
         tranformerParmeters["targetTable2"]="film_nullable"
         println(templateFilePath)
-        val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
+        val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters)
         // create the db views
         val type = "psql"
         val name = "sakila-source"
@@ -100,9 +98,9 @@ class SakilaTransfomerScenarioTI {
         // given
         val dbFilePath = "db/sakila_film_functional.xml"
         val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/horizontalTransfomer.xml").readText()
-        val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
-        val templateFilePath = vTransfomer!!.splitter.template.filename
-        val xrules = Xrule.toProperties(vTransfomer!!.splitter.xman.xrules)
+        val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok!!
+        val templateFilePath = vTransfomer.splitter.template.filename
+        val xrules = Xrule.toProperties(vTransfomer.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters["originTable"]="film"
         tranformerParmeters["targetTable1"]="film_italiano"
@@ -110,7 +108,8 @@ class SakilaTransfomerScenarioTI {
         tranformerParmeters["condition"]="select * from film where language_id=2"
         println(templateFilePath)
         // when
-        val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
+        //val newDb =
+                XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters)
         // then
         // print to console output
 

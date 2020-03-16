@@ -2,53 +2,69 @@ package unibz.cs.semint.kprime.usecase.common
 
 import freemarker.cache.ClassTemplateLoader
 import freemarker.template.Configuration
+import freemarker.template.Template
 import org.w3c.dom.NodeList
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 import unibz.cs.semint.kprime.usecase.service.FileIOService
+import java.io.File
 import java.io.InputStream
 import java.io.StringWriter
-import java.io.Writer
 import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
 
-class XPathTransformUseCase {
+class XPathTransformUseCase  {
 
-    fun transform(dbFilePath: String, trasformerName: String, trasformerDirection: String, trasformerVersion: String, tranformerParmeters: MutableMap<String, Any>,outWriter: Writer) :Database {
+    fun transform(
+            dbFilePath: String,
+            trasformerName: String,
+            trasformerDirection: String,
+            trasformerVersion: String,
+            tranformerParmeters: MutableMap<String, Any>)
+            :Database {
         val vdecomposeFilePath = "/transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.paths"
         val vdecomposeTemplatePath = "transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.template"
         val personProperties = XPathTransformUseCase::class.java.getResourceAsStream(vdecomposeFilePath)
         val xPaths = Properties()
         xPaths.load(personProperties)
-        return transform(dbFilePath,vdecomposeTemplatePath,xPaths, tranformerParmeters,outWriter)
+        return transform(dbFilePath,vdecomposeTemplatePath,xPaths, tranformerParmeters)
     }
 
     /*
     It uses 'changeset' template
      */
-    fun compute(dbFilePath: String, trasformerName: String, trasformerDirection: String, trasformerVersion: String, tranformerParmeters: MutableMap<String, Any>,outWriter: Writer) :ChangeSet {
+    fun compute(
+            dbFilePath: String,
+            trasformerName: String,
+            trasformerDirection: String,
+            trasformerVersion: String,
+            tranformerParmeters: MutableMap<String, Any>)
+            :ChangeSet {
         val vdecomposeFilePath = "/transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.paths"
         val vdecomposeTemplatePath = "transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_changeset_${trasformerVersion}.template"
         val personProperties = XPathTransformUseCase::class.java.getResourceAsStream(vdecomposeFilePath)
         val xPaths = Properties()
         xPaths.load(personProperties)
-        return compute(dbFilePath, vdecomposeTemplatePath, xPaths, tranformerParmeters,outWriter)
+        return compute(dbFilePath, vdecomposeTemplatePath, xPaths, tranformerParmeters)
     }
 
-    fun transform(dbFilePath: String, templateFilePath: String, xPaths: Properties, tranformerParmeters: MutableMap<String, Any>,outWriter:Writer): Database {
-        val changeSet = compute(dbFilePath, templateFilePath, xPaths, tranformerParmeters, outWriter)
-        if (changeSet == null) {
-            println("changeset null"); return Database()
-        }
+    fun transform(
+            dbFilePath: String,
+            templateFilePath: String,
+            xPaths: Properties,
+            tranformerParmeters:
+            MutableMap<String, Any>)
+            : Database {
+        val changeSet = compute(dbFilePath, templateFilePath, xPaths, tranformerParmeters)
 
         //val dbXml = XPathTransformUseCase::class.java.getResource("/${dbFilePath}").readText()
         val dbXml = FileIOService.readString(FileIOService.inputStreamFromPath(dbFilePath))
         val serializer = XMLSerializerJacksonAdapter()
         val db = serializer.deserializeDatabase(dbXml)
-        val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet);
+        val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
 
         println("-----------------------NEW-DB---------------")
         //println(serializer.prettyDatabase(newdb))
@@ -101,8 +117,13 @@ class XPathTransformUseCase {
         return listNodeValues
     }
 
-    fun compute(dbFilePath: String, templateFilePath: String, xPaths: Properties, tranformerParmeters: MutableMap<String, Any>,outWriter:Writer): ChangeSet {
-        var dbInputStream: InputStream = FileIOService.inputStreamFromPath(dbFilePath)
+    fun compute(
+            dbFilePath: String,
+            templateFilePath: String,
+            xPaths: Properties,
+            tranformerParmeters: MutableMap<String, Any>)
+            : ChangeSet {
+        val dbInputStream : InputStream = FileIOService.inputStreamFromPath(dbFilePath)
 
         val docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         val doc = docBuilder.parse(dbInputStream)
@@ -160,12 +181,27 @@ class XPathTransformUseCase {
         // = = 0 xpath
         println("22++++++++++++++++++++++++++++++++++++++++++-------------------------------")
 
-        val templ = //Template.getPlainTextTemplate("templ1",personTemplate,templConfig)
-                templConfig.getTemplate(templateFilePath)
+        lateinit var templ : Template
+        if (templateFilePath.startsWith("/")||
+                templateFilePath.startsWith("./")) {
+            templ = Template.getPlainTextTemplate("template1",
+                    File(templateFilePath).readText(Charsets.UTF_8), templConfig)
+            val lastSlash = templateFilePath.lastIndexOf("/")
+            val templateDir = templateFilePath.substring(0,lastSlash)
+            val templateFileName = templateFilePath.substring(lastSlash)
+            //templConfig.setDirectoryForTemplateLoading(File("/home/nipe/Temp/kprime/transformers/vertical/decompose/"))
+            //templ = templConfig.getTemplate("vertical_decompose_1_changeset.xml")
+            println("${templateDir}:${templateFileName}")
+            templConfig.setDirectoryForTemplateLoading(File(templateDir))
+            templ = templConfig.getTemplate(templateFileName)
+        } else {
+            templ = templConfig.getTemplate(templateFilePath)
+        }
+        val outWriter = StringWriter()
         templ.process(templModel, outWriter)
 
         println("33++++++++++++++++++++++++++++++++++++++++++-------------------------------")
-        val changeSetXml = (outWriter as StringWriter).buffer.toString()
+        val changeSetXml = outWriter.buffer.toString()
         println(changeSetXml)
         val serializer = XMLSerializerJacksonAdapter()
         println("44++++++++++++++++++++++++++++++++++++++++++-------------------------------")

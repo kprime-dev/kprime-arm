@@ -3,6 +3,7 @@ package unibz.cs.semint.kprime.scenario.person
 import org.junit.Test
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
 import java.io.OutputStreamWriter
+import java.io.StringWriter
 
 class PersonXPathScenarioTI {
 
@@ -18,7 +19,7 @@ class PersonXPathScenarioTI {
         tranformerParmeters["targetTable1"]="person1"
         tranformerParmeters["targetTable2"]="person2"
         // when
-        XPathTransformUseCase().transform(dbFilePath, trasformerName, trasformerDirection, trasformerVersion,tranformerParmeters, OutputStreamWriter(System.out))
+        XPathTransformUseCase().transform(dbFilePath, trasformerName, trasformerDirection, trasformerVersion,tranformerParmeters)
         // then
         // print to console output
     }
@@ -33,7 +34,7 @@ class PersonXPathScenarioTI {
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters["table"]="person"
         // when
-        XPathTransformUseCase().transform(dbFilePath, trasformerName, trasformerDirection, trasformerVersion,tranformerParmeters,OutputStreamWriter(System.out))
+        XPathTransformUseCase().transform(dbFilePath, trasformerName, trasformerDirection, trasformerVersion,tranformerParmeters)
         // then
         // print to console output
     }

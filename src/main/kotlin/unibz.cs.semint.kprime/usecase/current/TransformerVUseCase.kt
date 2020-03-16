@@ -9,14 +9,11 @@ import unibz.cs.semint.kprime.usecase.TransformerUseCase
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
 import unibz.cs.semint.kprime.usecase.service.FileIOService
 import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
-import java.io.File
 import java.io.StringWriter
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: FileIOService) : TransformerUseCase {
-    val serializer = serializer
-    val fileIOAdapter = fileIOAdapter
+class TransformerVUseCase(val serializer: IXMLSerializerService, val fileIOAdapter: FileIOService) : TransformerUseCase {
 
     override fun decompose(db: Database, params:Map<String,Any>): Transformation {
         val tranformerParmeters = mutableMapOf<String,Any>()
@@ -41,8 +38,7 @@ class TransformerVUseCase(serializer: IXMLSerializerService, fileIOAdapter: File
                 "vertical",
                 "decompose",
                 "1",
-                tranformerParmeters,
-                StringWriter())
+                tranformerParmeters)
         if (changeSet.size()!=0) {
             val csFileName = workingDir + "${timestamp.format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_cs.xml"
             println("Written cs file $tableToSplit : $csFileName ")

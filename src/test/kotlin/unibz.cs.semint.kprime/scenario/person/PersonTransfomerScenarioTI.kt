@@ -5,7 +5,6 @@ import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.Xrule
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
-import java.io.StringWriter
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -23,10 +22,10 @@ class PersonTransfomerScenarioTI {
         val transfomerXml = PersonTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.splitter.template.filename
-        val xrules = toProperties(vTransfomer!!.splitter.xman.xrules)
+        val xrules = toProperties(vTransfomer.splitter.xman.xrules)
         println(templateFilePath)
         // when
-        val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
+        val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters)
         // then
         val lineage = newDb.lineage("person1")
         assertEquals(lineage.size,2)
@@ -37,7 +36,7 @@ class PersonTransfomerScenarioTI {
     }
 
     private fun toProperties(xrules: ArrayList<Xrule>): Properties {
-        var pros = Properties()
+        val pros = Properties()
         for (xrule in xrules) {
             pros[xrule.name]=xrule.rule
         }
@@ -58,10 +57,10 @@ class PersonTransfomerScenarioTI {
         val transfomerXml = PersonTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.composer.template.filename
-        val xrules = toProperties(vTransfomer!!.composer.xman.xrules)
+        val xrules = toProperties(vTransfomer.composer.xman.xrules)
         println(templateFilePath)
         // when
-        val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters, StringWriter())
+        val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters)
         // then
         println(newDb)
     }

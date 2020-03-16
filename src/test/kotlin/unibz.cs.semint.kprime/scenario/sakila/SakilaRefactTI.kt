@@ -3,8 +3,6 @@ package unibz.cs.semint.kprime.scenario.sakila
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.file.FileIOAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.scenario.sakila.readMeta
-import unibz.cs.semint.kprime.scenario.sakila.sakilaDataSource
 import unibz.cs.semint.kprime.usecase.current.TransformerVUseCase
 
 /*
@@ -39,7 +37,7 @@ class SakilaRefactTI {
     @Test
     // TODO work in progress...
     fun test_api() {
-        var db = readMeta(sakilaDataSource())
+        val db = readMeta(sakilaDataSource())
         if (db==null) {
             println("sakila meta db not open")
             return
@@ -58,7 +56,8 @@ class SakilaRefactTI {
                 "targetTable2" to "film_rental",
                 "workingDir" to workingDir
         )
-        db = TransformerVUseCase(XMLSerializerJacksonAdapter(), FileIOAdapter()).decompose(db,params).newdb		// detect lossy
+        //val  newdb =
+                TransformerVUseCase(XMLSerializerJacksonAdapter(), FileIOAdapter()).decompose(db,params).newdb		// detect lossy
 //                .hdecompose("film_core","film_ita","film_not_ita","select * where language='IT'") // detect lossy
 //                .genarm()
 //                .alias("film_ita","film_italiani")
