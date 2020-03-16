@@ -40,6 +40,7 @@ class TransformerXUseCaseTI {
                 workingDir + "transformers/"+transformerName+"/decompose/vertical_decompose_1_paths.properties",
                 "",
                 "",
+                "",
                 transformerName)
                 .decompose(
                     db,params
