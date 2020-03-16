@@ -147,6 +147,7 @@ class XPathTransformUseCase  {
                 templModel[name] = asValueList(xpath.compile(value).evaluate(doc, XPathConstants.NODESET) as NodeList)
                 println(" ${name} = ${value}")
                 println(" ${name} = ${templModel[name]}")
+                tranformerParmeters[name]=templModel[name]!![0]
                 if (pathTokens.size == 3) {
                     println(pathTokens)
                     val pathCondition = pathTokens[1]
@@ -203,8 +204,8 @@ class XPathTransformUseCase  {
         println("33++++++++++++++++++++++++++++++++++++++++++-------------------------------")
         val changeSetXml = outWriter.buffer.toString()
         println(changeSetXml)
-        val serializer = XMLSerializerJacksonAdapter()
         println("44++++++++++++++++++++++++++++++++++++++++++-------------------------------")
+        val serializer = XMLSerializerJacksonAdapter()
         val changeSet = XMLSerializeUseCase(serializer).deserializeChangeSet(changeSetXml).ok ?: ChangeSet()
         println("55++++++++++++++++++++++++++++++++++++++++++-------------------------------")
 

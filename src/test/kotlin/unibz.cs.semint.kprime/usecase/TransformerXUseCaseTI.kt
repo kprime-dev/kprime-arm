@@ -25,11 +25,12 @@ class TransformerXUseCaseTI {
         val workingDir = "/home/nipe/Temp/kprime/"
 
         val transformerName="vertical"
-        val params = mutableMapOf<String,Any>(
-                "originTable" to "film",
-                "targetTable1" to "film_catalog",
-                "targetTable2" to "film_rental"
-        )
+        val params = mutableMapOf<String,Any>()
+//        val params = mutableMapOf<String,Any>(
+//                "originTable" to "film",
+//                "targetTable1" to "film_catalog",
+//                "targetTable2" to "film_rental"
+//        )
         // when
         TransformerXUseCase(
                 XMLSerializerJacksonAdapter(),
