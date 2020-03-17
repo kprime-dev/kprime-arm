@@ -86,20 +86,22 @@ class XPathTransformUseCase  {
         val splittedRule = derivationRule.split(" ")
         if (splittedRule[0]=="+") {
             val sourceLists = splittedRule.drop(1)
-            println(sourceLists)
+            println("sourceLists:"+sourceLists)
             derivedList.addAll(templModel[sourceLists[0]] as List<String>)
             for (i in 1..(sourceLists.size-1)) {
-                derivedList = derivedList.plus(templModel[sourceLists[i]] as MutableList<String>) as MutableList<String>
+                if (!templModel[sourceLists[i]]!!.isEmpty())
+                    derivedList = derivedList.plus(templModel[sourceLists[i]] as MutableList<String>) as MutableList<String>
             }
             println(derivedList)
         }
         if (splittedRule[0]=="-") {
             //println(splittedRule)
             val sourceLists = splittedRule.drop(1)
-            //println(sourceLists)
+            println("sourceLists:"+sourceLists)
             derivedList.addAll(templModel[sourceLists[0]] as List<String>)
             for (i in 1..(sourceLists.size-1)) {
-                derivedList = derivedList.minus(templModel[sourceLists[i]] as MutableList<String>) as MutableList<String>
+                if (!templModel[sourceLists[i]]!!.isEmpty())
+                    derivedList = derivedList.minus(templModel[sourceLists[i]] as MutableList<String>) as MutableList<String>
             }
             println(" $derivedList")
         }
@@ -186,6 +188,7 @@ class XPathTransformUseCase  {
                 templModel[name] = asValueList(xpath.compile(value).evaluate(doc, XPathConstants.NODESET) as NodeList)
                 println(" ${name} = ${value}")
                 println(" ${name} = ${templModel[name]}")
+                if (!templModel[name]!!.isEmpty())
                 tranformerParmeters[name] = templModel[name]!![0]
                 if (pathTokens.size == 3) {
                     println(pathTokens)
@@ -203,12 +206,15 @@ class XPathTransformUseCase  {
             templModel.put(parCouple.key, listOf(parCouple.value.toString()))
         }
         // compute derived list sum and minus
-        for (entryNameas in xPaths.propertyNames()) {
-            val name = entryNameas as String
-            val value = xPaths.getProperty(name)
-            if (value.startsWith("-") || value.startsWith("+")) {
-                println(" ${name} = ${value}")
-                templModel[name] = computeDerivedList(templModel, value)
+        // if there are values in template model
+        if (!templModel.isEmpty()) {
+            for (entryNameas in xPaths.propertyNames()) {
+                val name = entryNameas as String
+                val value = xPaths.getProperty(name)
+                if (value.startsWith("-") || value.startsWith("+")) {
+                    println(" ${name} = ${value}")
+                    templModel[name] = computeDerivedList(templModel, value)
+                }
             }
         }
         return Pair(templModel, violation)

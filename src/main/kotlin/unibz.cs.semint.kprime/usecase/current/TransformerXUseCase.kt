@@ -9,6 +9,7 @@ import unibz.cs.semint.kprime.usecase.common.ApplyChangeSetUseCase
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
 import unibz.cs.semint.kprime.usecase.service.FileIOService
 import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
+import java.io.File
 import java.io.FileInputStream
 import java.io.FileReader
 import java.time.LocalDateTime
@@ -44,30 +45,38 @@ class TransformerXUseCase(
 
     override fun decompose(db: Database, params: Map<String, Any>): Transformation {
 
-        lateinit var traceDir :String
-        if (traceName.endsWith("/")) traceDir = traceName
-        else  traceDir = traceName + "/"
+//        lateinit var traceDir :String
+//        if (traceName.endsWith("/")) traceDir = traceName
+//        else  traceDir = traceName + "/"
 
         val functionals = db.schema.functionals()
-        if (functionals.isEmpty()) return errorTransformation(db,"ERROR: TransformerXUseCase no functionals")
+        if (functionals.isEmpty()) return errorTransformation(db,
+                "ERROR: TransformerXUseCase no functionals")
 
 
-        val dbFilePath = fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(db), workingDir + traceDir + "db_worked.xml")
+        val dbFilePath = fileIOAdapter.writeOnWorkingFilePath(
+                serializer.prettyDatabase(db), workingDir +  "db_worked.xml")
         println("Updated db file db_worked.xml")
 
         val xPaths = Properties()
         xPaths.load(FileReader(decoXPathsFilePath))
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters.putAll(params)
-        val changeSet = xpathTransform.compute(dbFilePath, docoTemplateFilePath, xPaths, tranformerParmeters)
+        val changeSet = xpathTransform.compute(
+                dbFilePath, docoTemplateFilePath,
+                xPaths, tranformerParmeters)
         println("Computed changeSet : $changeSet")
-        val changeSetFileName = workingDir + traceDir +  "${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_cs.xml"
-        fileIOAdapter.writeOnWorkingFilePath(serializer.prettyChangeSet(changeSet), changeSetFileName)
+        val changeSetFileName = "${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_cs.xml"
+        changeSet.id=changeSetFileName
+        val changeSetFilePath = workingDir + changeSetFileName
+        fileIOAdapter.writeOnWorkingFilePath(serializer.prettyChangeSet(changeSet), changeSetFilePath)
 
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
-        val newDbFileName = workingDir + traceDir + "${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_db.xml"
-        fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(newdb), newDbFileName)
-        println("Written new db file : $newDbFileName")
+        val dbFileName = "${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_db.xml"
+        newdb.name=dbFileName
+        val newDbFilePath = workingDir + dbFileName
+        fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(newdb), newDbFilePath)
+        println("Written new db file : $newDbFilePath")
 
         return Transformation(changeSet, newdb, "TransformerXUseCase.decomposed ")
     }
@@ -83,16 +92,21 @@ class TransformerXUseCase(
         xPathProperties.load(FileInputStream(decoXPathsFilePath))
 
         if (db.name.isEmpty()) return Applicability(false,"db name empty", transformerParams)
-        lateinit var traceDir :String
-        if (traceName.endsWith("/")) traceDir = traceName
-        else  traceDir = traceName + "/"
-        val dbFilePath = workingDir + traceDir + db.name
+//        lateinit var traceDir :String
+//        if (traceName.endsWith("/")) traceDir = traceName
+//        else  traceDir = traceName + "/"
+
+        println("workingDir:"+workingDir)
+//        println("traceDir:"+traceDir)
+        println("db name:"+db.name)
+        val dbFilePath = workingDir + db.name
+        if (!File(dbFilePath).isFile) return Applicability(false,"db name ${dbFilePath} not exists", transformerParams)
 
         val (mutableMap, violation) = xpathTransform.getTemplateModel(dbFilePath, xPathProperties, transformerParams)
-        return Applicability(violation.isEmpty(),"decomposeApplicable", transformerParams)
+        return Applicability(violation.isEmpty(),"decomposeApplicable ${violation.isEmpty()} ${violation}", transformerParams)
     }
 
     override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
-        return Applicability(false,"decomposeApplicable", mutableMapOf())
+        return Applicability(false,"composeApplicable", mutableMapOf())
     }
 }
