@@ -102,8 +102,18 @@ class TransformerXUseCase(
         val dbFilePath = workingDir + db.name
         if (!File(dbFilePath).isFile) return Applicability(false,"db name ${dbFilePath} not exists", transformerParams)
 
-        val (mutableMap, violation) = xpathTransform.getTemplateModel(dbFilePath, xPathProperties, transformerParams)
-        return Applicability(violation.isEmpty(),"decomposeApplicable ${violation.isEmpty()} ${violation}", transformerParams)
+        var message = ""
+        var applicable = false
+        var mutableMap = mutableMapOf<String,Any>()
+        try {
+            val (templateMap, violation) = xpathTransform.getTemplateModel(dbFilePath, xPathProperties, transformerParams)
+            applicable = violation.isEmpty()
+            message = "decomposeApplicable ${violation.isEmpty()} ${violation}"
+            mutableMap = templateMap as MutableMap<String, Any>
+        } catch (e:Exception) {
+            message = e.localizedMessage
+        }
+        return Applicability(applicable, message, mutableMap)
     }
 
     override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {

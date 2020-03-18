@@ -195,9 +195,9 @@ class XPathTransformUseCase  {
                     val pathCondition = pathTokens[1]
                     val pathSize = pathTokens[2].toInt()
                     if (pathCondition == ">")
-                        if ((templModel[name])!!.size <= pathSize) violation = "violation: ${templModel[name]} size <= ${pathSize}"
+                        if ((templModel[name])!!.size <= pathSize) violation = "violation: ${name}:${xPaths.getProperty(name)} ${templModel[name]} size <= ${pathSize}"
                     if (pathCondition == "=")
-                        if ((templModel[name])!!.size != pathSize) violation = "violation: ${templModel[name]} size != ${pathSize}"
+                        if ((templModel[name])!!.size != pathSize) violation = "violation: ${name}:${xPaths.getProperty(name)} ${templModel[name]} size != ${pathSize}"
                 }
             }
         }
