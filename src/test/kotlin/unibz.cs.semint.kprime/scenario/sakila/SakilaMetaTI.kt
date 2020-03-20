@@ -16,8 +16,8 @@ class SakilaMetaTI {
         val name = "sakila-source"
         val driver = "org.postgresql.Driver"
         val path = "jdbc:postgresql://localhost:5432/sakila"
-        val user = "sammy"
-        val pass = "pass"
+        val user = System.getenv()["sakila_user"] ?: ""
+        val pass = System.getenv()["sakila_pass"] ?: ""
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
         val result = MetaSchemaReadUseCase().doit(sakilaSource,"read-meta-schema sakila-source", MetaSchemaJdbcAdapter(), XMLSerializerJacksonAdapter())

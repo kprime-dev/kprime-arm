@@ -44,6 +44,7 @@ class QueryJdbcAdapter {
         val metaData = resultSet.metaData
         val columnCount = metaData.columnCount
         while( resultSet.next()) {
+            result += "-----------------------------------------------------"
             for (i in 1..columnCount) {
                 if (i >1 ) print(",")
                 //print("${resultSet.getString(i)} ${metaData.getColumnName(i)}")
