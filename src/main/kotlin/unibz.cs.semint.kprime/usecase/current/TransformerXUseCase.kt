@@ -58,8 +58,7 @@ class TransformerXUseCase(
                 serializer.prettyDatabase(db), workingDir +  "db_worked.xml")
         println("Updated db file db_worked.xml")
 
-        val xPaths = Properties()
-        xPaths.load(FileReader(decoXPathsFilePath))
+        val xPaths = File(decoXPathsFilePath).readLines()
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters.putAll(params)
         val changeSet = xpathTransform.compute(
@@ -88,8 +87,7 @@ class TransformerXUseCase(
     override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
         val transformerParams = mutableMapOf<String,Any>()
 
-        val xPathProperties = Properties()
-        xPathProperties.load(FileInputStream(decoXPathsFilePath))
+        val xPathProperties = File(decoXPathsFilePath).readLines()
 
         if (db.name.isEmpty()) return Applicability(false,"db name empty", transformerParams)
 //        lateinit var traceDir :String
@@ -111,7 +109,7 @@ class TransformerXUseCase(
             message = "decomposeApplicable ${violation.isEmpty()} ${violation}"
             mutableMap = templateMap as MutableMap<String, Any>
         } catch (e:Exception) {
-            message = e.localizedMessage
+            message = e.message.toString()
         }
         return Applicability(applicable, message, mutableMap)
     }

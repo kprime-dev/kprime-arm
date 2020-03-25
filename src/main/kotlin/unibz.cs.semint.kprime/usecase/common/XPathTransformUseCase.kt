@@ -27,9 +27,7 @@ class XPathTransformUseCase  {
             :Database {
         val vdecomposeFilePath = "/transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.paths"
         val vdecomposeTemplatePath = "transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.template"
-        val personProperties = XPathTransformUseCase::class.java.getResourceAsStream(vdecomposeFilePath)
-        val xPaths = Properties()
-        xPaths.load(personProperties)
+        val xPaths = File(vdecomposeFilePath).readLines()
         return transform(dbFilePath,vdecomposeTemplatePath,xPaths, tranformerParmeters)
     }
 
@@ -45,16 +43,14 @@ class XPathTransformUseCase  {
             :ChangeSet {
         val vdecomposeFilePath = "/transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_${trasformerDirection}_${trasformerVersion}.paths"
         val vdecomposeTemplatePath = "transformer/${trasformerName}/${trasformerDirection}/${trasformerName}_changeset_${trasformerVersion}.template"
-        val personProperties = XPathTransformUseCase::class.java.getResourceAsStream(vdecomposeFilePath)
-        val xPaths = Properties()
-        xPaths.load(personProperties)
+        val xPaths = File(vdecomposeFilePath).readLines()
         return compute(dbFilePath, vdecomposeTemplatePath, xPaths, tranformerParmeters)
     }
 
     fun transform(
             dbFilePath: String,
             templateFilePath: String,
-            xPaths: Properties,
+            xPaths: List<String>,
             tranformerParmeters:
             MutableMap<String, Any>)
             : Database {
@@ -122,7 +118,7 @@ class XPathTransformUseCase  {
     fun compute(
             dbFilePath: String,
             templateFilePath: String,
-            xPaths: Properties,
+            xPaths: List<String>,
             tranformerParmeters: MutableMap<String, Any>)
             : ChangeSet {
 
@@ -171,7 +167,7 @@ class XPathTransformUseCase  {
         return changeSet
     }
 
-    fun getTemplateModel(dbFilePath: String, xPaths: Properties, tranformerParmeters: MutableMap<String, Any>): Pair<MutableMap<String, List<String>>, String> {
+    fun getTemplateModel(dbFilePath: String, xPaths: List<String>, tranformerParmeters: MutableMap<String, Any>): Pair<MutableMap<String, List<String>>, String> {
         val templModel = mutableMapOf<String, List<String>>()
 
         // compute xpath lists
@@ -180,11 +176,20 @@ class XPathTransformUseCase  {
         val doc = docBuilder.parse(dbInputStream)
         val xpath = XPathFactory.newInstance().newXPath()
         var violation = ""
-        for (entryNameas in xPaths.propertyNames()) {
-            val name = entryNameas as String
-            val pathTokens = xPaths.getProperty(name).split(" ")
+        for (xPathLine in xPaths) {
+            println("------------------------------------------")
+            val xPathTokens = xPathLine.split("==")
+            val name = xPathTokens[0]
+            println("name=|${name}|")
+            val rule = xPathTokens[1]
+            println("rule=|${rule}|")
+            val pathTokens = rule.split(" ")
             val value = parametrized(pathTokens[0], tranformerParmeters)
-            if (!(value.startsWith("-") || value.startsWith("+"))) {
+            println("value=|${value}|")
+            if (value.startsWith("-") || value.startsWith("+")) {
+                templModel[name] = computeDerivedList(templModel, rule)
+            }
+            else {
                 templModel[name] = asValueList(xpath.compile(value).evaluate(doc, XPathConstants.NODESET) as NodeList)
                 println(" ${name} = ${value}")
                 println(" ${name} = ${templModel[name]}")
@@ -195,27 +200,15 @@ class XPathTransformUseCase  {
                     val pathCondition = pathTokens[1]
                     val pathSize = pathTokens[2].toInt()
                     if (pathCondition == ">")
-                        if ((templModel[name])!!.size <= pathSize) violation = "violation: ${name}:${xPaths.getProperty(name)} ${templModel[name]} size <= ${pathSize}"
+                        if ((templModel[name])!!.size <= pathSize) violation = "violation: ${name}:${rule} ${templModel[name]} size <= ${pathSize}"
                     if (pathCondition == "=")
-                        if ((templModel[name])!!.size != pathSize) violation = "violation: ${name}:${xPaths.getProperty(name)} ${templModel[name]} size != ${pathSize}"
+                        if ((templModel[name])!!.size != pathSize) violation = "violation: ${name}:${rule} ${templModel[name]} size != ${pathSize}"
                 }
             }
         }
         // adds all input parameters as template parameters
         for (parCouple in tranformerParmeters) {
             templModel.put(parCouple.key, listOf(parCouple.value.toString()))
-        }
-        // compute derived list sum and minus
-        // if there are values in template model
-        if (!templModel.isEmpty()) {
-            for (entryNameas in xPaths.propertyNames()) {
-                val name = entryNameas as String
-                val value = xPaths.getProperty(name)
-                if (value.startsWith("-") || value.startsWith("+")) {
-                    println(" ${name} = ${value}")
-                    templModel[name] = computeDerivedList(templModel, value)
-                }
-            }
         }
         return Pair(templModel, violation)
     }

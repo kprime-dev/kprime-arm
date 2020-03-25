@@ -23,7 +23,7 @@ class SakilaTransfomerScenarioTI {
         val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.splitter.template.filename
-        val xrules = Xrule.toProperties(vTransfomer.splitter.xman.xrules)
+        val xrules = Xrule.toListOfString(vTransfomer.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters["originTable"]="film"
         tranformerParmeters["targetTable1"]="film1"
@@ -63,7 +63,7 @@ class SakilaTransfomerScenarioTI {
         val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok!!
         val templateFilePath = vTransfomer.splitter.template.filename
-        val xrules = Xrule.toProperties(vTransfomer.splitter.xman.xrules)
+        val xrules = Xrule.toListOfString(vTransfomer.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters["originTable"]="film"
         tranformerParmeters["targetTable1"]="film_core"
@@ -100,7 +100,7 @@ class SakilaTransfomerScenarioTI {
         val transfomerXml = SakilaTransfomerScenarioTI::class.java.getResource("/transformer/horizontalTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok!!
         val templateFilePath = vTransfomer.splitter.template.filename
-        val xrules = Xrule.toProperties(vTransfomer.splitter.xman.xrules)
+        val xrules = Xrule.toListOfString(vTransfomer.splitter.xman.xrules)
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters["originTable"]="film"
         tranformerParmeters["targetTable1"]="film_italiano"

@@ -14,10 +14,11 @@ class Xrule() {
     var rule = ""
 
     companion object {
-        fun toProperties(xrules: ArrayList<Xrule>): Properties {
-            var pros = Properties()
+
+        fun toListOfString(xrules: ArrayList<Xrule>): List<String> {
+            val pros = mutableListOf<String>()
             for (xrule in xrules) {
-                pros[xrule.name]=xrule.rule
+                pros.add("${xrule.name}=${xrule.rule}")
             }
             return pros
         }

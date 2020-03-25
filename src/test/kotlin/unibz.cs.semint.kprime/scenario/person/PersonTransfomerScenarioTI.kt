@@ -22,7 +22,7 @@ class PersonTransfomerScenarioTI {
         val transfomerXml = PersonTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.splitter.template.filename
-        val xrules = toProperties(vTransfomer.splitter.xman.xrules)
+        val xrules = Xrule.toListOfString(vTransfomer.splitter.xman.xrules)
         println(templateFilePath)
         // when
         val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters)
@@ -35,13 +35,6 @@ class PersonTransfomerScenarioTI {
         println(newDb)
     }
 
-    private fun toProperties(xrules: ArrayList<Xrule>): Properties {
-        val pros = Properties()
-        for (xrule in xrules) {
-            pros[xrule.name]=xrule.rule
-        }
-        return pros
-    }
 
     @Test
     // FIXME rimuovere attributi doppi dalla tabella
@@ -57,7 +50,7 @@ class PersonTransfomerScenarioTI {
         val transfomerXml = PersonTransfomerScenarioTI::class.java.getResource("/transformer/verticalTransfomer.xml").readText()
         val vTransfomer = XMLSerializeUseCase(XMLSerializerJacksonAdapter()).deserializeTransformer(transfomerXml).ok
         val templateFilePath = vTransfomer!!.composer.template.filename
-        val xrules = toProperties(vTransfomer.composer.xman.xrules)
+        val xrules = Xrule.toListOfString(vTransfomer.composer.xman.xrules)
         println(templateFilePath)
         // when
         val newDb = XPathTransformUseCase().transform(dbFilePath, templateFilePath, xrules, tranformerParmeters)
