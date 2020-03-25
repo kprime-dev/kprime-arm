@@ -94,22 +94,26 @@ class TransformerXUseCase(
 //        if (traceName.endsWith("/")) traceDir = traceName
 //        else  traceDir = traceName + "/"
 
-        println("workingDir:"+workingDir)
+        println("decomposeApplicable workingDir:"+workingDir)
 //        println("traceDir:"+traceDir)
-        println("db name:"+db.name)
+        println("decomposeApplicable db name:"+db.name)
         val dbFilePath = workingDir + db.name
         if (!File(dbFilePath).isFile) return Applicability(false,"db name ${dbFilePath} not exists", transformerParams)
 
+        println("decomposeApplicable 1:")
         var message = ""
         var applicable = false
         var mutableMap = mutableMapOf<String,Any>()
         try {
+            println("decomposeApplicable 2:")
             val (templateMap, violation) = xpathTransform.getTemplateModel(dbFilePath, xPathProperties, transformerParams)
+            println("decomposeApplicable 3:")
             applicable = violation.isEmpty()
             message = "decomposeApplicable ${violation.isEmpty()} ${violation}"
             mutableMap = templateMap as MutableMap<String, Any>
         } catch (e:Exception) {
             message = e.message.toString()
+            e.printStackTrace()
         }
         return Applicability(applicable, message, mutableMap)
     }

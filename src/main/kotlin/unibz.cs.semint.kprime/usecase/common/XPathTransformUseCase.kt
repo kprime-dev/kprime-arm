@@ -171,9 +171,10 @@ class XPathTransformUseCase  {
         val templModel = mutableMapOf<String, List<String>>()
 
         // compute xpath lists
-        val dbInputStream: InputStream = FileIOService.inputStreamFromPath(dbFilePath)
+        //val dbInputStream: InputStream = FileIOService.inputStreamFromPath(dbFilePath)
         val docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-        val doc = docBuilder.parse(dbInputStream)
+        println("dbFilePath: ${dbFilePath}")
+        val doc = docBuilder.parse(File(dbFilePath))
         val xpath = XPathFactory.newInstance().newXPath()
         var violation = ""
         for (xPathLine in xPaths) {
