@@ -1,5 +1,6 @@
 package unibz.cs.semint.kprime.usecase.common
 
+import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.dml.*
 import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
@@ -32,15 +33,16 @@ class ApplyChangeSetUseCase(serializer : IXMLSerializerService) {
         db.schema.tables().add(createTable)
         return db
     }
+
     fun createConstraint(db:Database, createConstraint: CreateConstraint): Database {
         db.schema.constraints().add(createConstraint)
         return db
     }
+
     fun dropTable(db:Database, dropTable: DropTable):Database {
         if (db.schema.tables().isEmpty()) return db
         if (db.schema==null) return db
-        val t= db.schema.table(dropTable.tableName)
-        if (t!=null){ db.schema.tables().remove(t)}
+        db.schema.dropTable(dropTable.tableName)
         return db
     }
 

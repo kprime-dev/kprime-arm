@@ -123,8 +123,16 @@ class Schema () {
     fun dropTable(commandArgs:String) : Schema {
         var tableNames = commandArgs.split(" ")
         for (tableName  in tableNames) {
-            var table = table(tableName)
-            tables().remove(table)
+            val t= table(tableName)
+            if (t!=null){ tables().remove(t)}
+            val toRemove = mutableListOf<Constraint>()
+            for (constr in constraints()) {
+                if (constr.source.table.equals(tableName))
+                    toRemove.add(constr)
+                if (constr.target.table.equals(tableName))
+                    toRemove.add(constr)
+            }
+            constraints().removeAll(toRemove)
         }
         return this
     }
