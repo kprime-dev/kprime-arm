@@ -169,11 +169,43 @@ class SchemaTest {
     fun test_addFunctional() {
         // given
         var schema = Schema()
-        assertEquals(0,schema.functionals())
+        assertEquals(0,schema.functionals().size)
         // when
-        schema.addFunctional("")
+        schema.addFunctional("person:dep_name-->dep_address")
         // then
-        assertEquals(1,schema.functionals())
+        assertEquals(1,schema.functionals().size)
     }
 
+    @Test
+    fun test_addTable() {
+        // given
+        var schema = Schema()
+        assertEquals(0,schema.tables().size)
+        // when
+        schema.addTable("person:name,dep_name,dep_address")
+        // then
+        assertEquals(1,schema.tables().size)
+    }
+
+    @Test
+    fun test_addKey() {
+        // given
+        var schema = Schema()
+        assertEquals(0,schema.keys().size)
+        // when
+        schema.addKey("person:name,surname")
+        // then
+        assertEquals(1,schema.keys().size)
+    }
+
+    @Test
+    fun test_addForeignKey() {
+        // given
+        var schema = Schema()
+        assertEquals(0,schema.foreignKeys().size)
+        // when
+        schema.addForeignKey("person:dep_id-->department:dep_id")
+        // then
+        assertEquals(1,schema.foreignKeys().size)
+    }
 }

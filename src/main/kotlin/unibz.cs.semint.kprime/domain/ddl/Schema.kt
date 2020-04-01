@@ -44,6 +44,24 @@ class Schema () {
         return first[0].source.columns.toSet()
     }
 
+    fun key(tableName:String,k:Set<Column>) {
+        val primaryConstraint = Constraint()
+        primaryConstraint.name="primaryKey.$tableName"
+        primaryConstraint.source.table="$tableName"
+        primaryConstraint.source.columns.addAll(k)
+        primaryConstraint.target.columns.addAll(k)
+        primaryConstraint.type= Constraint.TYPE.PRIMARY_KEY.name
+        constraints().add(primaryConstraint)
+    }
+
+    fun keys(): List<Constraint> {
+        return constraints().filter { c -> c.type.equals(Constraint.TYPE.PRIMARY_KEY.name) }
+    }
+
+    fun foreignKeys(): List<Constraint> {
+        return constraints().filter { c -> c.type.equals(Constraint.TYPE.FOREIGN_KEY.name) }
+    }
+
     fun functionalLHS(tableName: String): Set<Column> {
         var resultCols = mutableSetOf<Column>()
         val first = constraints().filter { c ->
@@ -70,16 +88,6 @@ class Schema () {
         return first[0].target.columns.toSet()
     }
 
-    fun key(tableName:String,k:Set<Column>) {
-        val primaryConstraint = Constraint()
-        primaryConstraint.name="primaryKey.$tableName"
-        primaryConstraint.source.table="$tableName"
-        primaryConstraint.source.columns.addAll(k)
-        primaryConstraint.target.columns.addAll(k)
-        primaryConstraint.type= Constraint.TYPE.PRIMARY_KEY.name
-        constraints().add(primaryConstraint)
-    }
-
     fun functional(tableName:String, lhs:Set<Column>, rhs:Set<Column>){
         val functionalConstraint = Constraint()
         functionalConstraint.name="functional.$tableName"
@@ -98,6 +106,16 @@ class Schema () {
         return addFunctional(tableName,setExpression)
     }
 
+    fun addTable(commandArgs:String) : Schema {
+        val tableName:String = commandArgs.split(":")[0]
+        val attributes = commandArgs.split(":")[1].split(",")
+        val table = Table()
+        table.name = tableName
+        for(att in attributes) table withColumn att
+        tables().add(table)
+        return this
+    }
+
     fun addFunctional(tableName:String, setExpression: String): Schema {
         val constraintsToAdd = Constraint.set(setExpression)
         for (constraint in constraintsToAdd) {
@@ -110,13 +128,36 @@ class Schema () {
         return this
     }
 
-    fun addTable(commandArgs:String) : Schema {
+    fun addKey(commandArgs:String):Schema {
         val tableName:String = commandArgs.split(":")[0]
-        val attributes = commandArgs.split(":")[1].split(",")
-        val table = Table()
-        table.name = tableName
-        for(att in attributes) table withColumn att
-        tables().add(table)
+        val attributeNames = commandArgs.split(":")[1]
+        val constraint = key {}
+        constraint.name = tableName+".primaryKey"
+        constraint.source.table=tableName
+        constraint.target.table=tableName
+        constraint.source.columns.addAll(Column.set(attributeNames))
+        constraint.target.columns.addAll(Column.set(attributeNames))
+        constraints().add(constraint)
+        return this
+    }
+
+    fun addForeignKey(commandArgs:String):Schema {
+        val source:String = commandArgs.split("-->")[0]
+        val target:String = commandArgs.split("-->")[1]
+
+        val sourceTableName:String = source.split(":")[0]
+        val sourceAttributeNames = source.split(":")[1]
+
+        val targetTableName:String = target.split(":")[0]
+        val targetAttributeNames = target.split(":")[1]
+
+        val constraint = foreignkey {}
+        constraint.name = "${sourceTableName}_${targetTableName}.foreignKey"
+        constraint.source.table=sourceTableName
+        constraint.target.table=targetTableName
+        constraint.source.columns.addAll(Column.set(sourceAttributeNames))
+        constraint.target.columns.addAll(Column.set(targetAttributeNames))
+        constraints().add(constraint)
         return this
     }
 
