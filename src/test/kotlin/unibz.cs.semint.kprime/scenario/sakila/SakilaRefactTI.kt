@@ -44,7 +44,7 @@ class SakilaRefactTI {
         }
         db.schema
                 //.checkBcnf()
-                .addFunctionals("film","film_id --> replacement_cost, rental_duration, rental_rate")
+                .addFunctional("film","film_id --> replacement_cost, rental_duration, rental_rate")
 
 
         // val workingDir = "/home/nicola/Tmp/"

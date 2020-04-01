@@ -11,6 +11,7 @@ class Schema () {
     var id: String=""
 
     var tables: ArrayList<Table>? = ArrayList<Table>()
+
     var constraints: MutableList<Constraint>? = ArrayList<Constraint>()
 
     fun table(name: String): Table? {
@@ -22,6 +23,7 @@ class Schema () {
         if (constraints!=null) return  constraints as MutableList<Constraint>
         return ArrayList()
     }
+
     fun tables():ArrayList<Table> {
         if (tables!=null) return tables as ArrayList<Table>
         return ArrayList()
@@ -90,13 +92,13 @@ class Schema () {
 
     }
 
-    fun addFunctionals(command:String): Schema {
-        val tableName:String = command.split(":")[0]
-        val setExpression: String= command.split(":")[1]
-        return addFunctionals(tableName,setExpression)
+    fun addFunctional(commandArgs:String): Schema {
+        val tableName:String = commandArgs.split(":")[0]
+        val setExpression: String= commandArgs.split(":")[1]
+        return addFunctional(tableName,setExpression)
     }
 
-    fun addFunctionals(tableName:String, setExpression: String): Schema {
+    fun addFunctional(tableName:String, setExpression: String): Schema {
         val constraintsToAdd = Constraint.set(setExpression)
         for (constraint in constraintsToAdd) {
             constraint.name=tableName+".functional"
@@ -105,6 +107,16 @@ class Schema () {
             constraint.target.table=tableName
         }
         constraints().addAll(constraintsToAdd)
+        return this
+    }
+
+    fun addTable(commandArgs:String) : Schema {
+        val tableName:String = commandArgs.split(":")[0]
+        val attributes = commandArgs.split(":")[1].split(",")
+        val table = Table()
+        table.name = tableName
+        for(att in attributes) table withColumn att
+        tables().add(table)
         return this
     }
 

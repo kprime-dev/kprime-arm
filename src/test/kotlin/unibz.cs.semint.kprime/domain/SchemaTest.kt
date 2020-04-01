@@ -164,4 +164,16 @@ class SchemaTest {
         assertTrue(fds.contains(Constraint.of("B , C --> D , E")))
         assertTrue(fds.contains(Constraint.of("A --> B, C")))
     }
+
+    @Test
+    fun test_addFunctional() {
+        // given
+        var schema = Schema()
+        assertEquals(0,schema.functionals())
+        // when
+        schema.addFunctional("")
+        // then
+        assertEquals(1,schema.functionals())
+    }
+
 }

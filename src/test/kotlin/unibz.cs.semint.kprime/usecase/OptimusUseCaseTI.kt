@@ -43,10 +43,10 @@ class OptimusUseCaseTI {
             return
         };
         database.schema
-                .addFunctionals("film","film_id --> replacement_cost, rental_duration, rental_rate")
+                .addFunctional("film","film_id --> replacement_cost, rental_duration, rental_rate")
 
         database.schema
-                .addFunctionals("address", "address_id --> address2")
+                .addFunctional("address", "address_id --> address2")
 
         val rootWorkingDir = System.getenv()["tmp_dir"] ?: "" // "/home/nipe/Temp/"
         val timestampSuffix =  LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))
