@@ -62,6 +62,10 @@ class Schema () {
         return constraints().filter { c -> c.type.equals(Constraint.TYPE.FOREIGN_KEY.name) }
     }
 
+    fun doubleIncs(): List<Constraint> {
+        return constraints().filter { c -> c.type.equals(Constraint.TYPE.DOUBLE_INCLUSION.name) }
+    }
+
     fun functionalLHS(tableName: String): Set<Column> {
         var resultCols = mutableSetOf<Column>()
         val first = constraints().filter { c ->
@@ -153,6 +157,26 @@ class Schema () {
 
         val constraint = foreignkey {}
         constraint.name = "${sourceTableName}_${targetTableName}.foreignKey"
+        constraint.source.table=sourceTableName
+        constraint.target.table=targetTableName
+        constraint.source.columns.addAll(Column.set(sourceAttributeNames))
+        constraint.target.columns.addAll(Column.set(targetAttributeNames))
+        constraints().add(constraint)
+        return this
+    }
+
+    fun addDoubleInc(commandArgs:String):Schema {
+        val source:String = commandArgs.split("-->")[0]
+        val target:String = commandArgs.split("-->")[1]
+
+        val sourceTableName:String = source.split(":")[0]
+        val sourceAttributeNames = source.split(":")[1]
+
+        val targetTableName:String = target.split(":")[0]
+        val targetAttributeNames = target.split(":")[1]
+
+        val constraint = doubleInclusion {}
+        constraint.name = "${sourceTableName}_${targetTableName}.doubleInc"
         constraint.source.table=sourceTableName
         constraint.target.table=targetTableName
         constraint.source.columns.addAll(Column.set(sourceAttributeNames))

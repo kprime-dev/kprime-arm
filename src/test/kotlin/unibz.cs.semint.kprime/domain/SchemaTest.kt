@@ -208,4 +208,17 @@ class SchemaTest {
         // then
         assertEquals(1,schema.foreignKeys().size)
     }
+
+
+    @Test
+    fun test_addDoubleInc() {
+        // given
+        var schema = Schema()
+        assertEquals(0,schema.doubleIncs().size)
+        // when
+        schema.addDoubleInc("person:dep_id-->department:dep_id")
+        // then
+        assertEquals(1,schema.doubleIncs().size)
+    }
+
 }
