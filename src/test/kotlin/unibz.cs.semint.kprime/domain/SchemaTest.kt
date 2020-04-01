@@ -3,9 +3,7 @@ package unibz.cs.semint.kprime.domain
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
-import unibz.cs.semint.kprime.domain.ddl.Column
-import unibz.cs.semint.kprime.domain.ddl.Constraint
-import unibz.cs.semint.kprime.domain.ddl.Schema
+import unibz.cs.semint.kprime.domain.ddl.*
 
 class SchemaTest {
 
@@ -221,4 +219,30 @@ class SchemaTest {
         assertEquals(1,schema.doubleIncs().size)
     }
 
+    @Test
+    fun test_dropTable() {
+        // given
+        var schema = Schema()
+        schema.addTable("person:name,surname")
+        assertEquals(1,schema.tables().size)
+        // when
+        schema.dropTable("person")
+        // then
+        assertEquals(0, schema.tables().size)
+
+    }
+
+    @Test
+    fun test_dropConstraint() {
+        // given
+        var schema = Schema()
+        schema.addKey("person:id")
+        schema.addForeignKey("person:id-->employee:id")
+        assertEquals(2,schema.constraints().size)
+        // when
+        schema.dropConstraint("person.primaryKey")
+        schema.dropConstraint("person_employee.foreignKey")
+        // then
+        assertEquals(0,schema.constraints().size)
+    }
 }

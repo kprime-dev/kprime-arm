@@ -120,6 +120,24 @@ class Schema () {
         return this
     }
 
+    fun dropTable(commandArgs:String) : Schema {
+        var tableNames = commandArgs.split(" ")
+        for (tableName  in tableNames) {
+            var table = table(tableName)
+            tables().remove(table)
+        }
+        return this
+    }
+
+    fun dropConstraint(commnadArgs:String) : Schema {
+        var constraintNames = commnadArgs.split(" ")
+        for (constraintName in constraintNames) {
+            var constraint = constraint(constraintName)
+            constraints().remove(constraint)
+        }
+        return this
+    }
+
     fun addFunctional(tableName:String, setExpression: String): Schema {
         val constraintsToAdd = Constraint.set(setExpression)
         for (constraint in constraintsToAdd) {
