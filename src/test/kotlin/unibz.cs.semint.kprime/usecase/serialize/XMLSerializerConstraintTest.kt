@@ -30,7 +30,7 @@ class XMLSerializerConstraintTest {
             .withTest(fileContent)
             .checkForSimilar().build()
         Assert.assertFalse(myDiff.toString(), myDiff.hasDifferences());
-        //assertEquals("",serializedConstraint)
+        //Assert.assertEquals("",serializedConstraint)
     }
 
     @Test

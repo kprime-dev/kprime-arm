@@ -1,5 +1,6 @@
 package unibz.cs.semint.kprime.domain.ddl
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
@@ -63,6 +64,19 @@ class Constraint () {
     @JacksonXmlElementWrapper(useWrapping = false)
     var target = Target()
 
+    fun clone():Constraint {
+        val objectMapper = ObjectMapper()
+        val asString = objectMapper.writeValueAsString(this)
+        return objectMapper.readValue(asString,Constraint::class.java)
+    }
+
+    fun hasTypeKey():Boolean {
+        return type!=null && type.equals(TYPE.PRIMARY_KEY.name)
+    }
+
+    fun hasTypeFunctional():Boolean {
+        return type!=null && type.equals(TYPE.FUNCTIONAL.name)
+    }
 
 
     companion object {

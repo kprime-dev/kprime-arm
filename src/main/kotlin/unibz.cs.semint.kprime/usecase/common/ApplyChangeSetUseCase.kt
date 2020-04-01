@@ -1,5 +1,6 @@
 package unibz.cs.semint.kprime.usecase.common
 
+import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.dml.*
@@ -18,7 +19,7 @@ class ApplyChangeSetUseCase(serializer : IXMLSerializerService) {
         for (dc in changeset.dropConstraint) { newdb = dropConstraint(newdb,dc) }
         for (dm in changeset.dropMapping) { newdb = dropMapping(newdb,dm) }
         for (cc in changeset.createConstraint) { newdb = createConstraint(newdb,cc) }
-        for (ct in changeset.createTable) { newdb = createTable(newdb,ct) }
+        for (ct in changeset.createTable) { newdb = createTable(newdb,ct,db) }
         for (cm in changeset.createMapping) {newdb = createMapping(newdb,cm) }
         return newdb
     }
@@ -29,9 +30,75 @@ class ApplyChangeSetUseCase(serializer : IXMLSerializerService) {
         return db
     }
 
-    fun createTable(db:Database, createTable: CreateTable): Database {
-        db.schema.tables().add(createTable)
-        return db
+    fun createTable(newdb:Database, createTable: CreateTable, olddb:Database): Database {
+        newdb.schema.tables().add(createTable)
+        println("====================================================")
+        println("ApplyChangeSetUseCase createTable ${createTable.view}")
+        if (createTable.view!=null && createTable.view.isNotEmpty()){
+            deriveConstraint(newdb, createTable, olddb)
+        }
+        return newdb
+    }
+
+    private fun deriveConstraint(newdb : Database, createTable: CreateTable, olddb:Database) {
+        println("===================================================0")
+        println(olddb.schema.tables().map { t -> t.name }.joinToString(","))
+        val fromTable = olddb.schema.table(createTable.view)
+        if (fromTable==null) return
+        println("===================================================1")
+        println("check deriveConstraint from ${fromTable.name}")
+        val contraintToCloneSource = mutableListOf<Constraint>()
+        val contraintToCloneTarget = mutableListOf<Constraint>()
+        for(col in createTable.columns) {
+            println("check deriveConstraint col ${col.name}")
+            val colDerived = fromTable.columns.filter { c -> c.name == col.name }.first()
+            val sourceConstraints = olddb.schema.constraints().filter { costr -> costr.source.table.equals(fromTable.name) }
+            for (constr in sourceConstraints) {
+                if (!constr.left().filter { leftcol -> leftcol.name.equals(colDerived.name) }.isEmpty()) {
+                    println("add LEFT constr ${constr.name}")
+                    contraintToCloneSource.add(constr)
+                }
+            }
+            val targetConstraints = olddb.schema.constraints().filter { costr -> costr.target.table.equals(fromTable.name) }
+            for (constr in targetConstraints) {
+                if (!constr.right().filter { rightcol -> rightcol.name.equals(colDerived.name) }.isEmpty()) {
+                    println("add RIGHT constr ${constr.name}")
+                    contraintToCloneTarget.add(constr)
+                }
+            }
+        }
+        for (oldConstr in contraintToCloneSource) {
+            val newConstr = oldConstr.clone()
+            newConstr.name = createTable.name+"."+newConstr.type.toLowerCase()+newdb.schema.constraints?.size
+            newConstr.source.table = createTable.name
+            if (oldConstr.hasTypeKey() || oldConstr.hasTypeFunctional()) {
+                println("clone KEY or FUNC constr ${oldConstr.name}")
+                cloneIfCreateTableHasAllCols(oldConstr, createTable, newConstr, newdb)
+            } else {
+                println("clone SOURCE constr ${oldConstr.name}")
+                newdb.schema.constraints().add(newConstr)
+            }
+        }
+        for (oldConstr in contraintToCloneTarget) {
+            if (!oldConstr.hasTypeKey() && !oldConstr.hasTypeFunctional()) {
+                println("clone TARGET constr ${oldConstr.name}")
+                val newConstr = oldConstr.clone()
+                newConstr.target.table = createTable.name
+                newdb.schema.constraints().add(newConstr)
+            }
+        }
+        println("END check deriveConstraint from ${fromTable.name}")
+    }
+
+    private fun cloneIfCreateTableHasAllCols(oldConstr: Constraint, createTable: CreateTable, newConstr: Constraint, newdb: Database) {
+        val allCols = ArrayList<Column>()
+        allCols.addAll(oldConstr.left())
+        allCols.addAll(oldConstr.right())
+        val allUniqueCols = allCols.toSet().map { c -> c.name }
+        if (createTable.hasColumns(allUniqueCols)) {
+            newConstr.target.table = createTable.name
+            newdb.schema.constraints().add(newConstr)
+        }
     }
 
     fun createConstraint(db:Database, createConstraint: CreateConstraint): Database {

@@ -20,6 +20,20 @@ class Table () {
 
     var columns= ArrayList<Column>()
 
+    fun hasColumn(nameToFind:String): Boolean {
+        for (col in columns) {
+            if (col.name.equals(nameToFind)) return true
+        }
+        return false
+    }
+
+    fun hasColumns(namesToFind:List<String>) : Boolean {
+        for (name in namesToFind) {
+            if (!hasColumn(name)) return false
+        }
+        return true
+    }
+
     fun hasNullable(): Boolean {
         for (col in columns) {
             if (col.nullable) return true

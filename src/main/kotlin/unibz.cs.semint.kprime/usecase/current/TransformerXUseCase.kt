@@ -107,6 +107,7 @@ class TransformerXUseCase(
         try {
             println("decomposeApplicable 2:")
             val (templateMap, violation) = xpathTransform.getTemplateModel(dbFilePath, xPathProperties, transformerParams)
+            if (templateMap.keys.isEmpty()) return Applicability(false,"Empty rules.", mutableMap)
             println("decomposeApplicable 3:")
             applicable = violation.isEmpty()
             message = "decomposeApplicable ${violation.isEmpty()} ${violation}"
