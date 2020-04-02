@@ -9,9 +9,7 @@ import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 import unibz.cs.semint.kprime.usecase.service.FileIOService
 import java.io.File
-import java.io.InputStream
 import java.io.StringWriter
-import java.util.*
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
@@ -70,7 +68,8 @@ class XPathTransformUseCase  {
     private fun parametrized(line: String, tranformerParmeters: MutableMap<String, Any>): String {
         var newline = line
         for (key in tranformerParmeters.keys) {
-            newline = newline.replace("%%${key}%%", tranformerParmeters[key] as String)
+            val newValue = (tranformerParmeters[key] as List<String>).get(0)
+            newline = newline.replace("%%${key}%%", newValue)
         }
         return newline
     }
@@ -82,24 +81,24 @@ class XPathTransformUseCase  {
         val splittedRule = derivationRule.split(" ")
         if (splittedRule[0]=="+") {
             val sourceLists = splittedRule.drop(1)
-            println("sourceLists:"+sourceLists)
+            //println("sourceLists:"+sourceLists)
             derivedList.addAll(templModel[sourceLists[0]] as List<String>)
             for (i in 1..(sourceLists.size-1)) {
                 if (!templModel[sourceLists[i]]!!.isEmpty())
                     derivedList = derivedList.plus(templModel[sourceLists[i]] as MutableList<String>) as MutableList<String>
             }
-            println(derivedList)
+            //println(derivedList)
         }
         if (splittedRule[0]=="-") {
             //println(splittedRule)
             val sourceLists = splittedRule.drop(1)
-            println("sourceLists:"+sourceLists)
+            //println("sourceLists:"+sourceLists)
             derivedList.addAll(templModel[sourceLists[0]] as List<String>)
             for (i in 1..(sourceLists.size-1)) {
                 if (!templModel[sourceLists[i]]!!.isEmpty())
                     derivedList = derivedList.minus(templModel[sourceLists[i]] as MutableList<String>) as MutableList<String>
             }
-            println(" $derivedList")
+            //println(" $derivedList")
         }
         // if derivationRule starts with - then compute intersection
         return derivedList.toSet().toList()
@@ -167,37 +166,37 @@ class XPathTransformUseCase  {
         return changeSet
     }
 
-    fun getTemplateModel(dbFilePath: String, xPaths: List<String>, tranformerParmeters: MutableMap<String, Any>): Pair<MutableMap<String, List<String>>, String> {
+    fun getTemplateModel(dbFilePath: String, xPaths: List<String>, tranformerParameters: MutableMap<String, Any>): Pair<MutableMap<String, List<String>>, String> {
         val templModel = mutableMapOf<String, List<String>>()
 
         // compute xpath lists
         //val dbInputStream: InputStream = FileIOService.inputStreamFromPath(dbFilePath)
         val docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-        println("dbFilePath: ${dbFilePath}")
+        //println("dbFilePath: ${dbFilePath}")
         val doc = docBuilder.parse(File(dbFilePath))
         val xpath = XPathFactory.newInstance().newXPath()
         var violation = ""
         for (xPathLine in xPaths) {
-            println("------------------------------------------")
+            //println("------------------------------------------")
             val xPathTokens = xPathLine.split("==")
             val name = xPathTokens[0]
-            println("name=|${name}|")
+            //println("name=|${name}|")
             val rule = xPathTokens[1]
-            println("rule=|${rule}|")
+            //println("rule=|${rule}|")
             val pathTokens = rule.split(" ")
-            val value = parametrized(pathTokens[0], tranformerParmeters)
-            println("value=|${value}|")
+            val value = parametrized(pathTokens[0], tranformerParameters)
+            //println("value=|${value}|")
             if (value.startsWith("-") || value.startsWith("+")) {
                 templModel[name] = computeDerivedList(templModel, rule)
             }
             else {
                 templModel[name] = asValueList(xpath.compile(value).evaluate(doc, XPathConstants.NODESET) as NodeList)
-                println(" ${name} = ${value}")
-                println(" ${name} = ${templModel[name]}")
+                //println(" ${name} = ${value}")
+                //println(" ${name} = ${templModel[name]}")
                 if (!templModel[name]!!.isEmpty())
-                tranformerParmeters[name] = templModel[name]!![0]
+                tranformerParameters[name] = templModel[name]!!
                 if (pathTokens.size == 3) {
-                    println(pathTokens)
+                    //println(pathTokens)
                     val pathCondition = pathTokens[1]
                     val pathSize = pathTokens[2].toInt()
                     if (pathCondition == ">")
@@ -208,7 +207,7 @@ class XPathTransformUseCase  {
             }
         }
         // adds all input parameters as template parameters
-        for (parCouple in tranformerParmeters) {
+        for (parCouple in tranformerParameters) {
             templModel.put(parCouple.key, listOf(parCouple.value.toString()))
         }
         return Pair(templModel, violation)
