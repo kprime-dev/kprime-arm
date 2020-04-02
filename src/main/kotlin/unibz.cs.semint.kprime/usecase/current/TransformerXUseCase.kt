@@ -45,13 +45,9 @@ class TransformerXUseCase(
 
     override fun decompose(db: Database, params: Map<String, Any>): Transformation {
 
-//        lateinit var traceDir :String
-//        if (traceName.endsWith("/")) traceDir = traceName
-//        else  traceDir = traceName + "/"
-
-        val functionals = db.schema.functionals()
-        if (functionals.isEmpty()) return errorTransformation(db,
-                "ERROR: TransformerXUseCase no functionals")
+//        val functionals = db.schema.functionals()
+//        if (functionals.isEmpty()) return errorTransformation(db,
+//                "ERROR: TransformerXUseCase no functionals")
 
 
         val dbFilePath = fileIOAdapter.writeOnWorkingFilePath(
@@ -81,7 +77,30 @@ class TransformerXUseCase(
     }
 
     override fun compose(db: Database, params: Map<String, Any>): Transformation {
-        TODO("Not yet implemented")
+        val dbFilePath = fileIOAdapter.writeOnWorkingFilePath(
+                serializer.prettyDatabase(db), workingDir +  "db_worked.xml")
+        println("Updated db file db_worked.xml")
+
+        val xPaths = File(coXPathsFilePath).readLines()
+        val tranformerParmeters = mutableMapOf<String,Any>()
+        tranformerParmeters.putAll(params)
+        val changeSet = xpathTransform.compute(
+                dbFilePath, coTemplateFilePath,
+                xPaths, tranformerParmeters)
+        println("Computed changeSet : $changeSet")
+        val changeSetFileName = "${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_cs.xml"
+        changeSet.id=changeSetFileName
+        val changeSetFilePath = workingDir + changeSetFileName
+        fileIOAdapter.writeOnWorkingFilePath(serializer.prettyChangeSet(changeSet), changeSetFilePath)
+
+        val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
+        val dbFileName = "${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_db.xml"
+        newdb.name=dbFileName
+        val newDbFilePath = workingDir + dbFileName
+        fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(newdb), newDbFilePath)
+        println("Written new db file : $newDbFilePath")
+
+        return Transformation(changeSet, newdb, "TransformerXUseCase.decomposed ")
     }
 
     override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
@@ -90,13 +109,6 @@ class TransformerXUseCase(
         val xPathProperties = File(decoXPathsFilePath).readLines()
 
         if (db.name.isEmpty()) return Applicability(false,"db name empty", transformerParams)
-//        lateinit var traceDir :String
-//        if (traceName.endsWith("/")) traceDir = traceName
-//        else  traceDir = traceName + "/"
-
-        //println("decomposeApplicable workingDir:"+workingDir)
-//        println("traceDir:"+traceDir)
-        //println("decomposeApplicable db name:"+db.name)
         val dbFilePath = workingDir + db.name
         if (!File(dbFilePath).isFile) return Applicability(false,"db name ${dbFilePath} not exists", transformerParams)
 
@@ -120,6 +132,30 @@ class TransformerXUseCase(
     }
 
     override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
-        return Applicability(false,"composeApplicable", mutableMapOf())
+        val transformerParams = mutableMapOf<String,Any>()
+
+        val xPathProperties = File(coXPathsFilePath).readLines()
+
+        if (db.name.isEmpty()) return Applicability(false,"db name empty", transformerParams)
+        val dbFilePath = workingDir + db.name
+        if (!File(dbFilePath).isFile) return Applicability(false,"db name ${dbFilePath} not exists", transformerParams)
+
+        //println("composeApplicable 1:")
+        var message = ""
+        var applicable = false
+        var mutableMap = mutableMapOf<String,Any>()
+        try {
+            //println("composeApplicable 2:")
+            val (templateMap, violation) = xpathTransform.getTemplateModel(dbFilePath, xPathProperties, transformerParams)
+            if (templateMap.keys.isEmpty()) return Applicability(false,"Empty rules.", mutableMap)
+            //println("composeApplicable 3:")
+            applicable = violation.isEmpty()
+            message = "composeApplicable ${violation.isEmpty()} ${violation}"
+            mutableMap = templateMap as MutableMap<String, Any>
+        } catch (e:Exception) {
+            message = e.message.toString()
+            e.printStackTrace()
+        }
+        return Applicability(applicable, message, mutableMap)
     }
 }
