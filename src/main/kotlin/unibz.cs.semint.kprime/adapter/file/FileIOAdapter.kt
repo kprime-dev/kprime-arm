@@ -1,10 +1,10 @@
 package unibz.cs.semint.kprime.adapter.file
 
-import unibz.cs.semint.kprime.usecase.service.FileIOService
+import unibz.cs.semint.kprime.usecase.service.FileIOServiceI
 import java.io.*
 
 
-class FileIOAdapter : FileIOService {
+class FileIOAdapter : FileIOServiceI {
     override fun writeOnWorkingFilePath(db: String, fileName: String): String {
         val writer = BufferedWriter(FileWriter(fileName));
         writer.write(db);

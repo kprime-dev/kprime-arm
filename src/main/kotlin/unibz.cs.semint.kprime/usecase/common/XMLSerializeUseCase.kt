@@ -6,9 +6,9 @@ import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.ddl.Table
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 import unibz.cs.semint.kprime.usecase.UseCaseResult
-import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
+import unibz.cs.semint.kprime.usecase.service.SerializerServiceI
 
-class XMLSerializeUseCase(val xmlSerializerService: IXMLSerializerService) {
+class XMLSerializeUseCase(val xmlSerializerService: SerializerServiceI) {
 
 
     // table

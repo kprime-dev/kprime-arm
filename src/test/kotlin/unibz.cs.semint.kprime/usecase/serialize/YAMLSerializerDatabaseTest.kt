@@ -6,7 +6,6 @@ import org.junit.Test
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.ddl.Schema
 import unibz.cs.semint.kprime.domain.ddl.Table
-import java.io.File
 import java.io.StringWriter
 import kotlin.test.assertEquals
 

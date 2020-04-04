@@ -6,7 +6,7 @@ import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.ddl.Table
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 
-interface IXMLSerializerService {
+interface SerializerServiceI {
     fun serializeTable(table: Table): String
     fun deserializeTable(s: String): Table
     fun prettyTable(table: Table): String

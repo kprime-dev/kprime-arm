@@ -33,13 +33,13 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             db.id=UUID.randomUUID().toString()
             db.schema.name="sourceName"
             db.schema.id=UUID.randomUUID().toString()
-            var tableNames :List<String>
+            var tableNames  =  mutableListOf<String>()
             if (table!=null && table.isNotEmpty()) {
-                tableNames= listOf(table)
+                tableNames= mutableListOf(table)
             } else {
-                tableNames = readTables(metaData,db)
+                tableNames.addAll(readTables(metaData,db))
             }
-            readViews(metaData,db)
+            tableNames.addAll(readViews(metaData,db))
             readColumns(metaData, tableNames,db)
             readPrimaryKeys(metaData, tableNames,db)
             readForeignKeys(metaData, tableNames,db)
@@ -63,11 +63,12 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
     private fun readViews(metaData: DatabaseMetaData, db: Database):List<String> {
         val views = metaData.getTables(null, null, null, arrayOf("VIEW"))
         val viewNames = mutableListOf<String>()
-        println("++++++++++++++++++++++++++++++++++++++++++++++++")
-        QueryJdbcAdapter().printResultSet(views)
+        //println("++++++++++++++++++++++++++++++++++++++++++++++++")
+        //QueryJdbcAdapter().printResultSet(views)
         println("++++++++++++++++++++++++++++++++++++++++++++++++")
         while (views.next()) {
             val viewName = "${views.getString("TABLE_NAME")}"
+            println(viewName)
             viewNames.add(viewName)
             val table = Table()
             table.name=viewName

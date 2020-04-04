@@ -1,5 +1,5 @@
 package unibz.cs.semint.kprime.usecase.service
 
-interface IXSLTransformerService {
+interface XSLTransformerServiceI {
     fun trasform(xsl:String,xml:String,out:String)
 }

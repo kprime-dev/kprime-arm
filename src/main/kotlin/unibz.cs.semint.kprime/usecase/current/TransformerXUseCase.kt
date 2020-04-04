@@ -7,14 +7,11 @@ import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.usecase.TransformerUseCase
 import unibz.cs.semint.kprime.usecase.common.ApplyChangeSetUseCase
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
-import unibz.cs.semint.kprime.usecase.service.FileIOService
-import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
+import unibz.cs.semint.kprime.usecase.service.FileIOServiceI
+import unibz.cs.semint.kprime.usecase.service.SerializerServiceI
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileReader
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 /**
  * Usage e.g.:
@@ -30,8 +27,8 @@ import java.util.*
  *
  */
 class TransformerXUseCase(
-        val serializer: IXMLSerializerService,
-        val fileIOAdapter: FileIOService,
+        val serializer: SerializerServiceI,
+        val fileIOAdapter: FileIOServiceI,
         val workingDir:String,
         val docoTemplateFilePath:String,
         val decoXPathsFilePath:String,

@@ -7,13 +7,12 @@ import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.usecase.common.ApplyChangeSetUseCase
 import unibz.cs.semint.kprime.usecase.TransformerUseCase
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
-import unibz.cs.semint.kprime.usecase.service.FileIOService
-import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
-import java.io.StringWriter
+import unibz.cs.semint.kprime.usecase.service.FileIOServiceI
+import unibz.cs.semint.kprime.usecase.service.SerializerServiceI
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class TransformerVUseCase(val serializer: IXMLSerializerService, val fileIOAdapter: FileIOService) : TransformerUseCase {
+class TransformerVUseCase(val serializer: SerializerServiceI, val fileIOAdapter: FileIOServiceI) : TransformerUseCase {
 
     override fun decompose(db: Database, params:Map<String,Any>): Transformation {
         val tranformerParmeters = mutableMapOf<String,Any>()

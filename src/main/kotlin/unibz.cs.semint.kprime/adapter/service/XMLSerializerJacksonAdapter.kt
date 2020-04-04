@@ -10,10 +10,9 @@ import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.ddl.Table
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 import unibz.cs.semint.kprime.domain.dql.Query
-import unibz.cs.semint.kprime.domain.dql.Select
-import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
+import unibz.cs.semint.kprime.usecase.service.SerializerServiceI
 
-class XMLSerializerJacksonAdapter : IXMLSerializerService {
+class XMLSerializerJacksonAdapter : SerializerServiceI {
 
 
     // table

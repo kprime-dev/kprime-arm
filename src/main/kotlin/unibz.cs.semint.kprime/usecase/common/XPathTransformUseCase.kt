@@ -7,7 +7,7 @@ import org.w3c.dom.NodeList
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
-import unibz.cs.semint.kprime.usecase.service.FileIOService
+import unibz.cs.semint.kprime.usecase.service.FileIOServiceI
 import java.io.File
 import java.io.StringWriter
 import javax.xml.parsers.DocumentBuilderFactory
@@ -55,7 +55,7 @@ class XPathTransformUseCase  {
         val changeSet = compute(dbFilePath, templateFilePath, xPaths, tranformerParmeters)
 
         //val dbXml = XPathTransformUseCase::class.java.getResource("/${dbFilePath}").readText()
-        val dbXml = FileIOService.readString(FileIOService.inputStreamFromPath(dbFilePath))
+        val dbXml = FileIOServiceI.readString(FileIOServiceI.inputStreamFromPath(dbFilePath))
         val serializer = XMLSerializerJacksonAdapter()
         val db = serializer.deserializeDatabase(dbXml)
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)

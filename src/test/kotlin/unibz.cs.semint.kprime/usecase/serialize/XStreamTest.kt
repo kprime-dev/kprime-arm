@@ -52,7 +52,7 @@ class XStreamTest {
         val db: Database = xstream.fromXML(dbxml) as Database
         // then
         val prettyDatabase = XMLSerializerJacksonAdapter().prettyDatabase(db)
-        println(prettyDatabase)
+        //println(prettyDatabase)
         assertEquals(db.schema.tables().size,0)
     }
 }

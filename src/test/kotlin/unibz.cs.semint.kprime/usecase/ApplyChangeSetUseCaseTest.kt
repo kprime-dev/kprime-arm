@@ -35,7 +35,6 @@ class ApplyChangeSetUseCaseTest {
         val db = setUpPersonDb()
         //db.mappings = mutableListOf()
         val serializeDb = serializer.serializeDatabase(db)
-        println(serializeDb)
         val newDb = serializer.deserializeDatabase(serializeDb)
         //newDb.mappings = mutableListOf()
         val serializeNewDb = serializer.serializeDatabase(newDb)

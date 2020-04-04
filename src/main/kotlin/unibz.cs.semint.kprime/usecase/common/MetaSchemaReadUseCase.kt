@@ -4,7 +4,7 @@ import unibz.cs.semint.kprime.domain.*
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.usecase.UseCaseResult
 import unibz.cs.semint.kprime.usecase.repository.IMetaSchemaRepository
-import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
+import unibz.cs.semint.kprime.usecase.service.SerializerServiceI
 import java.util.*
 
 
@@ -32,7 +32,7 @@ class MetaSchemaReadUseCase() {
         """.trimIndent()
     }
 
-    fun doit(datasource: DataSource,line: String, metaSchemaRepository: IMetaSchemaRepository, xmlSerializer:IXMLSerializerService) : UseCaseResult<Database> {
+    fun doit(datasource: DataSource,line: String, metaSchemaRepository: IMetaSchemaRepository, xmlSerializer:SerializerServiceI) : UseCaseResult<Database> {
         val tokens = tokenize(line)
         if (tokens.size<2) { return UseCaseResult("Usage:" + usage(), null);}
         if (tokens[1] == "?") { return UseCaseResult(oneline(), null);}

@@ -7,7 +7,7 @@ import java.io.FileInputStream
 import java.io.InputStream
 import java.nio.charset.StandardCharsets
 
-interface FileIOService {
+interface FileIOServiceI {
     fun writeOnWorkingFilePath(db: String, fileName: String): String
 
     companion object {

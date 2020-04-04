@@ -4,12 +4,12 @@ import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.dml.*
-import unibz.cs.semint.kprime.usecase.service.IXMLSerializerService
+import unibz.cs.semint.kprime.usecase.service.SerializerServiceI
 
 /**
  * Given a Databse will apply changes following a given changeSet modification.
  */
-class ApplyChangeSetUseCase(serializer : IXMLSerializerService) {
+class ApplyChangeSetUseCase(serializer : SerializerServiceI) {
 
     val serializer = serializer
 

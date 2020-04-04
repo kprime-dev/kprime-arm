@@ -101,7 +101,6 @@ class XMLDeserializerDatabaseTest {
             FROM alias 
         """.trimIndent()))
 
-        println(serializer.prettyDatabase(db))
         assertEquals(3, db.mappings().size)
         assertNotNull(database.mapping("query2"))
         assertEquals("*",deserialized!!.ok!!.mapping("query2")!!.select!!.attributes[0]?.name)
