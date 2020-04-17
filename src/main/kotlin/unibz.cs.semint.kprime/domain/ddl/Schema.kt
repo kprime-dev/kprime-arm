@@ -499,7 +499,7 @@ class Schema () {
             return violations
         }
 
-        fun checkBNFC(attrs: Set<Column>, fds:Set<Constraint>) : Set<Constraint> {
+        fun checkBCNF(attrs: Set<Column>, fds:Set<Constraint>) : Set<Constraint> {
             val keysSet = Companion.keys(attrs,fds)
             val violations = HashSet<Constraint>()
             for (fd in fds) {
@@ -585,7 +585,7 @@ class Schema () {
         fun decomposeToBCNF(attrs:Set<Column>, fds:Set<Constraint>): Set<Relation> {
             val result = HashSet<Relation>()
 
-            val violations = checkBNFC(attrs, fds)
+            val violations = checkBCNF(attrs, fds)
             if (violations.isEmpty()) {
                 result.add(Relation(Table() withCols attrs, fds))
                 return result
@@ -610,7 +610,7 @@ class Schema () {
         }
 
         fun lostBCNFConstraints(attrs : Set<Column>, fds: Set<Constraint>): Set<Constraint> {
-            val violations = Schema.checkBNFC(attrs, fds)
+            val violations = Schema.checkBCNF(attrs, fds)
             if (violations.isEmpty()) return emptySet()
 
             val result = Schema.decomposeToBCNF(attrs,fds)
@@ -649,4 +649,37 @@ class Schema () {
         }
         return allDecomposed
     }
+
+    fun decompose3NF(): Set<Relation> {
+        var allDecomposed = mutableSetOf<Relation>()
+        var tables = tables()
+        for ( table in tables) {
+            var fds = functionalsTable(table.name)
+            allDecomposed.addAll(Schema.decomposeTo3NF(table.columns.toSet(), fds.toSet()))
+        }
+        return allDecomposed
+    }
+
+    fun violations3NF(): Set<Constraint> {
+        var allViolations = mutableSetOf<Constraint>()
+        var tables = tables()
+        for ( table in tables) {
+            var fds = functionalsTable(table.name)
+            allViolations.addAll(Schema.check3NF(table.columns.toSet(), fds.toSet()))
+        }
+        return allViolations
+
+    }
+
+    fun violationsBCNF(): Set<Constraint> {
+        var allViolations = mutableSetOf<Constraint>()
+        var tables = tables()
+        for ( table in tables) {
+            var fds = functionalsTable(table.name)
+            allViolations.addAll(Schema.checkBCNF(table.columns.toSet(), fds.toSet()))
+        }
+        return allViolations
+
+    }
+
 }

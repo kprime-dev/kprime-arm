@@ -274,7 +274,7 @@ class SchemaTest {
         val attrs = Column.set("name, location, favAppl, application, provider")
         val fds = Constraint.set("name-->location; name-->favAppl; application-->provider")
         // when
-        val result = Schema.checkBNFC(attrs,fds)
+        val result = Schema.checkBCNF(attrs,fds)
         // then
         assertTrue(result.contains(Constraint.of("name --> favAppl")))
         assertTrue(result.contains(Constraint.of("name --> location")))
@@ -384,7 +384,7 @@ class SchemaTest {
         val fds = Constraint.set("A,B-->C; C-->B")
         val result = Schema.decomposeToBCNF(attrs,fds)
         //
-        val violations = Schema.checkBNFC(attrs, fds)
+        val violations = Schema.checkBCNF(attrs, fds)
         assertFalse(violations.isEmpty())
         for (constraint in violations) {
             println(constraint.toString())
