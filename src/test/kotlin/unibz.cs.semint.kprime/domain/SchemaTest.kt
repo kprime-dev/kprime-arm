@@ -1,7 +1,6 @@
 package unibz.cs.semint.kprime.domain
 
-import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertTrue
+import junit.framework.TestCase.*
 import org.junit.Test
 import unibz.cs.semint.kprime.domain.ddl.*
 
@@ -245,4 +244,28 @@ class SchemaTest {
         // then
         assertEquals(0,schema.constraints().size)
     }
+
+    @Test
+    fun test_check3NF() {
+        // given
+        val attrs = Column.set("A, B, C")
+        val fds = Constraint.set("A,B-->C; C-->B")
+        // when
+        val check3NF = Schema.check3NF(attrs, fds)
+        // then
+        assertTrue(check3NF.isEmpty())
+    }
+
+    @Test
+    fun test_not_check3NF() {
+        // given
+        val attrs = Column.set("A, B, C, D")
+        val fds = Constraint.set("A,B-->C; C-->D")
+        // when
+        val check3NF = Schema.check3NF(attrs, fds)
+        // then
+        assertEquals("[C --> D ; ]",check3NF.toString())
+        assertEquals(1, check3NF.size)
+    }
+
 }
