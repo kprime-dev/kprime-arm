@@ -82,6 +82,10 @@ class Schema () {
             c.type == Constraint.TYPE.FUNCTIONAL.name }.toSet()
     }
 
+    fun functionalsTable(tableName:String): List<Constraint> {
+        return functionals().filter { f -> f.source.table.equals(tableName) }
+    }
+
     fun functionalRHS(tableName: String): Set<Column> {
         var resultCols = mutableSetOf<Column>()
         val first = constraints().filter { c ->
@@ -578,7 +582,7 @@ class Schema () {
         }
 
 
-        fun decompostToBCNF(attrs:Set<Column>, fds:Set<Constraint>): Set<Relation> {
+        fun decomposeToBCNF(attrs:Set<Column>, fds:Set<Constraint>): Set<Relation> {
             val result = HashSet<Relation>()
 
             val violations = checkBNFC(attrs, fds)
@@ -600,11 +604,49 @@ class Schema () {
             val fds2 = projection(attrs2,fds)
             val relation1 = Relation(Table() withCols attrs1, fds1)
             val relation2 = Relation(Table() withCols attrs2, fds2)
-            result.addAll(decompostToBCNF(attrs1,fds1))
-            result.addAll(decompostToBCNF(attrs2,fds2))
+            result.addAll(decomposeToBCNF(attrs1,fds1))
+            result.addAll(decomposeToBCNF(attrs2,fds2))
             return result
         }
+
+        fun lostBCNFConstraints(attrs : Set<Column>, fds: Set<Constraint>): Set<Constraint> {
+            val violations = Schema.checkBNFC(attrs, fds)
+            if (violations.isEmpty()) return emptySet()
+
+            val result = Schema.decomposeToBCNF(attrs,fds)
+
+            var resultConstraints = HashSet<Set<Constraint>>()
+            for (relation in result) {
+                println("columns")
+                println(relation.table.columns)
+                //resultTables.add(relation.table.columns)
+                println("constr")
+                println(relation.constraints)
+                resultConstraints.add(relation.constraints)
+                println()
+            }
+
+            var lost = mutableSetOf<Constraint>()
+            for (constraint in fds) {
+                if (!resultConstraints.contains((setOf(constraint)))) {
+                    println ( "Lost "+constraint.toString())
+                    lost.add(constraint)
+
+                }
+            }
+            return lost
+        }
+
     } // End of companion
 
 
+    fun decomposeBCNF(): Set<Relation> {
+        var allDecomposed = mutableSetOf<Relation>()
+        var tables = tables()
+        for ( table in tables) {
+            var fds = functionalsTable(table.name)
+            allDecomposed.addAll(Schema.decomposeToBCNF(table.columns.toSet(), fds.toSet()))
+        }
+        return allDecomposed
+    }
 }

@@ -347,12 +347,12 @@ class SchemaTest {
     }
 
     @Test
-    fun test_deomposeToBCNF() {
+    fun test_decomposeToBCNF() {
         // given
         val attrs = Column.set("name, location, favAppl, application, provider")
         val fds = Constraint.set("name-->location; name-->favAppl; application-->provider")
         // when
-        val result = Schema.decompostToBCNF(attrs, fds)
+        val result = Schema.decomposeToBCNF(attrs, fds)
         // then
         var resultTables = HashSet<List<Column>>()
         var resultConstraints = HashSet<Set<Constraint>>()
@@ -378,4 +378,47 @@ class SchemaTest {
 
     }
 
+    @Test
+    fun test_decomposeBCNF_failed() {
+        val attrs = Column.set("A, B, C")
+        val fds = Constraint.set("A,B-->C; C-->B")
+        val result = Schema.decomposeToBCNF(attrs,fds)
+        //
+        val violations = Schema.checkBNFC(attrs, fds)
+        assertFalse(violations.isEmpty())
+        for (constraint in violations) {
+            println(constraint.toString())
+        }
+
+        var resultConstraints = HashSet<Set<Constraint>>()
+        for (relation in result) {
+            println("columns")
+            println(relation.table.columns)
+            //resultTables.add(relation.table.columns)
+            println("constr")
+            println(relation.constraints)
+            resultConstraints.add(relation.constraints)
+            println()
+        }
+
+        for (constraint in fds) {
+            if (!resultConstraints.contains((setOf(constraint)))) {
+                println ( "Lost "+constraint.toString())
+            }
+        }
+
+    }
+
+
+    @Test
+    fun test_lostBCNFConstraints() {
+        // given
+        val attrs = Column.set("A, B, C")
+        val fds = Constraint.set("A,B-->C; C-->B")
+        // when
+        val lostBCNFConstraints = Schema.lostBCNFConstraints(attrs, fds)
+        // then
+        assertEquals(1,lostBCNFConstraints.size)
+        assertTrue(lostBCNFConstraints.equals(Constraint.set("A,B --> C")))
+    }
 }
