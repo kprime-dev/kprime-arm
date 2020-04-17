@@ -55,5 +55,9 @@ class Table () {
         this.columns.add(col)
     }
 
+    infix fun withCols(cols: Set<Column>) = apply {
+        this.columns.addAll(cols)
+    }
+
 
 }

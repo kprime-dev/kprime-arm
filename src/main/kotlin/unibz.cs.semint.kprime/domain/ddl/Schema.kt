@@ -495,8 +495,116 @@ class Schema () {
             return violations
         }
 
-    }
+        fun checkBNFC(attrs: Set<Column>, fds:Set<Constraint>) : Set<Constraint> {
+            val keysSet = Companion.keys(attrs,fds)
+            val violations = HashSet<Constraint>()
+            for (fd in fds) {
+                var contains = false
+                for (keys in keysSet) {
+                    if (fd.left().containsAll(keys)) {
+                        contains = true
+                        break
+                    }
+                    if (!contains) violations.add(fd)
+                }
+            }
+            return violations
+        }
 
+        fun checkLossyDecomposition(attrs: Set<Column>, fds:Set<Constraint>, subattrs : Set<Set<Column>>)
+                : Set<Constraint> {
+            val lost = HashSet<Constraint>()
+            val decomposed = HashSet<Constraint>()
+            for (subattr in subattrs) {
+                decomposed.addAll(projection(subattr,fds))
+            }
+            for (fd in fds) {
+                val left = fd.left().toHashSet()
+                val closure = closure(left,decomposed)
+                if (!closure.containsAll(fd.right())) {
+                    lost.add(fd)
+                }
+            }
+            return lost
+        }
+
+        fun decomposeTo3NF(attrs:Set<Column>, fds:Set<Constraint>): Set<Relation> {
+            val result = HashSet<Relation>()
+            val minimalBasis = minimalBasis(fds)
+            decomposeOnPotentialRelations(minimalBasis, result)
+            removeSubsumed(result)
+            addMinimalBasisRelationIfExist(attrs, minimalBasis, result)
+            return result
+        }
+
+        private fun addMinimalBasisRelationIfExist(attrs: Set<Column>, minimalBasis: Set<Constraint>, result: HashSet<Relation>) {
+            val keys = keys(attrs, minimalBasis)
+            var contains = false
+            for (relationR in result) {
+                for (key in keys) {
+                    if (relationR.table.columns.containsAll(key)) {
+                        contains = true
+                        break
+                    }
+                }
+                if (contains) break
+            }
+            if (!contains) {
+                val key = keys.first()
+                val proj = projection(key, minimalBasis)
+                result.add(Relation(Table() withCols key, proj))
+            }
+        }
+
+        private fun removeSubsumed(result: HashSet<Relation>) {
+            val toRemove = HashSet<Relation>()
+            for (relationA in result) {
+                for (relationB in result) {
+                    if (relationA != relationB && relationA.table.columns.containsAll(
+                                    relationB.table.columns))
+                        toRemove.add(relationB)
+                }
+            }
+            result.removeAll(toRemove)
+        }
+
+        private fun decomposeOnPotentialRelations(minimalBasis: Set<Constraint>, result: HashSet<Relation>) {
+            for (fd in minimalBasis) {
+                val attrsNow = fd.left().toHashSet()
+                attrsNow.addAll(fd.right())
+                val projection = projection(attrsNow, minimalBasis)
+                result.add(Relation(Table() withCols attrsNow, projection))
+            }
+        }
+
+
+        fun decompostToBCNF(attrs:Set<Column>, fds:Set<Constraint>): Set<Relation> {
+            val result = HashSet<Relation>()
+
+            val violations = checkBNFC(attrs, fds)
+            if (violations.isEmpty()) {
+                result.add(Relation(Table() withCols attrs, fds))
+                return result
+            }
+            lateinit var pick : Constraint
+            for (fd in violations) {
+                pick = fd
+                break
+            }
+            val lefts = pick.left()
+            val attrs1 = closure(lefts.toSet(), fds)
+            val attrs2 = HashSet<Column>(attrs)
+            attrs2.removeAll(attrs1)
+            attrs2.addAll(lefts)
+            val fds1 = projection(attrs1, fds)
+            val fds2 = projection(attrs2,fds)
+            val relation1 = Relation(Table() withCols attrs1, fds1)
+            val relation2 = Relation(Table() withCols attrs2, fds2)
+            result.addAll(decompostToBCNF(attrs1,fds1))
+            result.addAll(decompostToBCNF(attrs2,fds2))
+            return result
+        }
+    } // End of companion
 
 
 }

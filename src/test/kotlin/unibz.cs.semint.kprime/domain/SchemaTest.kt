@@ -268,4 +268,114 @@ class SchemaTest {
         assertEquals(1, check3NF.size)
     }
 
+    @Test
+    fun test_checkBNFC() {
+        // given
+        val attrs = Column.set("name, location, favAppl, application, provider")
+        val fds = Constraint.set("name-->location; name-->favAppl; application-->provider")
+        // when
+        val result = Schema.checkBNFC(attrs,fds)
+        // then
+        assertTrue(result.contains(Constraint.of("name --> favAppl")))
+        assertTrue(result.contains(Constraint.of("name --> location")))
+        assertTrue(result.contains(Constraint.of("application --> provider")))
+        assertEquals(3,result.size)
+    }
+
+    @Test
+    fun test_checkLossyDecomposition() {
+        // given
+        val attrs = Column.set("A,B,C,D,E")
+        val subattrs1 = Column.set("A,B,C")
+        val subattrs2 = Column.set("A,D,E")
+        val subattrs = setOf(subattrs1,subattrs2)
+        val fds = Constraint.set("A-->B,C;C,D-->E;E-->A;B-->D")
+        // when
+        val result = Schema.checkLossyDecomposition(attrs, fds, subattrs)
+        // then
+        assertTrue(result.contains(Constraint.of("C , D --> E")))
+        assertTrue(result.contains(Constraint.of("B --> D")))
+        assertEquals(2,result.size)
+
+    }
+
+
+    @Test
+    fun test_deomposeTo3NF() {
+        // given
+        val attrs = Column.set("C, T, H, R, S, G")
+        val fds = Constraint.set("C-->T;H,R-->C;H,T-->R;C,S-->G;H,S-->R")
+        assertEquals(5,fds.size)
+        // when
+        val result = Schema.decomposeTo3NF(attrs, fds)
+        // then
+        var resultTables = HashSet<List<Column>>()
+        var resultConstraints = HashSet<Set<Constraint>>()
+        for (relation in result) {
+            println("columns")
+            println(relation.table.columns)
+            resultTables.add(relation.table.columns)
+            println("constr")
+            println(relation.constraints)
+            resultConstraints.add(relation.constraints)
+            println()
+        }
+        assertTrue(resultConstraints.contains(Constraint.set("R , H --> C ; C , H --> R")))
+        assertTrue(resultConstraints.contains(Constraint.set("C , S --> G")))
+        assertTrue(resultConstraints.contains(Constraint.set("S , H --> R")))
+        assertTrue(resultConstraints.contains(Constraint.set("R , H --> C ; C , H --> R")))
+        assertTrue(resultConstraints.contains(Constraint.set("T , H --> R ; R , H --> T")))
+        assertEquals(5, resultConstraints.size)
+
+        assertTrue(checkContains(resultTables, Column.set("H, T, R")))
+        assertTrue(checkContains(resultTables, Column.set("T, C")))
+        assertTrue(checkContains(resultTables, Column.set("C, S, G")))
+        assertTrue(checkContains(resultTables, Column.set("H, S, R")))
+        assertTrue(checkContains(resultTables, Column.set("H, R, C")))
+        assertEquals(5, resultTables.size)
+    }
+
+    private fun checkContains(resultTables: HashSet<List<Column>>, element: Set<Column>): Boolean {
+        var found = false
+        for (tab in resultTables) {
+            if (tab.toSet().equals(element)) {
+                found = true
+                break
+            }
+        }
+        return found
+    }
+
+    @Test
+    fun test_deomposeToBCNF() {
+        // given
+        val attrs = Column.set("name, location, favAppl, application, provider")
+        val fds = Constraint.set("name-->location; name-->favAppl; application-->provider")
+        // when
+        val result = Schema.decompostToBCNF(attrs, fds)
+        // then
+        var resultTables = HashSet<List<Column>>()
+        var resultConstraints = HashSet<Set<Constraint>>()
+        for (relation in result) {
+            println("columns")
+            println(relation.table.columns)
+            resultTables.add(relation.table.columns)
+            println("constr")
+            println(relation.constraints)
+            resultConstraints.add(relation.constraints)
+            println()
+        }
+        assertTrue(resultConstraints.contains(Constraint.set("application --> provider")))
+        assertTrue(resultConstraints.contains(Constraint.set("name --> favAppl ; name --> location")))
+        assertTrue(resultConstraints.contains(Constraint.set("")))
+        assertEquals(3, resultConstraints.size)
+
+
+        assertTrue(checkContains(resultTables, Column.set("application, provider")))
+        assertTrue(checkContains(resultTables, Column.set("application, name")))
+        assertTrue(checkContains(resultTables, Column.set("name, favAppl, location")))
+        assertEquals(3, resultTables.size)
+
+    }
+
 }
