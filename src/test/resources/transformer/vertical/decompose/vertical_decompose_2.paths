@@ -1,0 +1,10 @@
+%%alfa%%,%%beta%%
+originTable==/database/schema/constraints/constraints[@type='FUNCTIONAL'][1]/source/@table > 0
+all==/database/schema/tables/tables[@name='%%originTable%%'][1]/columns/columns/@name
+keys==/database/schema/constraints/constraints[@type='PRIMARY_KEY'][1]/source[@table='%%originTable%%']/columns/columns/@name
+lhss==/database/schema/constraints/constraints[@type='FUNCTIONAL'][1]/source[@table='%%originTable%%']/columns/columns/@name > 0
+rhss==/database/schema/constraints/constraints[@type='FUNCTIONAL'][1]/target[@table='%%originTable%%']/columns/columns/@name > 0
+rests==- all keys lhss rhss > 0
+table==/database/schema/tables/tables[@name='%%originTable%%'][1]/@name
+view1==+ keys lhss rests
+view2==+ lhss rhss

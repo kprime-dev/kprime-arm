@@ -1,0 +1,92 @@
+<changeSet id="234">
+  <createTable name="${table[0]}_1" id="" view="${table[0]}" condition="">
+    <columns>
+        <#list view1 as att1>
+        <columns name="${att1}" id="id.${att1}" dbname="" nullable="false" dbtype=""/>
+        </#list>
+    </columns>
+  </createTable>
+  <createTable name="${table[0]}_2" id="" view="${table[0]}" condition="">
+    <columns>
+        <#list view2 as att2>
+        <columns name="${att2}" id="id.${att2}" dbname="" nullable="false" dbtype=""/>
+        </#list>
+    </columns>
+  </createTable>
+  <createConstraint name="${table[0]}.doubleInclusion" id="" type="DOUBLE_INCLUSION">
+    <source name="" id="" table="${table[0]}_1">
+        <columns>
+            <#list lhss as lhs>
+            <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
+            </#list>
+        </columns>
+    </source>
+    <target name="" id="" table="${table[0]}_2">
+        <columns>
+            <#list lhss as lhs>
+            <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
+            </#list>
+        </columns>
+    </target>
+  </createConstraint>
+  <createConstraint name="${table[0]}_2.primaryKey" id="" type="PRIMARY_KEY">
+    <source name="" id="" table="${table[0]}_2">
+        <columns>
+            <#list lhss as lhs>
+            <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
+            </#list>
+        </columns>
+    </source>
+    <target name="" id="" table="">
+        <columns>
+            <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+        </columns>
+    </target>
+  </createConstraint>
+<#if keys?size gt 0 >
+  <createConstraint name="${table[0]}_1.primaryKey" id="" type="PRIMARY_KEY">
+    <source name="" id="" table="${table[0]}_1">
+        <columns>
+            <#list keys as key>
+            <columns name="${key}" id="id.${key}" dbname="" nullable="false" dbtype=""/>
+            </#list>
+        </columns>
+    </source>
+    <target name="" id="" table="">
+        <columns>
+            <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+        </columns>
+    </target>
+  </createConstraint>
+</#if>
+  <createMapping name="${table[0]}_1">
+    <select>
+      <attributes>
+        <#list view1 as view1col>
+        <attributes name="${view1col}" />
+        </#list>
+      </attributes>
+      <from>
+        <from tableName="${table[0]}" alias="" joinOn=""/>
+      </from>
+      <where condition="" />
+    </select>
+  </createMapping>
+  <createMapping name="${table[0]}_2">
+    <select>
+      <attributes>
+        <#list view2 as view2col>
+        <attributes name="${view2col}"/>
+        </#list>
+      </attributes>
+      <from>
+        <from tableName="${table[0]}" alias="" joinOn=""/>
+      </from>
+      <where condition="" />
+    </select>
+  </createMapping>
+
+  <dropTable path="" schemaName="" tableName="${table[0]}"/>
+  <dropConstraint path="" schemaName="" constraintName="${table[0]}.primaryKey"/>
+  <dropConstraint path="" schemaName="" constraintName="${table[0]}.functional"/>
+</changeSet>
