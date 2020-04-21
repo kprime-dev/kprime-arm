@@ -9,8 +9,8 @@ import unibz.cs.semint.kprime.domain.dml.ChangeSet
 interface TransformerUseCase {
     fun decompose(db: Database, params:Map<String,Any>): Transformation
     fun compose(db: Database, params:Map<String,Any>): Transformation
-    fun decomposeApplicable(db: Database, transformationStrategy : TransformationStrategy): Applicability
-    fun composeApplicable(db: Database, transformationStrategy : TransformationStrategy): Applicability
+    fun decomposeApplicable(db: Database, transformationStrategy : TransformationStrategy, params:Map<String,Any> ): Applicability
+    fun composeApplicable(db: Database, transformationStrategy : TransformationStrategy, params:Map<String,Any>): Applicability
     fun errorTransformation(db: Database, message: String): Transformation {
         return Transformation(ChangeSet(),db,message)
     }

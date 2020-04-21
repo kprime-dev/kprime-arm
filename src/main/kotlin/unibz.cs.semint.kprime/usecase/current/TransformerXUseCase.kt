@@ -100,14 +100,25 @@ class TransformerXUseCase(
         return Transformation(changeSet, newdb, "TransformerXUseCase.decomposed ")
     }
 
-    override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
-        val transformerParams = mutableMapOf<String,Any>()
+    override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy, transformerParams: Map<String,Any>): Applicability {
 
-        val xPathProperties = File(decoXPathsFilePath).readLines()
+        var xPathProperties = File(decoXPathsFilePath).readLines()
 
         if (db.name.isEmpty()) return Applicability(false,"db name empty", transformerParams)
         val dbFilePath = workingDir + db.name
         if (!File(dbFilePath).isFile) return Applicability(false,"db name ${dbFilePath} not exists", transformerParams)
+
+        if (xPathProperties.size>0 && xPathProperties[0].startsWith("%%")) {
+            // check required params
+            val requireds = xPathProperties[0].split(",")
+            for (required in requireds) {
+                if (transformerParams[required] == null || transformerParams[required] == "") {
+                    return Applicability(false, "required ${required} parameter not exists.", transformerParams)
+                }
+            }
+            xPathProperties = xPathProperties.drop(1)
+        }
+
 
         //println("decomposeApplicable 1:")
         var message = ""
@@ -115,8 +126,8 @@ class TransformerXUseCase(
         var mutableMap = mutableMapOf<String,Any>()
         try {
             //println("decomposeApplicable 2:")
-            val (templateMap, violation) = xpathTransform.getTemplateModel(dbFilePath, xPathProperties, transformerParams)
-            if (templateMap.keys.isEmpty()) return Applicability(false,"Empty rules.", mutableMap)
+            val (templateMap, violation) = xpathTransform.getTemplateModel(dbFilePath, xPathProperties, transformerParams.toMutableMap())
+            if (xPathProperties.isEmpty()) return Applicability(false,"Empty rules.", mutableMap)
             //println("decomposeApplicable 3:")
             applicable = violation.isEmpty()
             message = "decomposeApplicable ${violation.isEmpty()} ${violation}"
@@ -128,14 +139,25 @@ class TransformerXUseCase(
         return Applicability(applicable, message, mutableMap)
     }
 
-    override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
-        val transformerParams = mutableMapOf<String,Any>()
+    override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy, transformerParams: Map<String,Any>): Applicability {
 
-        val xPathProperties = File(coXPathsFilePath).readLines()
+        var xPathProperties = File(coXPathsFilePath).readLines()
 
         if (db.name.isEmpty()) return Applicability(false,"db name empty", transformerParams)
         val dbFilePath = workingDir + db.name
         if (!File(dbFilePath).isFile) return Applicability(false,"db name ${dbFilePath} not exists", transformerParams)
+
+
+        if (xPathProperties.size>0 && xPathProperties[0].startsWith("%%")) {
+            // check required params
+            val requireds = xPathProperties[0].split(",")
+            for (required in requireds) {
+                if (transformerParams[required] == null || transformerParams[required] == "") {
+                    return Applicability(false, "required ${required} parameter not exists.", transformerParams)
+                }
+            }
+           xPathProperties = xPathProperties.drop(1)
+        }
 
         //println("composeApplicable 1:")
         var message = ""
@@ -143,8 +165,8 @@ class TransformerXUseCase(
         var mutableMap = mutableMapOf<String,Any>()
         try {
             //println("composeApplicable 2:")
-            val (templateMap, violation) = xpathTransform.getTemplateModel(dbFilePath, xPathProperties, transformerParams)
-            if (templateMap.keys.isEmpty()) return Applicability(false,"Empty rules.", mutableMap)
+            val (templateMap, violation) = xpathTransform.getTemplateModel(dbFilePath, xPathProperties, transformerParams.toMutableMap())
+            if (xPathProperties.isEmpty()) return Applicability(false,"Empty rules.", mutableMap)
             //println("composeApplicable 3:")
             applicable = violation.isEmpty()
             message = "composeApplicable ${violation.isEmpty()} ${violation}"

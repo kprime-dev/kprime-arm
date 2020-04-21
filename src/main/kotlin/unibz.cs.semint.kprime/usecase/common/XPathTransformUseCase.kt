@@ -189,6 +189,7 @@ class XPathTransformUseCase  {
         var violation = ""
         for (xPathLine in xPaths) {
             //println("------------------------------------------")
+            if (xPathLine.startsWith("%%")) continue
             val xPathTokens = xPathLine.split("==")
             val name = xPathTokens[0]
             val rule = xPathTokens[1]

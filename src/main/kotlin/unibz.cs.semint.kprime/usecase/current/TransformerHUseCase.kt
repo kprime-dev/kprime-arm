@@ -18,13 +18,13 @@ class TransformerHUseCase : TransformerUseCase {
         return Transformation(ChangeSet(), Database(), "TransformerHUseCase.compose")
     }
 
-    override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
+    override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy, params: Map<String, Any>): Applicability {
         // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         val tranformerParmeters = mutableMapOf<String,Any>()
         return Applicability(false, "TransformerHUseCase.decomposeApplicable", tranformerParmeters)
     }
 
-    override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
+    override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy, params: Map<String, Any>): Applicability {
         // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
         val tranformerParmeters = mutableMapOf<String,Any>()
         return Applicability(false, "TransformerHUseCase.composeApplicable", tranformerParmeters)

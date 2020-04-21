@@ -58,7 +58,7 @@ class TransformerVUseCase(val serializer: SerializerServiceI, val fileIOAdapter:
         return Transformation(changeSet, newdb, "TransformerVUseCase.compose")
     }
 
-    override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
+    override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy, params: Map<String, Any>): Applicability {
         // TODO("not implemented decompose applicable logic.")
         // check if there is a functional dependency
         // transformationStrategy.askToProceed
@@ -72,7 +72,7 @@ class TransformerVUseCase(val serializer: SerializerServiceI, val fileIOAdapter:
         return Applicability(applicability,"TransformerVUseCase.decomposeApplicable", tranformerParmeters)
     }
 
-    override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy): Applicability {
+    override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy, params: Map<String, Any>): Applicability {
         // TODO("not implemented compose applicable logic.")
         val tranformerParmeters = mutableMapOf<String,Any>()
         return Applicability(true, "TransformerVUseCase.composeApplicable", tranformerParmeters)

@@ -36,7 +36,7 @@ class OptimusUseCase(transformationStrategy: TransformationStrategy) {
             println("========================================================= $steps =========================")
 
             val transformersApplicable = transfomers
-                    .filter { t -> t.decomposeApplicable(newdb, transformationStrategy).ok }
+                    .filter { t -> t.decomposeApplicable(newdb, transformationStrategy, emptyMap()).ok }
             println("transformersApplicable : $transformersApplicable ")
 
             val transfomersChoosed: List<TransformerUseCase> = transformationStrategy.choose(transformersApplicable)
