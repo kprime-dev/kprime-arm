@@ -13,6 +13,7 @@ interface SerializerServiceI {
     fun serializeDatabase(database: Database): String
     fun deserializeDatabase(s: String): Database
     fun prettyDatabase(db: Database): String
+    fun prettyJsonDatabase(db: Database): String
     fun serializeConstraint(constraint: Constraint): String
     fun deserializeConstraint(s: String): Constraint
     fun serializeChangeSet(changeset: ChangeSet): String

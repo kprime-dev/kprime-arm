@@ -2,6 +2,7 @@ package unibz.cs.semint.kprime.adapter.service
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import unibz.cs.semint.kprime.domain.*
@@ -53,6 +54,12 @@ class XMLSerializerJacksonAdapter : SerializerServiceI {
 
     override fun prettyDatabase(db: Database): String {
         val mapper = XmlMapper().registerModule(KotlinModule())
+        val writer = mapper.writerWithDefaultPrettyPrinter()
+        return writer.writeValueAsString(db)
+    }
+
+    override fun prettyJsonDatabase(db: Database): String {
+        val mapper = ObjectMapper().registerModule(KotlinModule())
         val writer = mapper.writerWithDefaultPrettyPrinter()
         return writer.writeValueAsString(db)
     }

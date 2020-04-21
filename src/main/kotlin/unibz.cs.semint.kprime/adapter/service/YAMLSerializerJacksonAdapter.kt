@@ -38,6 +38,10 @@ class YAMLSerializerJacksonAdapter : SerializerServiceI {
         return outWriter.toString()
     }
 
+    override fun prettyJsonDatabase(db: Database): String {
+        TODO("Not yet implemented")
+    }
+
     override fun serializeConstraint(constraint: Constraint): String {
         TODO("Not yet implemented")
     }

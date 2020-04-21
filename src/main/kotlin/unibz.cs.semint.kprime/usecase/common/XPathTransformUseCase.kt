@@ -78,7 +78,9 @@ class XPathTransformUseCase  {
     private fun computeDerivedList(templModel: MutableMap<String, List<String>>, derivationRule: String): List<String> {
         var derivedList = mutableListOf<String>()
         // if derivationRule starts with + then compute union
-        val splittedRule = derivationRule.split(" ")
+        var splittedRule = derivationRule.split(" ")
+        splittedRule = removeEventualConditionToken(splittedRule)
+        println("splittedRule ( ${splittedRule } )")
         if (splittedRule[0]=="+") {
             val sourceLists = splittedRule.drop(1)
             //println("sourceLists:"+sourceLists)
@@ -104,6 +106,13 @@ class XPathTransformUseCase  {
         return derivedList.toSet().toList()
     }
 
+    private fun removeEventualConditionToken(splittedRule: List<String>): List<String> {
+        val conditionOperators = listOf("=",">")
+        if (conditionOperators.contains(splittedRule[splittedRule.size-2]))
+            return splittedRule.subList(0,splittedRule.size-2)
+        return splittedRule
+    }
+
     private fun asValueList(xpathResultNodes: NodeList): MutableList<String> {
         val listNodeValues = mutableListOf<String>()
         for (nodeId in 0..xpathResultNodes.length) {
@@ -111,6 +120,8 @@ class XPathTransformUseCase  {
             if (item==null) continue
             listNodeValues.add(item.nodeValue)
         }
+        //println("listNodeValues:"+listNodeValues.toString())
+        return listNodeValues
         return listNodeValues
     }
 
@@ -180,36 +191,44 @@ class XPathTransformUseCase  {
             //println("------------------------------------------")
             val xPathTokens = xPathLine.split("==")
             val name = xPathTokens[0]
-            //println("name=|${name}|")
             val rule = xPathTokens[1]
-            //println("rule=|${rule}|")
             val pathTokens = rule.split(" ")
             val value = parametrized(pathTokens[0], tranformerParameters)
-            //println("value=|${value}|")
             if (value.startsWith("-") || value.startsWith("+")) {
                 templModel[name] = computeDerivedList(templModel, rule)
+                violation = checkCondition(pathTokens, templModel, name, violation, rule)
             }
             else {
                 templModel[name] = asValueList(xpath.compile(value).evaluate(doc, XPathConstants.NODESET) as NodeList)
                 //println(" ${name} = ${value}")
                 //println(" ${name} = ${templModel[name]}")
-                if (!templModel[name]!!.isEmpty())
-                tranformerParameters[name] = templModel[name]!!
-                if (pathTokens.size == 3) {
-                    //println(pathTokens)
-                    val pathCondition = pathTokens[1]
-                    val pathSize = pathTokens[2].toInt()
-                    if (pathCondition == ">")
-                        if ((templModel[name])!!.size <= pathSize) violation = "violation: ${name}:${rule} ${templModel[name]} size <= ${pathSize}"
-                    if (pathCondition == "=")
-                        if ((templModel[name])!!.size != pathSize) violation = "violation: ${name}:${rule} ${templModel[name]} size != ${pathSize}"
-                }
+                if (!templModel[name]!!.isEmpty()) tranformerParameters[name] = templModel[name]!!
+                violation = checkCondition(pathTokens, templModel, name, violation, rule)
             }
         }
         // adds all input parameters as template parameters
         for (parCouple in tranformerParameters) {
-            templModel.put(parCouple.key, listOf(parCouple.value.toString()))
+            if (parCouple.value is List<*>)
+                templModel.put(parCouple.key, parCouple.value as List<String>)
+            else
+                templModel.put(parCouple.key, listOf(parCouple.value.toString()))
         }
         return Pair(templModel, violation)
+    }
+
+    private fun checkCondition(pathTokens: List<String>, templModel: MutableMap<String, List<String>>, name: String, violation: String, rule: String): String {
+        var violation1 = violation
+        if (pathTokens.size > 2) {
+            val pathCondition = pathTokens[pathTokens.size - 2]
+            if (pathCondition == ">") {
+                val pathSize = pathTokens[pathTokens.size - 1].toInt()
+                if ((templModel[name])!!.size <= pathSize) violation1 = "violation: ${name}:${rule} ${templModel[name]} size <= ${pathSize}"
+            }
+            if (pathCondition == "=") {
+                val pathSize = pathTokens[pathTokens.size - 1].toInt()
+                if ((templModel[name])!!.size != pathSize) violation1 = "violation: ${name}:${rule} ${templModel[name]} size != ${pathSize}"
+            }
+        }
+        return violation1
     }
 }
