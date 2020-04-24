@@ -10,8 +10,10 @@ import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
 import unibz.cs.semint.kprime.usecase.service.FileIOServiceI
 import unibz.cs.semint.kprime.usecase.service.SerializerServiceI
 import java.io.File
+import java.lang.IllegalArgumentException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 /**
  * Usage e.g.:
@@ -54,6 +56,9 @@ class TransformerXUseCase(
         val xPaths = File(decoXPathsFilePath).readLines()
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters.putAll(params)
+
+        // check requred parameters
+
         val changeSet = xpathTransform.compute(
                 dbFilePath, docoTemplateFilePath,
                 xPaths, tranformerParmeters)
@@ -78,9 +83,17 @@ class TransformerXUseCase(
                 serializer.prettyDatabase(db), workingDir +  "db_worked.xml")
         println("Updated db file db_worked.xml")
 
-        val xPaths = File(coXPathsFilePath).readLines()
+        var xPaths = File(coXPathsFilePath).readLines()
         val tranformerParmeters = mutableMapOf<String,Any>()
         tranformerParmeters.putAll(params)
+
+        // check required parameters
+        val failuresOrXPathProperties = checkRequiredParams(xPaths, tranformerParmeters)
+        val failedCheckRequiredParams = failuresOrXPathProperties.first
+        if (failedCheckRequiredParams.isNotEmpty())
+            throw IllegalArgumentException("")
+        xPaths = failuresOrXPathProperties.second
+
         val changeSet = xpathTransform.compute(
                 dbFilePath, coTemplateFilePath,
                 xPaths, tranformerParmeters)
@@ -108,16 +121,11 @@ class TransformerXUseCase(
         val dbFilePath = workingDir + db.name
         if (!File(dbFilePath).isFile) return Applicability(false,"db name ${dbFilePath} not exists", transformerParams)
 
-        if (xPathProperties.size>0 && xPathProperties[0].startsWith("%%")) {
-            // check required params
-            val requireds = xPathProperties[0].split(",")
-            for (required in requireds) {
-                if (transformerParams[required] == null || transformerParams[required] == "") {
-                    return Applicability(false, "required ${required} parameter not exists.", transformerParams)
-                }
-            }
-            xPathProperties = xPathProperties.drop(1)
-        }
+        val failuresOrXPathProperties = checkRequiredParams(xPathProperties, transformerParams)
+        val failedCheckRequiredParams = failuresOrXPathProperties.first
+        if (failedCheckRequiredParams.isNotEmpty())
+            return Applicability(false, "required ${failedCheckRequiredParams} parameter(s).", transformerParams)
+        xPathProperties = failuresOrXPathProperties.second
 
 
         //println("decomposeApplicable 1:")
@@ -137,6 +145,22 @@ class TransformerXUseCase(
             e.printStackTrace()
         }
         return Applicability(applicable, message, mutableMap)
+    }
+
+    private fun checkRequiredParams(xPathProperties: List<String>, transformerParams: Map<String, Any>): Pair<MutableList<String>, List<String>> {
+        var xPathProperties1 = xPathProperties
+        val failedCheckRequiredParams = mutableListOf<String>()
+        if (xPathProperties1.size > 0 && xPathProperties1[0].startsWith("%%")) {
+            // check required params
+            val requireds = xPathProperties1[0].split(",")
+            for (required in requireds) {
+                if (transformerParams[required] == null || transformerParams[required] == "") {
+                    failedCheckRequiredParams.add(required)
+                }
+            }
+            xPathProperties1 = xPathProperties1.drop(1)
+        }
+        return Pair(failedCheckRequiredParams, xPathProperties1)
     }
 
     override fun composeApplicable(db: Database, transformationStrategy: TransformationStrategy, transformerParams: Map<String,Any>): Applicability {
