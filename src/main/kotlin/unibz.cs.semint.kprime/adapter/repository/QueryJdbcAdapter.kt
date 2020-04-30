@@ -2,7 +2,7 @@ package unibz.cs.semint.kprime.adapter.repository
 
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.dql.Query
-import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.util.*
@@ -10,7 +10,7 @@ import java.util.*
 class QueryJdbcAdapter {
 
     fun query(datasource: DataSource, query: Query):String {
-        var sqlquery = SQLizeUseCase().sqlize(query)
+        var sqlquery = SQLizeSelectUseCase().sqlize(query)
         return query(datasource,sqlquery)
     }
 

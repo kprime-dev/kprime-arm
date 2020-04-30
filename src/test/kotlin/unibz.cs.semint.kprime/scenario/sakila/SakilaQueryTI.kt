@@ -6,8 +6,8 @@ import unibz.cs.semint.kprime.adapter.repository.QueryJdbcAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.dql.Query
-import unibz.cs.semint.kprime.domain.dql.Select
-import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
+import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
 
 class SakilaQueryTI {
 
@@ -77,7 +77,7 @@ class SakilaQueryTI {
     @Test
     fun test_sakila_film1_query_to_xml() {
         // given
-        val query = SQLizeUseCase().fromsql("q1","""
+        val query = UnSQLizeSelectUseCase().fromsql("q1","""
             SELECT film_id,title,description,release_year,release_year,original_language_id,length,rating
             FROM film
         """.trimIndent())

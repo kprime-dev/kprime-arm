@@ -6,7 +6,8 @@ import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.Xrule
 import unibz.cs.semint.kprime.domain.dql.Query
-import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeCreateUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
 
@@ -45,7 +46,7 @@ class SakilaTransfomerScenarioTI {
         //val pass = "pass"
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
 
-        val sqlize = SQLizeUseCase().sqlize(simpleQueryMap1)
+        val sqlize = SQLizeSelectUseCase().sqlize(simpleQueryMap1)
         println(sqlize)
         QueryJdbcAdapter().query(sakilaSource, simpleQueryMap1)
         QueryJdbcAdapter().query(sakilaSource, simpleQueryMap2)
@@ -79,7 +80,7 @@ class SakilaTransfomerScenarioTI {
         val pass = System.getenv()["sakila_pass"]?:""//"password"
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
-        val createList = SQLizeUseCase().createViewCommands(newDb)
+        val createList = SQLizeCreateUseCase().createViewCommands(newDb)
         for (createCommand in createList) {
             println(createCommand)
             QueryJdbcAdapter().create(sakilaSource, createCommand)

@@ -4,7 +4,8 @@ import junit.framework.Assert.assertEquals
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.dql.*
-import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
+import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
 import kotlin.test.assertEquals as assertEquals1
 
 class QueryTest {
@@ -70,7 +71,7 @@ class QueryTest {
         // given
         val query = simpleQueryFixture("Table1")
         // when
-        var querySql = SQLizeUseCase().sqlize(query)
+        var querySql = SQLizeSelectUseCase().sqlize(query)
         // then
         assertEquals1("""
             SELECT Name,Surname
@@ -92,7 +93,7 @@ class QueryTest {
         select.from.add(from)
         select.where.condition="a = b"
         // when
-        val selectSql = SQLizeUseCase().sqlize(select)
+        val selectSql = SQLizeSelectUseCase().sqlize(select)
         // then
         assertEquals1("""
             SELECT ww
@@ -147,7 +148,7 @@ class QueryTest {
         // given
         val query = unionFixtureQuery()
         // when
-        var querySql = SQLizeUseCase().sqlize(query)
+        var querySql = SQLizeSelectUseCase().sqlize(query)
         // then
         assertEquals1("""
             SELECT Name,Surname
@@ -174,7 +175,7 @@ class QueryTest {
             SELECT *
             FROM tab1
         """.trimIndent()
-        val query = SQLizeUseCase().fromsql("query1",sqlQuery)
+        val query = UnSQLizeSelectUseCase().fromsql("query1",sqlQuery)
         assertEquals("*",query.select.attributes[0].name)
         assertEquals("tab1",query.select.from[0].tableName)
     }
@@ -187,7 +188,7 @@ class QueryTest {
             FROM tab1
             WHERE a = b
         """.trimIndent()
-        val query = SQLizeUseCase().fromsql("query1",sqlQuery)
+        val query = UnSQLizeSelectUseCase().fromsql("query1",sqlQuery)
         assertEquals("alfa",query.select.attributes[0].name)
         assertEquals("beta",query.select.attributes[1].name)
         assertEquals("tab1",query.select.from[0].tableName)
@@ -206,7 +207,7 @@ class QueryTest {
             FROM tab2
             WHERE c = d
         """.trimIndent()
-        val query = SQLizeUseCase().fromsql("query1",sqlQuery)
+        val query = UnSQLizeSelectUseCase().fromsql("query1",sqlQuery)
         assertEquals(1,query.union.selects().size)
         assertEquals("alfa",   query.select.attributes[0].name)
         assertEquals("beta",   query.select.attributes[1].name)
@@ -236,7 +237,7 @@ class QueryTest {
             FROM tab3
             WHERE e = f
         """.trimIndent()
-        val query = SQLizeUseCase().fromsql("query1",sqlQuery)
+        val query = UnSQLizeSelectUseCase().fromsql("query1",sqlQuery)
         assertEquals(2,query.union.selects().size)
         assertEquals("alfa",   query.select.attributes[0].name)
         assertEquals("beta",   query.select.attributes[1].name)
@@ -255,7 +256,7 @@ class QueryTest {
         assertEquals("tab3",    select1.from[0].tableName)
         assertEquals("e = f",    select1.where.condition)
 
-        val sqlize = SQLizeUseCase().sqlize(query)
+        val sqlize = SQLizeSelectUseCase().sqlize(query)
         assertEquals("""
             SELECT alfa,beta
             FROM   tab1

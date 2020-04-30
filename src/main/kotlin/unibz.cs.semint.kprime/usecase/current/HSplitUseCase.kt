@@ -6,7 +6,8 @@ import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.ddl.Table
 import unibz.cs.semint.kprime.usecase.UseCaseResult
-import unibz.cs.semint.kprime.usecase.common.SQLizeUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeCreateUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 
 class HSplitUseCase {
@@ -18,7 +19,7 @@ class HSplitUseCase {
             val applied = apply(databaseMetadata, detected)
             if (applied.ok!=null) {
                 printDb(applied.ok)
-                printSql(SQLizeUseCase().createViewCommands(applied.ok))
+                printSql(SQLizeCreateUseCase().createViewCommands(applied.ok))
             }
         }
     }
