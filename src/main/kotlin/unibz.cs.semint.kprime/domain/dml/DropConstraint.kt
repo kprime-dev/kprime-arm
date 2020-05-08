@@ -10,6 +10,10 @@ class DropConstraint() {
     var schemaName: String = ""
     @JacksonXmlProperty(isAttribute = true)
     var constraintName: String = ""
+    @JacksonXmlProperty(isAttribute = true)
+    var type: String = ""
+    @JacksonXmlProperty(isAttribute = true)
+    var tableName: String = ""
 
     infix fun withPath(path: String ) = apply {
         this.path = path
@@ -23,4 +27,11 @@ class DropConstraint() {
         this.constraintName = constraintName
     }
 
+    infix fun type(type:String) {
+        this.type = type
+    }
+
+    infix fun table(table:String) {
+        this.tableName = table
+    }
 }

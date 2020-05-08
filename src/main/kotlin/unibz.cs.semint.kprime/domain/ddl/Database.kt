@@ -1,5 +1,6 @@
 package unibz.cs.semint.kprime.domain.ddl
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
@@ -26,22 +27,27 @@ open class Database () {
     }
 
     fun lineage(tableName:String) : List<String> {
-            val result = mutableListOf<String>()
-            var viewTable = tableName
-            while (!viewTable.isEmpty()) {
-                result.add(viewTable)
-                if (schema.table(viewTable)==null) viewTable = ""
-                else viewTable = (schema.table(viewTable) as Table).view
-            }
-            return result
+        val result = mutableListOf<String>()
+        var viewTable = tableName
+        while (!viewTable.isEmpty()) {
+            result.add(viewTable)
+            if (schema.table(viewTable)==null) viewTable = ""
+            else viewTable = (schema.table(viewTable) as Table).view
         }
+        return result
+    }
 
-        fun mappings():MutableList<Query> {
-            if (mappings!=null) return mappings as MutableList<Query>
-            return ArrayList<Query>()
-        }
+    fun mappings():MutableList<Query> {
+        if (mappings!=null) return mappings as MutableList<Query>
+        return ArrayList<Query>()
+    }
 
-        fun mapping(name:String): Query? {
-            return mappings().filter { m -> m.name.equals(name) }.firstOrNull()
-        }
+    fun mapping(name:String): Query? {
+        return mappings().filter { m -> m.name.equals(name) }.firstOrNull()
+    }
+
+    @JsonIgnore
+    fun isEmpty(): Boolean {
+        return schema.tables().size == 0
+    }
 }
