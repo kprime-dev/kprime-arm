@@ -1,11 +1,15 @@
 package unibz.cs.semint.kprime.adapter.repository
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
+import java.io.StringWriter
 import java.sql.DriverManager
 import java.sql.ResultSet
 import java.util.*
+
 
 class QueryJdbcAdapter {
 
@@ -33,7 +37,7 @@ class QueryJdbcAdapter {
         val sqlnative = conn.nativeSQL(sqlquery)
         val prepareStatement = conn.prepareStatement(sqlnative)
         val resultSet = prepareStatement.executeQuery()
-        val result =printResultSet(resultSet)
+        val result =printJsonResultSet(resultSet)
         resultSet.close()
         conn.close()
         return result
@@ -46,13 +50,31 @@ class QueryJdbcAdapter {
         while( resultSet.next()) {
             result += "-----------------------------------------------------"
             for (i in 1..columnCount) {
-                if (i >1 ) print(",")
+                //if (i >1 ) print(",")
                 //print("${resultSet.getString(i)} ${metaData.getColumnName(i)}")
                 result += "${metaData.getColumnName(i)}: ${resultSet.getString(i)}" + System.lineSeparator()
             }
-            println()
+            //println()
         }
         return result
+    }
+
+    fun printJsonResultSet(resultSet:ResultSet):String {
+        val list = mutableListOf<Map<String, String>>()
+        val metaData = resultSet.metaData
+        val columnCount = metaData.columnCount
+        while( resultSet.next()) {
+            val obj = LinkedHashMap<String, String>()
+            for (i in 1..columnCount) {
+                obj.put(metaData.getColumnName(i), resultSet.getString(i))
+            }
+            list.add(obj)
+        }
+        val mapper = ObjectMapper()
+        mapper.enable(SerializationFeature.INDENT_OUTPUT)
+        val stringWriter = StringWriter()
+        mapper.writeValue(stringWriter, list)
+        return stringWriter.toString()
     }
 
     fun create(datasource: DataSource, sqlcreate: String) {
