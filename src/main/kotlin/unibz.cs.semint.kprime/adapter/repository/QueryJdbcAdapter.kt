@@ -95,7 +95,7 @@ class QueryJdbcAdapter {
             obj.put("@id", "tableurl")
             obj.put("@type", "tablename")
             for (i in 1..columnCount) {
-                obj.put(metaData.getColumnName(i), resultSet.getString(i))
+                obj.put("ex:"+metaData.getColumnName(i), resultSet.getString(i))
             }
             list.add(obj)
         }
@@ -105,7 +105,6 @@ class QueryJdbcAdapter {
         graphObj.put("@graph", list)
 
         val mapper = ObjectMapper()
-        mapper.enable(SerializationFeature.WRAP_ROOT_VALUE)
         val result = mapper.writeValueAsString(graphObj)
         println(result)
         return result
