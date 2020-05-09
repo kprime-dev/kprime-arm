@@ -24,8 +24,9 @@ class SakilaQueryTI {
     fun test_read_sakila_query_string() {
         //given
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
+        val adapter = QueryJdbcAdapter()
         // when
-        val result = QueryJdbcAdapter().query(sakilaSource,"select * from film where film_id=1")
+        val result = adapter.query(sakilaSource,"select * from film where film_id=1",adapter::printResultSet)
         // then
         assertEquals("""
              film_id: 1
@@ -55,7 +56,8 @@ class SakilaQueryTI {
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
         val sqlquery = Query.build("film")
-        val result = QueryJdbcAdapter().query(sakilaSource, sqlquery)
+        val adapter = QueryJdbcAdapter()
+        val result = adapter.query(sakilaSource, sqlquery,adapter::printResultSet)
         // then
         //assertEquals("read-meta-schema done.","")
     }
@@ -68,7 +70,8 @@ class SakilaQueryTI {
         // when
         val condition = "language_id=2"
         val sqlquery = Query.build("film",condition)
-        val result = QueryJdbcAdapter().query(sakilaSource, sqlquery)
+        val adapter = QueryJdbcAdapter()
+        val result = adapter.query(sakilaSource, sqlquery,adapter::printResultSet)
         // then
         //assertEquals("read-meta-schema done.","")
     }

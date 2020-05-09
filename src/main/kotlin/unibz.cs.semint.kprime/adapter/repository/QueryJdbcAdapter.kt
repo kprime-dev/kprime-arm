@@ -13,12 +13,18 @@ import java.util.*
 
 class QueryJdbcAdapter {
 
-    fun query(datasource: DataSource, query: Query):String {
-        var sqlquery = SQLizeSelectUseCase().sqlize(query)
-        return query(datasource,sqlquery)
+    private var formatted=false
+    constructor() {}
+    constructor(formatted: Boolean) {
+        this.formatted = formatted
     }
 
-    fun query(datasource: DataSource, sqlquery: String):String {
+    fun query(datasource: DataSource, query: Query, printer: (rs :ResultSet)->String) :String {
+        var sqlquery = SQLizeSelectUseCase().sqlize(query)
+        return query(datasource,sqlquery,printer)
+    }
+
+    fun query(datasource: DataSource, sqlquery: String, printer:(rs:ResultSet)->String):String {
         val source = datasource
         val user = source.user
         val pass = source.pass
@@ -37,7 +43,7 @@ class QueryJdbcAdapter {
         val sqlnative = conn.nativeSQL(sqlquery)
         val prepareStatement = conn.prepareStatement(sqlnative)
         val resultSet = prepareStatement.executeQuery()
-        val result =printJsonResultSet(resultSet)
+        val result =printer(resultSet)
         resultSet.close()
         conn.close()
         return result
@@ -71,10 +77,38 @@ class QueryJdbcAdapter {
             list.add(obj)
         }
         val mapper = ObjectMapper()
-        mapper.enable(SerializationFeature.INDENT_OUTPUT)
-        val stringWriter = StringWriter()
-        mapper.writeValue(stringWriter, list)
-        return stringWriter.toString()
+        val result = mapper.writeValueAsString(list)
+        println(result)
+        return result
+    }
+
+    fun printJsonLDResultSet(resultSet:ResultSet):String {
+        val list = mutableListOf<Map<String, String>>()
+        val metaData = resultSet.metaData
+        val columnCount = metaData.columnCount
+
+        val contextObj = LinkedHashMap<String, String>()
+        contextObj.put("ex","http://example.org/vocab#")
+
+        while( resultSet.next()) {
+            val obj = LinkedHashMap<String, String>()
+            obj.put("@id", "tableurl")
+            obj.put("@type", "tablename")
+            for (i in 1..columnCount) {
+                obj.put(metaData.getColumnName(i), resultSet.getString(i))
+            }
+            list.add(obj)
+        }
+
+        val graphObj = LinkedHashMap<String, Any>()
+        graphObj.put("@context", contextObj)
+        graphObj.put("@graph", list)
+
+        val mapper = ObjectMapper()
+        mapper.enable(SerializationFeature.WRAP_ROOT_VALUE)
+        val result = mapper.writeValueAsString(graphObj)
+        println(result)
+        return result
     }
 
     fun create(datasource: DataSource, sqlcreate: String) {

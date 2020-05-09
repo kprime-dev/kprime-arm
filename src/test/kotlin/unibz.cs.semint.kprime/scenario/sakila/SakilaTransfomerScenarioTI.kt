@@ -48,8 +48,9 @@ class SakilaTransfomerScenarioTI {
 
         val sqlize = SQLizeSelectUseCase().sqlize(simpleQueryMap1)
         println(sqlize)
-        QueryJdbcAdapter().query(sakilaSource, simpleQueryMap1)
-        QueryJdbcAdapter().query(sakilaSource, simpleQueryMap2)
+        val adapter = QueryJdbcAdapter()
+        adapter.query(sakilaSource, simpleQueryMap1,adapter::printResultSet)
+        adapter.query(sakilaSource, simpleQueryMap2,adapter::printResultSet)
         // print to console output
     }
 
