@@ -1,4 +1,4 @@
-<database name="" id="">
+<database name="" id="" source="">
     <schema name="" id="">
         <tables>
             <tables name="person1" id="" view="person" condition="">

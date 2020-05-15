@@ -1,4 +1,4 @@
-<database name="sourceName" id="5dca90a2-5dd6-4791-b4b8-b82d26f8a7f3">
+<database name="sourceName" id="5dca90a2-5dd6-4791-b4b8-b82d26f8a7f3" source="">
     <schema name="sourceName" id="1a2e31f0-6501-4316-8568-231ddec2c4b7">
         <tables>
             <tables name="actor" id="" view="" condition="">

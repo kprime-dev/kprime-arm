@@ -45,6 +45,7 @@ class YAMLSerializerDatabaseTest {
                 columns: []
               constraints: []
             mappings: []
+            source: ""
 
         """.trimIndent(),outWriter.toString())
     }

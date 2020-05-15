@@ -61,7 +61,7 @@ class ApplyChangeSetUseCaseTest {
         val db = setUpPersonDb()
         val serialized = XMLSerializerJacksonAdapter().prettyDatabase(db)
         assertEquals("""
-            <database name="person" id="">
+            <database name="person" id="" source="">
               <schema name="" id="">
                 <tables>
                   <tables name="person" id="" view="" condition="">
@@ -103,7 +103,7 @@ class ApplyChangeSetUseCaseTest {
         val serializeDb = serializer.serializeDatabase(db)
         val serializeNewDb = serializer.prettyDatabase(newdb)
         val expectedDb = """
-            <database name="person" id="">
+            <database name="person" id="" source="">
               <schema name="" id="">
                 <tables>
                   <tables name="person1" id="" view="" condition="">

@@ -22,6 +22,9 @@ open class Database () {
     @JacksonXmlProperty(localName = "query")
     var mappings : MutableList<Query>? = ArrayList<Query>()
 
+    @JacksonXmlProperty(isAttribute = true)
+    var source: String = ""
+
     init {
         this.mappings = mutableListOf()
     }

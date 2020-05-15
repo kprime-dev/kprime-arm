@@ -28,6 +28,7 @@ class XStreamTest {
                 <constraints/>
               </schema>
               <mappings/>
+              <source></source>
             </database>
         """.trimIndent(),dbxml)
     }
@@ -35,7 +36,7 @@ class XStreamTest {
     @Test
     fun test_xstream_deserialize() {
         val dbxml = """
-            <database name="">
+            <database name="" source="">
               <id></id>
               <schema>
                 <name></name>
