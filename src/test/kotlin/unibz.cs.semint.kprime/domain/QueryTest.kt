@@ -74,7 +74,7 @@ class QueryTest {
         var querySql = SQLizeSelectUseCase().sqlize(query)
         // then
         assertEquals1("""
-            SELECT Name,Surname
+            SELECT "Name","Surname"
             FROM   Table1
             WHERE Name='Gigi'
             """.trimIndent(),querySql)
@@ -96,7 +96,7 @@ class QueryTest {
         val selectSql = SQLizeSelectUseCase().sqlize(select)
         // then
         assertEquals1("""
-            SELECT ww
+            SELECT "ww"
             FROM   tab
             WHERE a = b
         """.trimIndent(),selectSql)
@@ -151,11 +151,11 @@ class QueryTest {
         var querySql = SQLizeSelectUseCase().sqlize(query)
         // then
         assertEquals1("""
-            SELECT Name,Surname
+            SELECT "Name","Surname"
             FROM   Table1
             WHERE Name='Gigi'
             UNION
-            SELECT Name,Surname
+            SELECT "Name","Surname"
             FROM   Table2
             WHERE Name='Gigi'
             """.trimIndent(),querySql)
@@ -258,15 +258,15 @@ class QueryTest {
 
         val sqlize = SQLizeSelectUseCase().sqlize(query)
         assertEquals("""
-            SELECT alfa,beta
+            SELECT "alfa","beta"
             FROM   tab1
             WHERE a = b
             UNION
-            SELECT gamma,theta
+            SELECT "gamma","theta"
             FROM   tab2
             WHERE c = d
             UNION
-            SELECT delta,zeta
+            SELECT "delta","zeta"
             FROM   tab3
             WHERE e = f
         """.trimIndent(),sqlize)

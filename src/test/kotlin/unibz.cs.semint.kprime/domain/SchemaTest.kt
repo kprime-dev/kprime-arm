@@ -32,7 +32,7 @@ class SchemaTest {
         val expr = "A, B --> C; C, D --> E; C --> A; C --> D; D-->B"
         val fds = Constraint.set(exprs)
         val attrs = Column.set("A, B, C, D, E")
-        val keys = Schema.superkeys(attrs,fds)
+        val keys = SchemaAlgo.superkeys(attrs,fds)
         assertEquals(
                 "[[A, B], [C], [A, C], [A, D], [B, C], [A, B, C], [A, B, D], [C, D], [A, B, E], [A, C, D], [C, E], [A, C, E], [B, C, D], [A, B, C, D], [A, D, E], [B, C, E], [A, B, C, E], [A, B, D, E], [C, D, E], [A, C, D, E], [B, C, D, E], [A, B, C, D, E]]"
                 ,keys.toString()
@@ -43,7 +43,7 @@ class SchemaTest {
     fun test_find_keys() {
         val constraints = Constraint.set("A, B --> C; C, D --> E; C --> A; C --> D; D --> B")
         val columns = Column.set("A, B, C, D, E")
-        val keys = Schema.keys(columns, constraints)
+        val keys = SchemaAlgo.keys(columns, constraints)
         assertEquals(
                 "[[A, B], [C], [A, D]]",
                 keys.toString()
@@ -55,7 +55,7 @@ class SchemaTest {
         val columns = Column.set("C,S")
         val constraints = Constraint.set("C-->T;H,R-->C;H,T-->R;C,S-->G;H,S-->R")
 
-        val closure = Schema.closure(columns, constraints)
+        val closure = SchemaAlgo.closure(columns, constraints)
         assertEquals("[C, S, T, G]",closure.toString())
     }
 
@@ -66,7 +66,7 @@ class SchemaTest {
                 + "A,B-->A;"
                 + "C-->C;"
                 + "C,D,E,F-->C,D,F")
-        val result= Schema.removeTrivial(constraints)
+        val result= SchemaAlgo.removeTrivial(constraints)
         assertEquals("[A --> B ; ]",result.toString())
     }
 
@@ -74,7 +74,7 @@ class SchemaTest {
     fun test_equivalent() {
         val setA = Constraint.set("A-->C; A,C-->D; E-->A,D; E-->H")
         val setB = Constraint.set("A-->C,D; E-->A,H")
-        assertTrue(Schema.equivalent(setA,setB))
+        assertTrue(SchemaAlgo.equivalent(setA,setB))
     }
 
 
@@ -85,11 +85,11 @@ class SchemaTest {
         val notin = Column.set("D,E")
         val fds = Constraint.set("A-->B,C;C,D-->E;E-->A;B-->D")
         // when
-        val powerSet = Schema.powerSet(attrs)
+        val powerSet = SchemaAlgo.powerSet(attrs)
         // then
         val map = HashMap<Set<Column>,Set<Column>>()
         for (sa in powerSet) {
-            map.put(sa,Schema.closure(sa,fds))
+            map.put(sa,SchemaAlgo.closure(sa,fds))
         }
         var result = ""
         for (k in map.keys) {
@@ -114,8 +114,8 @@ class SchemaTest {
     @Test
     fun test_removeUnnecessaryEntireFD() {
         var fds = Constraint.set("A-->B,C;B-->C;A-->B;A,B-->C")
-        fds = Schema.splitRight(fds)
-        val removed = Schema.removeUnnecessaryEntireFD(fds)
+        fds = SchemaAlgo.splitRight(fds)
+        val removed = SchemaAlgo.removeUnnecessaryEntireFD(fds)
         assertEquals("[B --> C ; , A --> B ; ]",removed.toString())
     }
 
@@ -125,7 +125,7 @@ class SchemaTest {
         val attrs = Column.set("name, location, favAppl, appl")
         val fds = Constraint.set("name-->location,favAppl; appl-->provider")
         // when
-        val result : Set<Constraint> = Schema.projection(attrs,fds)
+        val result : Set<Constraint> = SchemaAlgo.projection(attrs,fds)
         // then
         assertEquals(2,result.size)
         assertTrue(result.contains(Constraint.of("name --> favAppl")))
@@ -137,7 +137,7 @@ class SchemaTest {
         // given
         val fds = Constraint.set("name --> location;name --> favAppl;appl, name --> favAppl")
         // when
-        val basis = Schema.minimalBasis(fds)
+        val basis = SchemaAlgo.minimalBasis(fds)
         // then
         assertEquals(2,basis.size)
         assertTrue(basis.contains(Constraint.of("name --> favAppl")))
@@ -153,8 +153,8 @@ class SchemaTest {
                 + "B,C-->D;"
                 + "B,C-->C,E")
         // when
-        fds = Schema.combineRight(fds)
-        fds = Schema.removeTrivial(fds)
+        fds = SchemaAlgo.combineRight(fds)
+        fds = SchemaAlgo.removeTrivial(fds)
         // then
         assertEquals(3,fds.size)
         assertTrue(fds.contains(Constraint.of("A , B --> C")))
@@ -251,7 +251,7 @@ class SchemaTest {
         val attrs = Column.set("A, B, C")
         val fds = Constraint.set("A,B-->C; C-->B")
         // when
-        val check3NF = Schema.check3NF(attrs, fds)
+        val check3NF = SchemaAlgo.check3NF(attrs, fds)
         // then
         assertTrue(check3NF.isEmpty())
     }
@@ -262,7 +262,7 @@ class SchemaTest {
         val attrs = Column.set("A, B, C, D")
         val fds = Constraint.set("A,B-->C; C-->D")
         // when
-        val check3NF = Schema.check3NF(attrs, fds)
+        val check3NF = SchemaAlgo.check3NF(attrs, fds)
         // then
         assertEquals("[C --> D ; ]",check3NF.toString())
         assertEquals(1, check3NF.size)
@@ -274,7 +274,7 @@ class SchemaTest {
         val attrs = Column.set("name, location, favAppl, application, provider")
         val fds = Constraint.set("name-->location; name-->favAppl; application-->provider")
         // when
-        val result = Schema.checkBCNF(attrs,fds)
+        val result = SchemaAlgo.checkBCNF(attrs,fds)
         // then
         assertTrue(result.contains(Constraint.of("name --> favAppl")))
         assertTrue(result.contains(Constraint.of("name --> location")))
@@ -291,7 +291,7 @@ class SchemaTest {
         val subattrs = setOf(subattrs1,subattrs2)
         val fds = Constraint.set("A-->B,C;C,D-->E;E-->A;B-->D")
         // when
-        val result = Schema.checkLossyDecomposition(attrs, fds, subattrs)
+        val result = SchemaAlgo.checkLossyDecomposition(attrs, fds, subattrs)
         // then
         assertTrue(result.contains(Constraint.of("C , D --> E")))
         assertTrue(result.contains(Constraint.of("B --> D")))
@@ -307,7 +307,7 @@ class SchemaTest {
         val fds = Constraint.set("C-->T;H,R-->C;H,T-->R;C,S-->G;H,S-->R")
         assertEquals(5,fds.size)
         // when
-        val result = Schema.decomposeTo3NF(attrs, fds)
+        val result = SchemaAlgo.decomposeTo3NF(attrs, fds)
         // then
         var resultTables = HashSet<List<Column>>()
         var resultConstraints = HashSet<Set<Constraint>>()
@@ -352,7 +352,7 @@ class SchemaTest {
         val attrs = Column.set("name, location, favAppl, application, provider")
         val fds = Constraint.set("name-->location; name-->favAppl; application-->provider")
         // when
-        val result = Schema.decomposeToBCNF(attrs, fds)
+        val result = SchemaAlgo.decomposeToBCNF(attrs, fds)
         // then
         var resultTables = HashSet<List<Column>>()
         var resultConstraints = HashSet<Set<Constraint>>()
@@ -382,9 +382,9 @@ class SchemaTest {
     fun test_decomposeBCNF_failed() {
         val attrs = Column.set("A, B, C")
         val fds = Constraint.set("A,B-->C; C-->B")
-        val result = Schema.decomposeToBCNF(attrs,fds)
+        val result = SchemaAlgo.decomposeToBCNF(attrs,fds)
         //
-        val violations = Schema.checkBCNF(attrs, fds)
+        val violations = SchemaAlgo.checkBCNF(attrs, fds)
         assertFalse(violations.isEmpty())
         for (constraint in violations) {
             println(constraint.toString())
@@ -416,7 +416,7 @@ class SchemaTest {
         val attrs = Column.set("A, B, C")
         val fds = Constraint.set("A,B-->C; C-->B")
         // when
-        val lostBCNFConstraints = Schema.lostBCNFConstraints(attrs, fds)
+        val lostBCNFConstraints = SchemaAlgo.lostBCNFConstraints(attrs, fds)
         // then
         assertEquals(1,lostBCNFConstraints.size)
         assertTrue(lostBCNFConstraints.equals(Constraint.set("A,B --> C")))

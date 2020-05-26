@@ -116,5 +116,15 @@ class SakilaQueryTI {
         """.trimIndent(),queryXml)
     }
 
+    @Test
+    fun test_read_sakila_query_appici() {
+        //given
+        val sakilaSource = DataSource(type,name,driver,path,user,pass)
+        // when
+        val adapter = QueryJdbcAdapter()
+        val result = adapter.query(sakilaSource, "select id,name,address,'zip code' FROM staff_list  LIMIT 10",adapter::printResultSet)
+        // then
+        //assertEquals("read-meta-schema done.","")
+    }
 
 }

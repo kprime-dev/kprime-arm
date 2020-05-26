@@ -33,7 +33,7 @@ class OptimusUseCase(transformationStrategy: TransformationStrategy) {
         var maxSteps = 10
         var steps = 1
         while(tryMoreSteps && steps < maxSteps) {
-            println("========================================================= $steps =========================")
+            println("------------------------------------- $steps ---------------------")
 
             val transformersApplicable = transfomers
                     .filter { t -> t.decomposeApplicable(newdb, transformationStrategy, emptyMap()).ok }
@@ -55,7 +55,7 @@ class OptimusUseCase(transformationStrategy: TransformationStrategy) {
             }
             steps++
         }
-        println("========================================================= END =========================")
+        println("-------------------------------------------- END ---------------------")
         return totalTransformationPath
     }
 

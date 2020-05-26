@@ -65,10 +65,10 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
         val viewNames = mutableListOf<String>()
         //println("++++++++++++++++++++++++++++++++++++++++++++++++")
         //QueryJdbcAdapter().printResultSet(views)
-        println("++++++++++++++++++++++++++++++++++++++++++++++++")
+        //println("++++++++++++++++++++++++++++++++++++++++++++++++")
         while (views.next()) {
             val viewName = "${views.getString("TABLE_NAME")}"
-            println(viewName)
+            //println(viewName)
             viewNames.add(viewName)
             val table = Table()
             table.name=viewName
