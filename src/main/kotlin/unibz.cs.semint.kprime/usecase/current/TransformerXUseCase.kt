@@ -150,7 +150,7 @@ class TransformerXUseCase(
     private fun checkRequiredParams(xPathProperties: List<String>, transformerParams: Map<String, Any>): Pair<MutableList<String>, List<String>> {
         var xPathProperties1 = xPathProperties
         val failedCheckRequiredParams = mutableListOf<String>()
-        if (xPathProperties1.size > 0 && xPathProperties1[0].startsWith("%%")) {
+        if (xPathProperties1.size > 0 && xPathProperties1[0].startsWith("((")) {
             // check required params
             val requireds = xPathProperties1[0].split(",")
             for (required in requireds) {
@@ -172,7 +172,7 @@ class TransformerXUseCase(
         if (!File(dbFilePath).isFile) return Applicability(false,"db name ${dbFilePath} not exists", transformerParams)
 
 
-        if (xPathProperties.size>0 && xPathProperties[0].startsWith("%%")) {
+        if (xPathProperties.size>0 && xPathProperties[0].startsWith("((")) {
             // check required params
             val requireds = xPathProperties[0].split(",")
             for (required in requireds) {

@@ -69,7 +69,9 @@ class XPathTransformUseCase  {
         var newline = line
         for (key in tranformerParmeters.keys) {
             val newValue = (tranformerParmeters[key] as List<String>).get(0)
-            newline = newline.replace("%%${key}%%", newValue)
+            println(" *************************** XPathTransformUseCase.parametrized(): ${key} == ${newValue}")
+            newline = newline.replace("${key}", newValue)
+            println(newline)
         }
         return newline
     }
@@ -164,6 +166,9 @@ class XPathTransformUseCase  {
             templ = templConfig.getTemplate(templateFilePath)
         }
         val outWriter = StringWriter()
+        for(ent in templModel) {
+            println("${ent.key} === ${ent.value}")
+        }
         templ.process(templModel, outWriter)
 
         println("33++++++++++++++++++++++++++++++++++++++++++-------------------------------")
@@ -189,7 +194,7 @@ class XPathTransformUseCase  {
         var violation = ""
         for (xPathLine in xPaths) {
             //println("------------------------------------------")
-            if (xPathLine.startsWith("%%")) continue
+            if (xPathLine.startsWith("((")) continue
             val xPathTokens = xPathLine.split("==")
             val name = xPathTokens[0]
             val rule = xPathTokens[1]

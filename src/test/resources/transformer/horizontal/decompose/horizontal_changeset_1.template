@@ -1,80 +1,9 @@
-<changeSet id="234">
-  <createTable name="${table[0]}1" id="" view="${table[0]}" condition="${condition1}">
-    <columns>
-        <#list keys as key>
-        <columns name="${key}" id="id.${key}" dbname="" nullable="false" dbtype=""/>
-        </#list>
-        <#list lhss as lhs>
-        <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
-        </#list>
-        <#list rhss as rhs>
-        <columns name="${rhs}" id="id.${rhs}" dbname="" nullable="false" dbtype=""/>
-        </#list>
-        <#list rests as rest>
-        <columns name="${rest}" id="id.${rest}" dbname="" nullable="true" dbtype=""/>
+<changeSet id="345">
+    <createTable name="${((originTable))}_1" id="" view="${((originTable))}" condition="${((condition))}">
+        <columns>
+            <#list all as att1>
+            <columns name="${att1}" id="id.${att1}" dbname="" nullable="false" dbtype=""/>
         </#list>
     </columns>
-  </createTable>
-  <createTable name="${table[0]}2" id="" view="${table[0]}" condition="${condition2}">
-    <columns>
-        <#list keys as key>
-        <columns name="${key}" id="id.${key}" dbname="" nullable="false" dbtype=""/>
-        </#list>
-        <#list lhss as lhs>
-        <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
-        </#list>
-        <#list rhss as rhs>
-        <columns name="${rhs}" id="id.${rhs}" dbname="" nullable="false" dbtype=""/>
-        </#list>
-        <#list rests as rest>
-        <columns name="${rest}" id="id.${rest}" dbname="" nullable="true" dbtype=""/>
-        </#list>
-    </columns>
-  </createTable>
-  <createConstraint name="${table[0]}.doubleInclusion" id="" type="DOUBLE_INCLUSION">
-    <source name="" id="" table="${table[0]}1">
-        <columns>
-            <#list lhss as lhs>
-            <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
-            </#list>
-        </columns>
-    </source>
-    <target name="" id="" table="${table[0]}2">
-        <columns>
-            <#list lhss as lhs>
-            <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
-            </#list>
-        </columns>
-    </target>
-  </createConstraint>
-  <createConstraint name="${table[0]}2.primaryKey" id="" type="PRIMARY_KEY">
-    <source name="" id="" table="${table[0]}2">
-        <columns>
-            <#list lhss as lhs>
-            <columns name="${lhs}" id="id.${lhs}" dbname="" nullable="false" dbtype=""/>
-            </#list>
-        </columns>
-    </source>
-    <target name="" id="" table="">
-        <columns>
-            <columns name="" id="" dbname="" nullable="false" dbtype=""/>
-        </columns>
-    </target>
-  </createConstraint>
-  <createConstraint name="${table[0]}1.primaryKey" id="" type="PRIMARY_KEY">
-    <source name="" id="" table="${table[0]}1">
-        <columns>
-            <#list keys as key>
-            <columns name="${key}" id="id.${key}" dbname="" nullable="false" dbtype=""/>
-            </#list>
-        </columns>
-    </source>
-    <target name="" id="" table="">
-        <columns>
-            <columns name="" id="" dbname="" nullable="false" dbtype=""/>
-        </columns>
-    </target>
-  </createConstraint>
-  <dropTable path="" schemaName="" tableName="${table[0]}"/>
-  <dropConstraint path="" schemaName="" constraintName="${table[0]}.primaryKey"/>
+</createTable>
 </changeSet>

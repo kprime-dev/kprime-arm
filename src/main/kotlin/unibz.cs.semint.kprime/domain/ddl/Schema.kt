@@ -62,6 +62,10 @@ class Schema () {
         return constraints().filter { c -> c.type.equals(Constraint.TYPE.FOREIGN_KEY.name) }
     }
 
+    fun foreignsTable(tableName: String): List<Constraint> {
+        return foreignKeys().filter { f -> f.source.table.equals(tableName) }
+    }
+
     fun doubleIncs(): List<Constraint> {
         return constraints().filter { c -> c.type.equals(Constraint.TYPE.DOUBLE_INCLUSION.name) }
     }
