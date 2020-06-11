@@ -48,31 +48,43 @@ class ChangeSet() {
     infix fun plus(createView: CreateView)= apply{
         this.createView.add(createView)
     }
+
     infix fun plus(createTable: CreateTable)= apply{
         this.createTable.add(createTable)
     }
+
     infix fun plus(createConstraint: CreateConstraint)= apply{
         this.createConstraint.add(createConstraint)
     }
+
     infix fun plus(createMapping: CreateMapping)= apply{
         this.createMapping.add(createMapping)
     }
+
     infix fun minus(view: DropView)= apply{
         this.dropView.add(view)
     }
+
     infix fun minus(droptable:DropTable) = apply {
         this.dropTable.add(droptable)
     }
+
     infix fun minus(dropconstraint:DropConstraint) = apply {
         this.dropConstraint.add(dropconstraint)
     }
+
     infix fun minus(dropMapping: DropMapping) = apply {
         this.dropMapping.add(dropMapping)
     }
+
     fun size(): Int {
         return createView.size +createTable.size + createConstraint.size
             + dropView.size + dropTable.size + dropConstraint.size
             + dropMapping.size
+    }
+
+    fun isEmpty() : Boolean {
+        return this.size()==0
     }
 
     companion object {
