@@ -3,6 +3,7 @@ package unibz.cs.semint.kprime.domain.dml
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import unibz.cs.semint.kprime.domain.ddl.Database
 
 fun initChangeSet(alfa:ChangeSet.()->Unit):ChangeSet {
     val changeSet = ChangeSet()
@@ -72,5 +73,14 @@ class ChangeSet() {
         return createView.size +createTable.size + createConstraint.size
             + dropView.size + dropTable.size + dropConstraint.size
             + dropMapping.size
+    }
+
+    companion object {
+        fun fromDatabase(db:Database):ChangeSet {
+            var cs = ChangeSet()
+            if (db.schema.tables!=null) cs.createTable.addAll(db.schema.tables!!)
+            if (db.schema.constraints!=null) cs.createConstraint.addAll(db.schema.constraints!!)
+            return cs
+        }
     }
 }
