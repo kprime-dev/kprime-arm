@@ -63,7 +63,7 @@ class Schema () {
     }
 
     fun foreignsTable(tableName: String): List<Constraint> {
-        return foreignKeys().filter { f -> f.source.table.equals(tableName) }
+        return foreignKeys().filter { f -> f.source.name.equals(tableName) }
     }
 
     fun doubleIncs(): List<Constraint> {
