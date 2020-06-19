@@ -14,10 +14,21 @@ open class Database () {
 
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""
+
     @JacksonXmlProperty(isAttribute = true)
     var id: String=""
 
+    @JacksonXmlProperty(isAttribute = true)
+    var author: String? = null
+
+    @JacksonXmlProperty(isAttribute = true)
+    var time: String? = null
+
+    @JacksonXmlProperty(isAttribute = true)
+    var parent: String? = null
+
     var schema: Schema = Schema()
+
     @JacksonXmlElementWrapper(localName = "mappings")
     @JacksonXmlProperty(localName = "query")
     var mappings : MutableList<Query>? = ArrayList<Query>()

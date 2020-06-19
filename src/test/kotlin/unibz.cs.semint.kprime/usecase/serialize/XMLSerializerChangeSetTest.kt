@@ -48,7 +48,7 @@ class XMLSerializerChangeSetTest  {
         val changeSet = xmlSerializeUseCase.deserializeChangeSet(changesetXml)
         // then
         assertEquals("""
-            UseCaseResult(message=done, ok=<changeSet id="createView-example">
+            UseCaseResult(message=done, ok=<changeSet id="createView-example" author="liquibase-docs">
               <createView path="A String" schemaName="public" viewName="v_person">select id, name from person where id > 10</createView>
             </changeSet>, ko=kotlin.Unit)
         """.trimIndent(),xmlSerializeUseCase.prettyChangeSet(changeSet.ok!!).toString())

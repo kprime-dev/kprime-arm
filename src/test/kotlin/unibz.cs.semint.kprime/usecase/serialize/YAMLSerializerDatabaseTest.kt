@@ -29,6 +29,9 @@ class YAMLSerializerDatabaseTest {
             ---
             name: "dbname"
             id: "iddb"
+            author: null
+            time: null
+            parent: null
             schema:
               name: ""
               id: "idschema"
