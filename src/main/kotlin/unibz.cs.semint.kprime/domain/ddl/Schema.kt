@@ -38,7 +38,7 @@ class Schema () {
         var resultCols = mutableSetOf<Column>()
         val first = constraints().filter { c ->
             c.type == Constraint.TYPE.PRIMARY_KEY.name &&
-                    c.name == "primaryKey.${tableName}"
+                    c.source.table == "${tableName}"
         }.toList()
         if (first.isEmpty()) return mutableSetOf()
         return first[0].source.columns.toSet()
@@ -46,7 +46,7 @@ class Schema () {
 
     fun key(tableName:String,k:Set<Column>) {
         val primaryConstraint = Constraint()
-        primaryConstraint.name="primaryKey.$tableName"
+        primaryConstraint.name="pkey_$tableName"
         primaryConstraint.source.table="$tableName"
         primaryConstraint.source.columns.addAll(k)
         primaryConstraint.target.columns.addAll(k)
@@ -64,6 +64,9 @@ class Schema () {
 
     fun foreignsTable(tableName: String): List<Constraint> {
         return foreignKeys().filter { f -> f.source.name.equals(tableName) }
+    }
+    fun foreignsTargets(tableName: String): List<Constraint> {
+        return foreignKeys().filter { f -> f.target.name.equals(tableName) }
     }
 
     fun doubleIncs(): List<Constraint> {
