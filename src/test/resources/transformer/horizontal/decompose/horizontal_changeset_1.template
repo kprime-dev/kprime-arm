@@ -1,5 +1,5 @@
 <changeSet id="345">
-    <createTable name="${((originTable))}_1" id="" view="${((originTable))}" condition="${((condition))}">
+    <createTable name="${originTable[0]}_1" id="" view="${originTable[0]}" condition="${condition[0]}">
         <columns>
             <#list all as att1>
             <columns name="${att1}" id="id.${att1}" dbname="" nullable="false" dbtype=""/>

@@ -98,6 +98,10 @@ class ChangeSet() {
         return this.size()==0
     }
 
+    override fun toString(): String {
+        return "ChangeSet(id='$id', author=$author, time=$time, parent=$parent, createView=$createView, createTable=$createTable, createConstraint=$createConstraint, createMapping=$createMapping, dropView=$dropView, dropTable=$dropTable, dropConstraint=$dropConstraint, dropMapping=$dropMapping)"
+    }
+
     companion object {
         fun fromDatabase(db:Database):ChangeSet {
             var cs = ChangeSet()
@@ -106,4 +110,6 @@ class ChangeSet() {
             return cs
         }
     }
+
+
 }

@@ -154,11 +154,14 @@ class TransformerXUseCase(
             // check required params
             val requireds = xPathProperties1[0].split(",")
             for (required in requireds) {
-                if (transformerParams[required] == null || transformerParams[required] == "") {
-                    failedCheckRequiredParams.add(required)
+                val para = required.replace("((","").replace("))","")
+                //println("££$para££")
+                if (transformerParams[para] == null || transformerParams[para] == "") {
+                    failedCheckRequiredParams.add(para)
                 }
             }
             xPathProperties1 = xPathProperties1.drop(1)
+            //println("xPathProperties1:::::::::::::::::::::::>>>>>>>>"+xPathProperties1)
         }
         return Pair(failedCheckRequiredParams, xPathProperties1)
     }

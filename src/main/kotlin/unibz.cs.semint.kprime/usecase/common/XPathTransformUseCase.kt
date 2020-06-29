@@ -69,9 +69,9 @@ class XPathTransformUseCase  {
         var newline = line
         for (key in tranformerParmeters.keys) {
             val newValue = (tranformerParmeters[key] as List<String>).get(0)
-            println(" *************************** XPathTransformUseCase.parametrized(): ${key} == ${newValue}")
+            //println(" *************************** XPathTransformUseCase.parametrized(): ${key} == ${newValue}")
             newline = newline.replace("${key}", newValue)
-            println(newline)
+            //println(newline)
         }
         return newline
     }
@@ -82,13 +82,17 @@ class XPathTransformUseCase  {
         // if derivationRule starts with + then compute union
         var splittedRule = derivationRule.split(" ")
         splittedRule = removeEventualConditionToken(splittedRule)
-        println("splittedRule ( ${splittedRule } )")
+        //println("splittedRule ( ${splittedRule } )")
         if (splittedRule[0]=="+") {
             val sourceLists = splittedRule.drop(1)
             //println("sourceLists:"+sourceLists)
             derivedList.addAll(templModel[sourceLists[0]] as List<String>)
             for (i in 1..(sourceLists.size-1)) {
-                if (!templModel[sourceLists[i]]!!.isEmpty())
+                if (templModel!=null
+                        && sourceLists!=null
+                        && sourceLists[i]!=null
+                        && templModel[sourceLists[i]]!= null
+                        && !templModel[sourceLists[i]]!!.isEmpty())
                     derivedList = derivedList.plus(templModel[sourceLists[i]] as MutableList<String>) as MutableList<String>
             }
             //println(derivedList)
@@ -159,16 +163,16 @@ class XPathTransformUseCase  {
             val templateFileName = templateFilePath.substring(lastSlash)
             //templConfig.setDirectoryForTemplateLoading(File("/home/nipe/Temp/kprime/transformers/vertical/decompose/"))
             //templ = templConfig.getTemplate("vertical_decompose_1_changeset.xml")
-            println("${templateDir}:${templateFileName}")
+            //println("${templateDir}:${templateFileName}")
             templConfig.setDirectoryForTemplateLoading(File(templateDir))
             templ = templConfig.getTemplate(templateFileName)
         } else {
             templ = templConfig.getTemplate(templateFilePath)
         }
         val outWriter = StringWriter()
-        for(ent in templModel) {
-            println("${ent.key} === ${ent.value}")
-        }
+//        for(ent in templModel) {
+//            println("${ent.key} === ${ent.value}")
+//        }
         templ.process(templModel, outWriter)
 
         println("33++++++++++++++++++++++++++++++++++++++++++-------------------------------")
@@ -202,7 +206,7 @@ class XPathTransformUseCase  {
             val value = parametrized(pathTokens[0], tranformerParameters)
             if (value.startsWith("-") || value.startsWith("+")) {
                 templModel[name] = computeDerivedList(templModel, rule)
-                violation = checkCondition(pathTokens, templModel, name, violation, rule)
+//                violation = checkCondition(pathTokens, templModel, name, violation, rule)
             }
             else {
                 templModel[name] = asValueList(xpath.compile(value).evaluate(doc, XPathConstants.NODESET) as NodeList)
@@ -214,6 +218,7 @@ class XPathTransformUseCase  {
         }
         // adds all input parameters as template parameters
         for (parCouple in tranformerParameters) {
+            //println("parCouple.key:::::::::::"+parCouple.key)
             if (parCouple.value is List<*>)
                 templModel.put(parCouple.key, parCouple.value as List<String>)
             else
