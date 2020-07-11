@@ -69,7 +69,7 @@ class TransformerXUseCase(
         fileIOAdapter.writeOnWorkingFilePath(serializer.prettyChangeSet(changeSet), changeSetFilePath)
 
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
-        val dbFileName = "${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_db.xml"
+        val dbFileName = "revision_${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_db.xml"
         newdb.name=dbFileName
         val newDbFilePath = workingDir + dbFileName
         fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(newdb), newDbFilePath)
