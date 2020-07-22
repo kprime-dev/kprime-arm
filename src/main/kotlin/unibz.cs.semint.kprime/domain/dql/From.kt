@@ -10,4 +10,9 @@ class From {
     var alias=String()
 
     var joins : ArrayList<Join> ? = null
+
+    fun addJoin(join: Join ) {
+        if (joins==null) joins = ArrayList<Join>()
+        joins!!.add(join)
+    }
 }

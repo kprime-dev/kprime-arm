@@ -1,6 +1,5 @@
 package unibz.cs.semint.kprime.usecase.common
 
-import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.dql.*
 
 class SQLizeSelectUseCase {
@@ -37,6 +36,12 @@ class SQLizeSelectUseCase {
                 sql += "  ${from.tableName}"
                 if (!from.alias.isEmpty()) sql += " AS ${from.alias}"
                 sql += System.lineSeparator()
+                if (from.joins!=null){
+                    for (join in from.joins as ArrayList<Join>) {
+                        sql += "${join.joinType} JOIN" + System.lineSeparator()
+                        sql += "ON ${join.joinLeftTable}.${join.joinOnLeft} = ${join.joinRightTable}.${join.joinOnRight}" + System.lineSeparator()
+                    }
+                }
         }
         if (!select.where.condition.isEmpty()) {
             sql += "WHERE ${select.where.condition}"  //+ System.lineSeparator()

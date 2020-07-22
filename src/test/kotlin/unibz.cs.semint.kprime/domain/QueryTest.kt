@@ -111,6 +111,13 @@ class QueryTest {
         select.attributes.add(att)
         val from = From()
         from.tableName="Orders"
+        val join = Join()
+        join.joinLeftTable = "Orders"
+        join.joinOnLeft = "customerId"
+        join.joinRightTable = "Customer"
+        join.joinOnRight = "customerId"
+        join.joinType = "INNER"
+        from.addJoin(join)
         select.from.add(from)
         select.where.condition="a = b"
         // when
@@ -119,6 +126,47 @@ class QueryTest {
         assertEquals1("""
             SELECT "ww"
             FROM   Orders
+            INNER JOIN
+            ON Orders.customerId = Customer.customerId
+            WHERE a = b
+        """.trimIndent(),selectSql)
+    }
+
+    @Test
+    fun test_multiple_join_to_sql(){
+        // given
+        val select = Select()
+        val att = Attribute()
+        att.name="ww"
+        select.attributes.add(att)
+        val from = From()
+        from.tableName="Orders"
+        val join = Join()
+        join.joinLeftTable = "Orders"
+        join.joinOnLeft = "customerId"
+        join.joinRightTable = "Customer"
+        join.joinOnRight = "customerId"
+        join.joinType = "INNER"
+        from.addJoin(join)
+        val join2 = Join()
+        join2.joinLeftTable = "Customer"
+        join2.joinOnLeft = "orderId"
+        join2.joinRightTable = "Sales"
+        join2.joinOnRight = "orderId"
+        join2.joinType = "LEFT"
+        from.addJoin(join2)
+        select.from.add(from)
+        select.where.condition="a = b"
+        // when
+        val selectSql = SQLizeSelectUseCase().sqlize(select)
+        // then
+        assertEquals1("""
+            SELECT "ww"
+            FROM   Orders
+            INNER JOIN
+            ON Orders.customerId = Customer.customerId
+            LEFT JOIN
+            ON Customer.orderId = Sales.orderId
             WHERE a = b
         """.trimIndent(),selectSql)
     }

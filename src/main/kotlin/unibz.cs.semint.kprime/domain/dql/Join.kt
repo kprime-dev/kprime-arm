@@ -4,10 +4,14 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 class Join {
     @JacksonXmlProperty(isAttribute = true)
-    var joinOn=String()
+    var joinOnLeft=String()
     @JacksonXmlProperty(isAttribute = true)
-    var joinTable=String()
+    var joinLeftTable=String()
     @JacksonXmlProperty(isAttribute = true)
     var joinType=String()
+    @JacksonXmlProperty(isAttribute = true)
+    var joinOnRight=String()
+    @JacksonXmlProperty(isAttribute = true)
+    var joinRightTable=String()
 
 }
