@@ -34,17 +34,9 @@ class SQLizeSelectUseCase {
                 .map { a -> "\"${a.name}\"" }.toList().joinToString(",") + System.lineSeparator()
         sql += "FROM "
         for (from in select.from) {
-            if (from.joinOn.isEmpty()) {
                 sql += "  ${from.tableName}"
                 if (!from.alias.isEmpty()) sql += " AS ${from.alias}"
                 sql += System.lineSeparator()
-            }
-            else {
-                if (from.alias.isEmpty())
-                    sql += "  JOIN ${from.tableName} ON ${from.joinOn}"
-                else
-                    sql += "JOIN ${from.tableName} AS ${from.alias} ON ${from.joinOn}"
-            }
         }
         if (!select.where.condition.isEmpty()) {
             sql += "WHERE ${select.where.condition}"  //+ System.lineSeparator()

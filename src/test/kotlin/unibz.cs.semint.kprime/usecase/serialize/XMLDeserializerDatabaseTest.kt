@@ -65,7 +65,7 @@ class XMLDeserializerDatabaseTest {
                       <attributes name="name"/>
                     </attributes>
                     <from>
-                      <from tableName="people" alias="" joinOn=""/>
+                      <from tableName="people" alias=""/>
                     </from>
                     <where condition=""/>
                   </select>
@@ -76,7 +76,7 @@ class XMLDeserializerDatabaseTest {
                       <attributes name="name"/>
                     </attributes>
                     <from>
-                      <from tableName="people" alias="" joinOn=""/>
+                      <from tableName="people" alias=""/>
                     </from>
                     <where condition=""/>
                   </select>

@@ -51,7 +51,7 @@ class QueryTest {
                   <attributes name="Surname"/>
                 </attributes>
                 <from>
-                  <from tableName="Table1" alias="" joinOn=""/>
+                  <from tableName="Table1" alias=""/>
                 </from>
                 <where condition="Name='Gigi'"/>
               </select>
@@ -86,7 +86,7 @@ class QueryTest {
         // given
         val select = Select()
         val att = Attribute()
-            att.name="ww"
+        att.name="ww"
         select.attributes.add(att)
         val from = From()
         from.tableName="tab"
@@ -98,6 +98,27 @@ class QueryTest {
         assertEquals1("""
             SELECT "ww"
             FROM   tab
+            WHERE a = b
+        """.trimIndent(),selectSql)
+    }
+
+    @Test
+    fun test_simple_join_to_sql(){
+        // given
+        val select = Select()
+        val att = Attribute()
+        att.name="ww"
+        select.attributes.add(att)
+        val from = From()
+        from.tableName="Orders"
+        select.from.add(from)
+        select.where.condition="a = b"
+        // when
+        val selectSql = SQLizeSelectUseCase().sqlize(select)
+        // then
+        assertEquals1("""
+            SELECT "ww"
+            FROM   Orders
             WHERE a = b
         """.trimIndent(),selectSql)
     }
@@ -117,7 +138,7 @@ class QueryTest {
                   <attributes name="Surname"/>
                 </attributes>
                 <from>
-                  <from tableName="Table1" alias="" joinOn=""/>
+                  <from tableName="Table1" alias=""/>
                 </from>
                 <where condition="Name='Gigi'"/>
               </select>
@@ -129,7 +150,7 @@ class QueryTest {
                       <attributes name="Surname"/>
                     </attributes>
                     <from>
-                      <from tableName="Table2" alias="" joinOn=""/>
+                      <from tableName="Table2" alias=""/>
                     </from>
                     <where condition="Name='Gigi'"/>
                   </selects>

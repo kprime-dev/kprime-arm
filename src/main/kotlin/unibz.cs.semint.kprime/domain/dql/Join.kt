@@ -1,13 +1,13 @@
 package unibz.cs.semint.kprime.domain.dql
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
-import unibz.cs.semint.kprime.domain.ddl.Column
 
-class From {
+class Join {
     @JacksonXmlProperty(isAttribute = true)
-    var tableName=String()
+    var joinOn=String()
     @JacksonXmlProperty(isAttribute = true)
-    var alias=String()
+    var joinTable=String()
+    @JacksonXmlProperty(isAttribute = true)
+    var joinType=String()
 
-    var joins : ArrayList<Join> ? = null
 }
