@@ -46,7 +46,7 @@ class SQLizeSelectUseCase {
         if (!select.where.condition.isEmpty()) {
             sql += "WHERE ${select.where.condition}"  //+ System.lineSeparator()
         }
-        sql += " LIMIT 10"  //+ System.lineSeparator()
+        sql += if (select.limit!=null) " LIMIT "+select.limit else  " LIMIT 10" //+ System.lineSeparator()
         return sql
     }
 
