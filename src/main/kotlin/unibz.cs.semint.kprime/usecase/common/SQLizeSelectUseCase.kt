@@ -8,7 +8,7 @@ class SQLizeSelectUseCase {
     fun sqlize(query: Query):String {
         var sql = ""
         sql += sqlize(query.select)
-        val union = query.union
+        val union = query.safeUnion()
         if (union.selects().size>0) {
             for (select in union.selects()) {
                 sql += System.lineSeparator() + "UNION" + System.lineSeparator()
@@ -16,7 +16,7 @@ class SQLizeSelectUseCase {
             }
         }
 
-        val minus = query.minus
+        val minus = query.safeMinus()
         if (minus.selects().size>0) {
             for (select in minus.selects()) {
                 sql += System.lineSeparator() + "MINUS" + System.lineSeparator()
@@ -30,7 +30,7 @@ class SQLizeSelectUseCase {
     fun sqlize(select : Select):String {
         var sql = ""
         sql += "SELECT " + select.attributes
-                .map { a -> "\"${a.name}\"" }.toList().joinToString(",") + System.lineSeparator()
+                .map { a -> "${a.name}" }.toList().joinToString(",") + System.lineSeparator()
         sql += "FROM "
         for (from in select.from) {
                 sql += "  ${from.tableName}"
@@ -38,7 +38,7 @@ class SQLizeSelectUseCase {
                 sql += System.lineSeparator()
                 if (from.joins!=null){
                     for (join in from.joins as ArrayList<Join>) {
-                        sql += "${join.joinType} JOIN" + System.lineSeparator()
+                        sql += "${join.joinType} JOIN ${join.joinRightTable}" + System.lineSeparator()
                         sql += "ON ${join.joinLeftTable}.${join.joinOnLeft} = ${join.joinRightTable}.${join.joinOnRight}" + System.lineSeparator()
                     }
                 }
@@ -46,6 +46,7 @@ class SQLizeSelectUseCase {
         if (!select.where.condition.isEmpty()) {
             sql += "WHERE ${select.where.condition}"  //+ System.lineSeparator()
         }
+        sql += " LIMIT 10"  //+ System.lineSeparator()
         return sql
     }
 

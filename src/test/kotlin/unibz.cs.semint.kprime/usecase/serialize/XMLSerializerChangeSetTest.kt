@@ -82,12 +82,8 @@ class XMLSerializerChangeSetTest  {
                   </from>
                   <where condition="Name='Gigi'"/>
                 </select>
-                <union>
-                  <selects/>
-                </union>
-                <minus>
-                  <selects/>
-                </minus>
+                <union/>
+                <minus/>
               </createMapping>
             </changeSet>
         """.trimIndent(),changeSetXml.ok)

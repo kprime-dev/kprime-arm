@@ -15,26 +15,26 @@ class UnSQLizeSelectUseCase {
             parseWhere(select,line)
             parseUnionMinus(query,line)
         }
-        if (query.union.selects().size>0) {
+        if (query.safeUnion().selects().size>0) {
             val tmp = query.select
-            query.select=query.union.selects().removeAt(0)
-            query.union.selects().add(tmp)
+            query.select=query.safeUnion().selects().removeAt(0)
+            query.safeUnion().selects().add(tmp)
         }
-        if (query.minus.selects().size>0) {
+        if (query.safeMinus().selects().size>0) {
             val tmp = query.select
-            query.select=query.minus.selects().removeAt(0)
-            query.minus.selects().add(tmp)
+            query.select=query.safeMinus().selects().removeAt(0)
+            query.safeMinus().selects().add(tmp)
         }
         return query
     }
 
     private fun parseUnionMinus(query: Query, sqlline: String) {
         if (sqlline.startsWith("UNION")) {
-            query.union.selects().add(query.select)
+            query.safeUnion().selects().add(query.select)
             query.select= Select()
         } else
         if (sqlline.startsWith("MINUS")) {
-            query.minus.selects().add(query.select)
+            query.safeMinus().selects().add(query.select)
             query.select= Select()
         }
     }

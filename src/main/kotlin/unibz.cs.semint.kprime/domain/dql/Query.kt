@@ -8,12 +8,26 @@ import unibz.cs.semint.kprime.domain.ddl.Database
 @JacksonXmlRootElement(localName = "query")
 class Query {
     @JacksonXmlProperty(isAttribute = true)
-    var name=""
+    var name = ""
     var select = Select()
     @JacksonXmlElementWrapper(useWrapping=false)
-    var union= Union()
+    var union : Union? = null
     @JacksonXmlElementWrapper(useWrapping=false)
-    var minus= Minus()
+    var minus : Minus? = null
+
+    fun safeMinus():Minus {
+        if (minus==null) {
+            this.minus = Minus()
+        }
+        return this.minus as Minus
+    }
+
+    fun safeUnion():Union {
+        if (union==null) {
+            this.union = Union()
+        }
+        return this.union as Union
+    }
 
     companion object {
         fun build(tableName:String): Query {

@@ -84,12 +84,8 @@ class XMLSerializerDatabaseTest {
                     </from>
                     <where condition=""/>
                   </select>
-                  <union>
-                    <selects/>
-                  </union>
-                  <minus>
-                    <selects/>
-                  </minus>
+                  <union/>
+                  <minus/>
                 </query>
               </mappings>
             </database>
