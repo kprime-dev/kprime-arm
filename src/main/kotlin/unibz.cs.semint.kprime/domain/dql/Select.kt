@@ -12,4 +12,11 @@ class Select {
     @JacksonXmlProperty(isAttribute = true)
     var limit : String? = null
 
+    fun addAttributes(args: List<String>) {
+        for (arg in args) {
+            val att = Attribute()
+            att.name = arg
+            attributes.add(att)
+        }
+    }
 }
