@@ -60,6 +60,19 @@ open class Database () {
         return mappings().filter { m -> m.name.equals(name) }.firstOrNull()
     }
 
+    fun mappingAsTable(name:String): Table? {
+        val mapping = mapping(name)
+        if (mapping==null) return null
+        val table = Table()
+        table.name = mapping.name
+        for(attribute in mapping.select.attributes.toSet()) {
+            val col = Column()
+            col.name = attribute.name
+            table.columns.add(col)
+        }
+        return table
+    }
+
     @JsonIgnore
     fun isEmpty(): Boolean {
         return schema.tables().size == 0
