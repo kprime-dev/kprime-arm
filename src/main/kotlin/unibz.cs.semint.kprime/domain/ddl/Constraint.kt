@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const
 
 fun key(alfa:Constraint.()->Unit):Constraint {
     val constraint = Constraint()

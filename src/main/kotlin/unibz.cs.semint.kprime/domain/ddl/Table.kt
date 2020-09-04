@@ -18,6 +18,9 @@ class Table () {
     @JacksonXmlProperty(isAttribute = true)
     var condition: String =""
 
+    @JacksonXmlProperty(isAttribute = true)
+    var parent: String? = null
+
     var columns= ArrayList<Column>()
 
     fun hasColumn(nameToFind:String): Boolean {

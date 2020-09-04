@@ -40,11 +40,13 @@ class YAMLSerializerDatabaseTest {
                 id: ""
                 view: ""
                 condition: ""
+                parent: null
                 columns: []
               - name: ""
                 id: ""
                 view: ""
                 condition: ""
+                parent: null
                 columns: []
               constraints: []
             mappings: []
