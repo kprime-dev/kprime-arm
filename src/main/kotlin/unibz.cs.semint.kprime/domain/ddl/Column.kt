@@ -22,6 +22,8 @@ class Column () {
     var unit: String? = null
     @JacksonXmlProperty(isAttribute = true)
     var cardinality: String? = null
+    @JacksonXmlProperty(isAttribute = true)
+    var role: String? = null
 
     @JsonCreator
     constructor(
