@@ -16,6 +16,12 @@ class Column () {
     var nullable: Boolean = false
     @JacksonXmlProperty(isAttribute = true)
     var dbtype: String = ""
+    @JacksonXmlProperty(isAttribute = true)
+    var type: String? = null
+    @JacksonXmlProperty(isAttribute = true)
+    var unit: String? = null
+    @JacksonXmlProperty(isAttribute = true)
+    var cardinality: String? = null
 
     @JsonCreator
     constructor(
