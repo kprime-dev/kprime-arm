@@ -34,17 +34,22 @@ class Schema () {
         return constraints().filter { c -> c.name==name}.firstOrNull()
     }
 
-    fun key(tableName: String): Set<Column> {
-        var resultCols = mutableSetOf<Column>()
+    fun keys(tableName: String): List<Constraint> {
         val first = constraints().filter { c ->
             c.type == Constraint.TYPE.PRIMARY_KEY.name &&
                     c.source.table == "${tableName}"
         }.toList()
-        if (first.isEmpty()) return mutableSetOf()
-        return first[0].source.columns.toSet()
+        return first
     }
 
-    fun key(tableName:String,k:Set<Column>) {
+    fun key(tableName: String): Set<Column> {
+        var resultCols = mutableSetOf<Column>()
+        val keys = keys(tableName)
+        if (keys.isEmpty()) return mutableSetOf()
+        return keys[0].source.columns.toSet()
+    }
+
+    fun addKey(tableName:String, k:Set<Column>) {
         val primaryConstraint = Constraint()
         primaryConstraint.name="pkey_$tableName"
         primaryConstraint.source.table="$tableName"
@@ -103,7 +108,7 @@ class Schema () {
         return first[0].target.columns.toSet()
     }
 
-    fun functional(tableName:String, lhs:Set<Column>, rhs:Set<Column>){
+    internal fun addFunctional(tableName:String, lhs:Set<Column>, rhs:Set<Column>){
         val functionalConstraint = Constraint()
         functionalConstraint.name="functional.$tableName"
         functionalConstraint.source.table="$tableName"
@@ -169,7 +174,7 @@ class Schema () {
     fun addKey(commandArgs:String):Schema {
         val tableName:String = commandArgs.split(":")[0]
         val attributeNames = commandArgs.split(":")[1]
-        val constraint = key {}
+        val constraint = addKey {}
         constraint.name = tableName+".primaryKey"
         constraint.source.table=tableName
         constraint.target.table=tableName

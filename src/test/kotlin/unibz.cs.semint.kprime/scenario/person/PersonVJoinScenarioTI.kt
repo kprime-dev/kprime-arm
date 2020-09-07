@@ -26,7 +26,7 @@ class PersonVJoinScenarioTI {
         colX.nullable=true
         personTable1.columns.add(colX)
 
-        db.schema.key("person1", mutableSetOf(colSSN))
+        db.schema.addKey("person1", mutableSetOf(colSSN))
 
         db.schema.tables().add(personTable1)
 
@@ -41,7 +41,7 @@ class PersonVJoinScenarioTI {
         colS2.nullable=true
         personTable2.columns.add(colS2)
 
-        db.schema.key("person2", mutableSetOf(colT2))
+        db.schema.addKey("person2", mutableSetOf(colT2))
 
         db.schema.tables().add(personTable2)
         return db

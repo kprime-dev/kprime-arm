@@ -30,8 +30,8 @@ class PersonVSplitScenarioTI {
         colX.nullable=true
         personTable.columns.add(colX)
 
-        db.schema.key("person", mutableSetOf(colSSN))
-        db.schema.functional("person", mutableSetOf(colT), mutableSetOf(colS))
+        db.schema.addKey("person", mutableSetOf(colSSN))
+        db.schema.addFunctional("person", mutableSetOf(colT), mutableSetOf(colS))
 
         db.schema.tables().add(personTable)
 

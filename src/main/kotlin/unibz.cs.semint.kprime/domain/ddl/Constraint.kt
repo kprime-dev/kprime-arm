@@ -5,7 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
-fun key(alfa:Constraint.()->Unit):Constraint {
+fun addKey(alfa:Constraint.()->Unit):Constraint {
     val constraint = Constraint()
     constraint.type = Constraint.TYPE.PRIMARY_KEY.name
     return constraint
@@ -17,7 +17,7 @@ fun foreignkey(alfa:Constraint.()->Unit):Constraint {
     return constraint
 }
 
-fun functional(alfa:Constraint.()->Unit):Constraint {
+fun addFunctional(alfa:Constraint.()->Unit):Constraint {
     val constraint = Constraint()
     constraint.type = Constraint.TYPE.FUNCTIONAL.name
     return constraint

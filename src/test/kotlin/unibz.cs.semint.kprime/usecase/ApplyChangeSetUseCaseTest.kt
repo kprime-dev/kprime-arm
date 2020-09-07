@@ -4,7 +4,6 @@ import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.ddl.*
 import unibz.cs.semint.kprime.domain.dml.*
-import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.common.ApplyChangeSetUseCase
 import kotlin.test.assertEquals
 
@@ -174,7 +173,7 @@ class ApplyChangeSetUseCaseTest {
         val table1 = CreateTable() name "person1" withColumn  "K" withColumn "T" withColumn "S"
         val table2 = CreateTable() name "person2" withColumn "T" withColumn "S"
         val doubleInc = doubleInclusion {}
-        val person2Key = key {  }
+        val person2Key = addKey {  }
         vsplitChangeSet plus table1 plus  table2 plus doubleInc plus person2Key
         return vsplitChangeSet
     }
