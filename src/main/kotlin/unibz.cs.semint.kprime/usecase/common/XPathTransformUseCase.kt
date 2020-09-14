@@ -144,6 +144,7 @@ class XPathTransformUseCase  {
 
         if (!violation.isEmpty()) {
             println("Condition Failure")
+            println(violation)
             return ChangeSet()
         }
 
@@ -209,6 +210,7 @@ class XPathTransformUseCase  {
 //                violation = checkCondition(pathTokens, templModel, name, violation, rule)
             }
             else {
+                println("getTemplateModel().xpath.compile(value)="+value)
                 templModel[name] = asValueList(xpath.compile(value).evaluate(doc, XPathConstants.NODESET) as NodeList)
                 //println(" ${name} = ${value}")
                 //println(" ${name} = ${templModel[name]}")
