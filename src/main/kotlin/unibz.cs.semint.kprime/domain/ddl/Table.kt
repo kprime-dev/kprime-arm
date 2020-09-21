@@ -62,5 +62,4 @@ class Table () {
         this.columns.addAll(cols)
     }
 
-
 }

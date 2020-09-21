@@ -2,6 +2,10 @@ package unibz.cs.semint.kprime.domain.ddl
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import unibz.cs.semint.kprime.domain.ddl.schemalgo.check3NF
+import unibz.cs.semint.kprime.domain.ddl.schemalgo.checkBCNF
+import unibz.cs.semint.kprime.domain.ddl.schemalgo.decomposeTo3NF
+import unibz.cs.semint.kprime.domain.ddl.schemalgo.decomposeToBCNF
 
 @JacksonXmlRootElement(localName = "schema")
 class Schema () {
@@ -229,7 +233,7 @@ class Schema () {
         var tables = tables()
         for ( table in tables) {
             var fds = functionalsTable(table.name)
-            allDecomposed.addAll(SchemaAlgo.decomposeToBCNF(table.columns.toSet(), fds.toSet()))
+            allDecomposed.addAll(decomposeToBCNF(table.columns.toSet(), fds.toSet()))
         }
         return allDecomposed
     }
@@ -239,7 +243,7 @@ class Schema () {
         var tables = tables()
         for ( table in tables) {
             var fds = functionalsTable(table.name)
-            allDecomposed.addAll(SchemaAlgo.decomposeTo3NF(table.columns.toSet(), fds.toSet()))
+            allDecomposed.addAll(decomposeTo3NF(table.columns.toSet(), fds.toSet()))
         }
         return allDecomposed
     }
@@ -249,7 +253,7 @@ class Schema () {
         var tables = tables()
         for ( table in tables) {
             var fds = functionalsTable(table.name)
-            allViolations.addAll(SchemaAlgo.check3NF(table.columns.toSet(), fds.toSet()))
+            allViolations.addAll(check3NF(table.columns.toSet(), fds.toSet()))
         }
         return allViolations
 
@@ -260,10 +264,21 @@ class Schema () {
         var tables = tables()
         for ( table in tables) {
             var fds = functionalsTable(table.name)
-            allViolations.addAll(SchemaAlgo.checkBCNF(table.columns.toSet(), fds.toSet()))
+            allViolations.addAll(checkBCNF(table.columns.toSet(), fds.toSet()))
         }
         return allViolations
 
     }
+
+    /**
+     * TODO weak if has primarykey with-a column used as foreignkey.
+    fun isTableWeak(tableName:String):Boolean {
+        val key = key(tableName)
+        for (keycol in key) {
+            foreignKeys().forEach{fkey -> fkey.target.columns. }
+        }
+        return false
+    }
+     */
 
 }

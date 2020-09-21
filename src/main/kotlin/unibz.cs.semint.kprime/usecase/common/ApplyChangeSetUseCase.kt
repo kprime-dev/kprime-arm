@@ -33,7 +33,6 @@ class ApplyChangeSetUseCase(serializer : SerializerServiceI) {
     fun createTable(newdb:Database, createTable: CreateTable, olddb:Database): Database {
         newdb.schema.tables().add(createTable)
         // TODO derive inherited constraints
-//        println("====================================================")
 //        println("ApplyChangeSetUseCase createTable ${createTable.view}")
 //        if (createTable.view!=null && createTable.view.isNotEmpty()){
 //            deriveConstraint(newdb, createTable, olddb)
@@ -43,11 +42,11 @@ class ApplyChangeSetUseCase(serializer : SerializerServiceI) {
 
     // TODO derive inherited constraints
     private fun deriveConstraint(newdb : Database, createTable: CreateTable, olddb:Database) {
-        println("===================================================0")
+        println("=0")
         println(olddb.schema.tables().map { t -> t.name }.joinToString(","))
         val fromTable = olddb.schema.table(createTable.view)
         if (fromTable==null) return
-        println("===================================================1")
+        println("=1")
         println("check deriveConstraint from ${fromTable.name}")
         val contraintToCloneSource = mutableListOf<Constraint>()
         val contraintToCloneTarget = mutableListOf<Constraint>()

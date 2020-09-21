@@ -49,7 +49,16 @@ class Constraint () {
         this.name=newname
     }
     enum class TYPE {
-        FOREIGN_KEY,PRIMARY_KEY,FUNCTIONAL,DOUBLE_INCLUSION,INCLUSION,DISJUNCTION,COVER
+        FOREIGN_KEY,
+        PRIMARY_KEY,
+        CANDIDATE_KEY,
+        SURROGATE_KEY,
+        FUNCTIONAL,
+        DOUBLE_INCLUSION,
+        INCLUSION,
+        PARTITION,
+        DISJUNCTION,
+        COVER
     }
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""

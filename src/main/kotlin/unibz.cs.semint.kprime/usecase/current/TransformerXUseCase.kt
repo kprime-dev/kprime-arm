@@ -40,77 +40,30 @@ class TransformerXUseCase(
         val name:String)
     : TransformerUseCase {
     private val xpathTransform = XPathTransformUseCase()
+    private val decomposer = TransformerXDecompose(
+            serializer,
+            fileIOAdapter,
+            workingDir,
+            docoTemplateFilePath,
+            decoXPathsFilePath,
+            xpathTransform
+    )
+    private val composer = TransformerXCompose(
+            serializer,
+            fileIOAdapter,
+            workingDir,
+            docoTemplateFilePath,
+            decoXPathsFilePath,
+            xpathTransform
+    )
 
 
     override fun decompose(db: Database, params: Map<String, Any>): Transformation {
-
-//        val functionals = db.schema.functionals()
-//        if (functionals.isEmpty()) return errorTransformation(db,
-//                "ERROR: TransformerXUseCase no functionals")
-
-
-        val dbFilePath = fileIOAdapter.writeOnWorkingFilePath(
-                serializer.prettyDatabase(db), workingDir +  "db_worked.xml")
-        println("Updated db file db_worked.xml")
-
-        val xPaths = File(decoXPathsFilePath).readLines()
-        val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters.putAll(params)
-
-        // check requred parameters
-
-        val changeSet = xpathTransform.compute(
-                dbFilePath, docoTemplateFilePath,
-                xPaths, tranformerParmeters)
-        println("Computed changeSet : $changeSet")
-        val changeSetFileName = "${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_cs.xml"
-        changeSet.id=changeSetFileName
-        val changeSetFilePath = workingDir + changeSetFileName
-        fileIOAdapter.writeOnWorkingFilePath(serializer.prettyChangeSet(changeSet), changeSetFilePath)
-
-        val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
-        val dbFileName = "revision_${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_db.xml"
-        newdb.name=dbFileName
-        val newDbFilePath = workingDir + dbFileName
-        fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(newdb), newDbFilePath)
-        println("Written new db file : $newDbFilePath")
-
-        return Transformation(changeSet, newdb, "TransformerXUseCase.decomposed ")
+        return decomposer.decompose(db,params)
     }
 
     override fun compose(db: Database, params: Map<String, Any>): Transformation {
-        val dbFilePath = fileIOAdapter.writeOnWorkingFilePath(
-                serializer.prettyDatabase(db), workingDir +  "db_worked.xml")
-        println("Updated db file db_worked.xml")
-
-        var xPaths = File(coXPathsFilePath).readLines()
-        val tranformerParmeters = mutableMapOf<String,Any>()
-        tranformerParmeters.putAll(params)
-
-        // check required parameters
-        val failuresOrXPathProperties = checkRequiredParams(xPaths, tranformerParmeters)
-        val failedCheckRequiredParams = failuresOrXPathProperties.first
-        if (failedCheckRequiredParams.isNotEmpty())
-            throw IllegalArgumentException("")
-        xPaths = failuresOrXPathProperties.second
-
-        val changeSet = xpathTransform.compute(
-                dbFilePath, coTemplateFilePath,
-                xPaths, tranformerParmeters)
-        println("Computed changeSet : $changeSet")
-        val changeSetFileName = "${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_cs.xml"
-        changeSet.id=changeSetFileName
-        val changeSetFilePath = workingDir + changeSetFileName
-        fileIOAdapter.writeOnWorkingFilePath(serializer.prettyChangeSet(changeSet), changeSetFilePath)
-
-        val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
-        val dbFileName = "${LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_nnnnnnnnnn"))}_db.xml"
-        newdb.name=dbFileName
-        val newDbFilePath = workingDir + dbFileName
-        fileIOAdapter.writeOnWorkingFilePath(serializer.prettyDatabase(newdb), newDbFilePath)
-        println("Written new db file : $newDbFilePath")
-
-        return Transformation(changeSet, newdb, "TransformerXUseCase.decomposed ")
+        return composer.compose(db,params,::checkRequiredParams)
     }
 
     override fun decomposeApplicable(db: Database, transformationStrategy: TransformationStrategy, transformerParams: Map<String,Any>): Applicability {
@@ -147,7 +100,7 @@ class TransformerXUseCase(
         return Applicability(applicable, message, mutableMap)
     }
 
-    private fun checkRequiredParams(xPathProperties: List<String>, transformerParams: Map<String, Any>): Pair<MutableList<String>, List<String>> {
+    fun checkRequiredParams(xPathProperties: List<String>, transformerParams: Map<String, Any>): Pair<MutableList<String>, List<String>> {
         var xPathProperties1 = xPathProperties
         val failedCheckRequiredParams = mutableListOf<String>()
         if (xPathProperties1.size > 0 && xPathProperties1[0].startsWith("((")) {
