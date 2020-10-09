@@ -69,10 +69,12 @@ class SQLizeCreateUseCase {
     private fun createTableCommand(createTable: CreateTable): String {
         var cols = "  "
         for (col in createTable.columns) {
-            cols+="${col.name} ${col.dbtype} ,"
+            var colType = col.dbtype
+            if (colType == null || colType.trim().isEmpty()) colType = "varchar(64)"
+            cols+="${col.name} ${colType} ,"
         }
         cols = cols.dropLast(2)
-        return "CREATE TABLE ${createTable.name} ($cols);"
+        return "CREATE TABLE IF NOT EXISTS ${createTable.name} ($cols);"
     }
 
     private fun createViewCommand(createView: CreateView):String {
