@@ -11,8 +11,8 @@ class XPathTransformUseCaseTest {
     fun test_compute_vertical_person() {
         val xtransf = XPathTransformUseCase()
         //when
-        val dbFilePath = "/home/nipe/Workspaces/semint-kprime/src/test/resources/db/person.xml"
-        val templateFilePath = "/home/nipe/Workspaces/semint-kprime/src/test/resources/transformer/vertical/decompose/vertical_changeset_1.template"
+        val dbFilePath = "src/test/resources/db/person.xml"
+        val templateFilePath = "transformer/vertical/decompose/vertical_changeset_1.template"
         val xPaths= """
 originTable==/database/schema/constraints/constraints[@type='FUNCTIONAL']/source/@table > 0
 all==/database/schema/tables/tables[@name='originTable']/columns/columns/@name
@@ -34,8 +34,8 @@ view2==+ lhss rhss
     fun test_compute_horizontal_person() {
         val xtransf = XPathTransformUseCase()
         //when
-        val dbFilePath = "/home/nipe/Workspaces/semint-kprime/src/test/resources/db/person.xml"
-        val templateFilePath = "/home/nipe/Workspaces/semint-kprime/src/test/resources/transformer/horizontal/decompose/horizontal_changeset_1.template"
+        val dbFilePath = "src/test/resources/db/person.xml"
+        val templateFilePath = "transformer/horizontal/decompose/horizontal_changeset_1.template"
         val xPaths= listOf(
             "((originTable)),((condition))",
             "all==/database/schema/tables/tables[@name='originTable'][1]/columns/columns/@name"
