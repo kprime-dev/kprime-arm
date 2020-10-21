@@ -128,7 +128,6 @@ class XPathTransformUseCase  {
         }
         //println("listNodeValues:"+listNodeValues.toString())
         return listNodeValues
-        return listNodeValues
     }
 
     fun compute(

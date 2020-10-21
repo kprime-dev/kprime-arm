@@ -74,6 +74,7 @@ class Schema () {
     fun foreignsTable(tableName: String): List<Constraint> {
         return foreignKeys().filter { f -> f.source.name.equals(tableName) }
     }
+
     fun foreignsTargets(tableName: String): List<Constraint> {
         return foreignKeys().filter { f -> f.target.name.equals(tableName) }
     }
@@ -135,7 +136,6 @@ class Schema () {
         tables().add(table)
         return this
     }
-
 
     fun dropTable(commandArgs:String) : Schema {
         var tableNames = commandArgs.split(" ")
