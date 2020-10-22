@@ -9,9 +9,7 @@ import unibz.cs.semint.kprime.usecase.service.SerializerServiceI
 /**
  * Given a Databse will apply changes following a given changeSet modification.
  */
-class ApplyChangeSetUseCase(serializer : SerializerServiceI) {
-
-    val serializer = serializer
+class ApplyChangeSetUseCase(val serializer: SerializerServiceI) {
 
     fun apply(db: Database, changeset: ChangeSet): Database {
         var newdb = serializer.deepclone(db)
@@ -44,8 +42,7 @@ class ApplyChangeSetUseCase(serializer : SerializerServiceI) {
     private fun deriveConstraint(newdb : Database, createTable: CreateTable, olddb:Database) {
         println("=0")
         println(olddb.schema.tables().map { t -> t.name }.joinToString(","))
-        val fromTable = olddb.schema.table(createTable.view)
-        if (fromTable==null) return
+        val fromTable = olddb.schema.table(createTable.view) ?: return
         println("=1")
         println("check deriveConstraint from ${fromTable.name}")
         val contraintToCloneSource = mutableListOf<Constraint>()
