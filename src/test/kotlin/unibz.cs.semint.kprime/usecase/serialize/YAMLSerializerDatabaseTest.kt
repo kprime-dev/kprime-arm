@@ -42,12 +42,14 @@ class YAMLSerializerDatabaseTest {
                 condition: ""
                 parent: null
                 columns: []
+                labels: null
               - name: ""
                 id: ""
                 view: ""
                 condition: ""
                 parent: null
                 columns: []
+                labels: null
               constraints: []
             mappings: []
             source: ""

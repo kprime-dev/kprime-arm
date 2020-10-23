@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
 @JacksonXmlRootElement(localName = "table")
-class Table () {
+class Table (): Labelled {
 
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""
@@ -22,6 +22,11 @@ class Table () {
     var parent: String? = null
 
     var columns= ArrayList<Column>()
+
+    @JacksonXmlProperty(isAttribute = true)
+    var labels: String? = null
+
+    private var labeller = Labeller()
 
     fun hasColumn(nameToFind:String): Boolean {
         for (col in columns) {
@@ -60,6 +65,34 @@ class Table () {
 
     infix fun withCols(cols: Set<Column>) = apply {
         this.columns.addAll(cols)
+    }
+
+    override fun resetLabels(labelsAsString: String): String {
+        labels = labeller.resetLabels(labelsAsString)
+        return labelsAsString()
+    }
+
+    override fun addLabels(labelsAsString: String): String {
+        labels = labeller.addLabels(labelsAsString)
+        return labelsAsString()
+    }
+
+    fun addColomunsLabels(labelsAsString: String): String {
+        for (column in columns) column.addLabels(labelsAsString)
+        return ""
+    }
+
+    override fun addLabels(newLabels: List<Label>): String {
+        labels = labeller.addLabels(newLabels)
+        return labelsAsString()
+    }
+
+    override fun labelsAsString(): String {
+        return labels?: ""
+    }
+
+    override fun hasLabel(label: String): Boolean {
+        return labeller.hasLabel(label)
     }
 
 }

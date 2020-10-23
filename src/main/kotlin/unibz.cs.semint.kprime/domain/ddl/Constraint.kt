@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
 @JacksonXmlRootElement(localName = "constraint")
-class Constraint () {
+class Constraint(): Labelled {
     fun left(): Collection<Column> {
         return source.columns
     }
@@ -41,6 +41,11 @@ class Constraint () {
     @JacksonXmlProperty(isAttribute = false)
     @JacksonXmlElementWrapper(useWrapping = false)
     var target = Target()
+
+    @JacksonXmlProperty(isAttribute = true)
+    var labels: String? = null
+
+    private var labeller = Labeller()
 
     fun clone():Constraint {
         val objectMapper = ObjectMapper()
@@ -136,6 +141,29 @@ class Constraint () {
             }
             return result
         }
+    }
+
+    override fun resetLabels(labelsAsString: String): String {
+        labels = labeller.resetLabels(labelsAsString)
+        return labelsAsString()
+    }
+
+    override fun addLabels(labelsAsString: String): String {
+        labels = labeller.addLabels(labelsAsString)
+        return labelsAsString()
+    }
+
+    override fun addLabels(newLabels: List<Label>): String {
+        labels = labeller.addLabels(newLabels)
+        return labelsAsString()
+    }
+
+    override fun labelsAsString(): String {
+        return labels?: ""
+    }
+
+    override fun hasLabel(label: String): Boolean {
+        return labeller.hasLabel(label)
     }
 
     override fun toString(): String {
