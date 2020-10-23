@@ -2,12 +2,12 @@ package unibz.cs.semint.kprime.domain.ddl
 
 class Labeller: Labelled {
 
-    private lateinit var labels : MutableList<Label>
+    private var labels : MutableList<Label>? = null
 
     override
     fun resetLabels(labelsAsString: String):String {
         if (labels==null) labels = mutableListOf()
-        else labels.clear()
+        else labels?.clear()
         addLabels(labelsAsString)
         return labelsAsString()
     }
@@ -15,14 +15,14 @@ class Labeller: Labelled {
     override
     fun addLabels(labelsAsString: String):String {
         if (labels==null) labels = mutableListOf()
-        labels.addAll(labelsAsString.split(","))
+        labels?.addAll(labelsAsString.split(","))
         return labelsAsString()
     }
 
     override
     fun addLabels(newLabels: List<Label>): String {
         if (labels==null) labels = mutableListOf()
-        labels.addAll(newLabels)
+        labels?.addAll(newLabels)
         return labelsAsString()
     }
 
