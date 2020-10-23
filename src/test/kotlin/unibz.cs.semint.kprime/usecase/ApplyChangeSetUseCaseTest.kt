@@ -99,7 +99,6 @@ class ApplyChangeSetUseCaseTest {
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeset)
         //then
         // checks identity
-        val serializeDb = serializer.serializeDatabase(db)
         val serializeNewDb = serializer.prettyDatabase(newdb)
         val expectedDb = """
             <database name="person" id="" source="">
@@ -172,8 +171,8 @@ class ApplyChangeSetUseCaseTest {
         vsplitChangeSet minus dropPersonTable minus dropPrimaryKeyConstraint
         val table1 = CreateTable() name "person1" withColumn  "K" withColumn "T" withColumn "S"
         val table2 = CreateTable() name "person2" withColumn "T" withColumn "S"
-        val doubleInc = doubleInclusion {}
-        val person2Key = addKey {  }
+        val doubleInc = Constraint.doubleInclusion {}
+        val person2Key = Constraint.addKey {  }
         vsplitChangeSet plus table1 plus  table2 plus doubleInc plus person2Key
         return vsplitChangeSet
     }

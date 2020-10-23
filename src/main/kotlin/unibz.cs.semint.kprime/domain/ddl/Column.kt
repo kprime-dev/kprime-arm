@@ -3,9 +3,8 @@ package unibz.cs.semint.kprime.domain.ddl
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
-import kotlin.math.exp
 
-class Column () {
+class Column (): Labelled {
     @JacksonXmlProperty(isAttribute = true)
     var name: String = ""
     @JacksonXmlProperty(isAttribute = true)
@@ -24,6 +23,10 @@ class Column () {
     var cardinality: String? = null
     @JacksonXmlProperty(isAttribute = true)
     var role: String? = null
+    @JacksonXmlProperty(isAttribute = true)
+    var labels: String? = null
+
+    private var labeller = Labeller()
 
     @JsonCreator
     constructor(
@@ -37,7 +40,7 @@ class Column () {
 
     companion object {
         fun set(expr:String):Set<Column> {
-            if (expr.isEmpty()) return HashSet<Column>()
+            if (expr.isEmpty()) return HashSet()
             val names = expr.replace("\\s+","")
             return set(names.split(","))
         }
@@ -58,8 +61,31 @@ class Column () {
         }
 
     }
+    override fun resetLabels(labelsAsString: String): String {
+        labels = labeller.resetLabels(labelsAsString)
+        return labelsAsString()
+    }
+
+    override fun addLabels(labelsAsString: String): String {
+        labels = labeller.addLabels(labelsAsString)
+        return labelsAsString()
+    }
+
+    override fun addLabels(newLabels: List<Label>): String {
+        labels = labeller.addLabels(newLabels)
+        return labelsAsString()
+    }
+
+    override fun labelsAsString(): String {
+        return labels?: ""
+    }
+
+    override fun hasLabel(label: String): Boolean {
+        return labeller.hasLabel(label)
+    }
+
     override fun toString(): String {
-        return "$name"
+        return name
     }
 
     override fun equals(other: Any?): Boolean {

@@ -5,36 +5,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
-fun addKey(alfa:Constraint.()->Unit):Constraint {
-    val constraint = Constraint()
-    constraint.type = Constraint.TYPE.PRIMARY_KEY.name
-    return constraint
-}
-
-fun foreignkey(alfa:Constraint.()->Unit):Constraint {
-    val constraint = Constraint()
-    constraint.type = Constraint.TYPE.FOREIGN_KEY.name
-    return constraint
-}
-
-fun addFunctional(alfa:Constraint.()->Unit):Constraint {
-    val constraint = Constraint()
-    constraint.type = Constraint.TYPE.FUNCTIONAL.name
-    return constraint
-}
-
-fun inclusion(alfa:Constraint.()->Unit):Constraint {
-    val constraint = Constraint()
-    constraint.type = Constraint.TYPE.INCLUSION.name
-    return constraint
-}
-
-fun doubleInclusion(alfa:Constraint.()->Unit):Constraint {
-    val constraint = Constraint()
-    constraint.type = Constraint.TYPE.DOUBLE_INCLUSION.name
-    return constraint
-}
-
 @JacksonXmlRootElement(localName = "constraint")
 class Constraint () {
     fun left(): Collection<Column> {
@@ -88,6 +58,37 @@ class Constraint () {
 
 
     companion object {
+
+        fun addKey(alfa:Constraint.()->Unit):Constraint {
+            val constraint = Constraint()
+            constraint.type = Constraint.TYPE.PRIMARY_KEY.name
+            return constraint
+        }
+
+        fun foreignkey(alfa:Constraint.()->Unit):Constraint {
+            val constraint = Constraint()
+            constraint.type = Constraint.TYPE.FOREIGN_KEY.name
+            return constraint
+        }
+
+        fun addFunctional(alfa:Constraint.()->Unit):Constraint {
+            val constraint = Constraint()
+            constraint.type = Constraint.TYPE.FUNCTIONAL.name
+            return constraint
+        }
+
+        fun inclusion(alfa:Constraint.()->Unit):Constraint {
+            val constraint = Constraint()
+            constraint.type = Constraint.TYPE.INCLUSION.name
+            return constraint
+        }
+
+        fun doubleInclusion(alfa:Constraint.()->Unit):Constraint {
+            val constraint = Constraint()
+            constraint.type = Constraint.TYPE.DOUBLE_INCLUSION.name
+            return constraint
+        }
+
 
         fun set(exprs : String ):Set<Constraint> {
             if (exprs.equals("")) return HashSet<Constraint>()

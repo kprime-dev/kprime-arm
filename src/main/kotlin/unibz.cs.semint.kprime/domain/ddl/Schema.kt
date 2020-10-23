@@ -178,7 +178,7 @@ class Schema () {
     fun addKey(commandArgs:String):Schema {
         val tableName:String = commandArgs.split(":")[0]
         val attributeNames = commandArgs.split(":")[1]
-        val constraint = addKey {}
+        val constraint = Constraint.addKey {}
         constraint.name = tableName+".primaryKey"
         constraint.source.table=tableName
         constraint.target.table=tableName
@@ -198,7 +198,7 @@ class Schema () {
         val targetTableName:String = target.split(":")[0]
         val targetAttributeNames = target.split(":")[1]
 
-        val constraint = foreignkey {}
+        val constraint = Constraint.foreignkey {}
         constraint.name = "${sourceTableName}_${targetTableName}.foreignKey"
         constraint.source.table=sourceTableName
         constraint.target.table=targetTableName
@@ -218,7 +218,7 @@ class Schema () {
         val targetTableName:String = target.split(":")[0]
         val targetAttributeNames = target.split(":")[1]
 
-        val constraint = doubleInclusion {}
+        val constraint = Constraint.doubleInclusion {}
         constraint.name = "${sourceTableName}_${targetTableName}.doubleInc"
         constraint.source.table=sourceTableName
         constraint.target.table=targetTableName
