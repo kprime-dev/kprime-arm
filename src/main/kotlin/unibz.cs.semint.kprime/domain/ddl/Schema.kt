@@ -53,7 +53,7 @@ class Schema () {
         return keys[0].source.columns.toSet()
     }
 
-    fun addKey(tableName:String, k:Set<Column>) {
+    fun addKey(tableName:String, k:Set<Column>): Constraint {
         val primaryConstraint = Constraint()
         primaryConstraint.name="pkey_$tableName"
         primaryConstraint.source.table="$tableName"
@@ -61,6 +61,7 @@ class Schema () {
         primaryConstraint.target.columns.addAll(k)
         primaryConstraint.type= Constraint.TYPE.PRIMARY_KEY.name
         constraints().add(primaryConstraint)
+        return primaryConstraint
     }
 
     fun keys(): List<Constraint> {
