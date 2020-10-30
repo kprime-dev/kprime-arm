@@ -54,12 +54,12 @@ class SQLizeCreateUseCase {
 
     private fun creatColumnCommands(createTableColumn: CreateColumn): List<String> {
         val addColumns = createTableColumn.columns.map {
-            col ->  AddColumnStatement(createTableColumn.catalog,
+            col -> AddColumnStatement(createTableColumn.catalog,
                                         createTableColumn.schema,
                                         createTableColumn.name,
                                         col.name,
-                             col.type?:"varchar",
-                                        null,
+                                        col.dbtype,
+                                        col.default,
                                         NotNullConstraint())}
         val addColumnsStatement = AddColumnStatement(addColumns)
         val generateSql = AddColumnGenerator().generateSql(

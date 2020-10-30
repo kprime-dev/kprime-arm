@@ -25,6 +25,8 @@ class Column (): Labelled {
     var role: String? = null
     @JacksonXmlProperty(isAttribute = true)
     var labels: String? = null
+    @JacksonXmlProperty(isAttribute = true)
+    var default: Any? = null
 
     private var labeller = Labeller()
 

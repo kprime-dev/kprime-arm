@@ -18,8 +18,12 @@ class SQLizeCreateUseCaseTest {
         val changeSet = ChangeSet()
         val columnsToAdd = CreateColumn()
         columnsToAdd.name = "table1"
-        columnsToAdd.columns.add(Column(name="col1",id="id1",dbname = "dbname1"))
-        columnsToAdd.columns.add(Column(name="col2",id="id1",dbname = "dbname1"))
+        val col1 = Column(name = "col1", id = "id1", dbname = "dbname1")
+        col1.dbtype = "varchar"
+        columnsToAdd.columns.add(col1)
+        val col2 = Column(name = "col2", id = "id1", dbname = "dbname1")
+        col2.dbtype = "varchar"
+        columnsToAdd.columns.add(col2)
         val createColumns = ArrayList<CreateColumn>()
         createColumns.add(columnsToAdd)
         changeSet.createColumn = createColumns
