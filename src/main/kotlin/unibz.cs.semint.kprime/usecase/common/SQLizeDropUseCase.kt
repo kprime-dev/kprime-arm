@@ -1,10 +1,7 @@
 package unibz.cs.semint.kprime.usecase.common
 
 import unibz.cs.semint.kprime.domain.ddl.Constraint
-import unibz.cs.semint.kprime.domain.dml.ChangeSet
-import unibz.cs.semint.kprime.domain.dml.DropConstraint
-import unibz.cs.semint.kprime.domain.dml.DropTable
-import unibz.cs.semint.kprime.domain.dml.DropView
+import unibz.cs.semint.kprime.domain.dml.*
 
 class SQLizeDropUseCase {
 
@@ -16,7 +13,13 @@ class SQLizeDropUseCase {
             commands.add(dropViewCommand(dropView))
         for (dropConstraint in changeset.dropConstraint)
             commands.add(dropConstraintCommand(dropConstraint))
+        for (dropColumn in changeset.dropColumn)
+            commands.add(dropColumnsCommand(dropColumn))
         return commands
+    }
+
+    private fun dropColumnsCommand(dropColumn: DropColumn): String {
+        return "ALTER TABLE ${dropColumn.tableName} DROP COLUMN ${dropColumn.name};"
     }
 
     private fun dropConstraintCommand(dropConstraint: DropConstraint): String {
