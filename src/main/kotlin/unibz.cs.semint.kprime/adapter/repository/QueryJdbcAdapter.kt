@@ -110,6 +110,27 @@ class QueryJdbcAdapter {
         return result
     }
 
+    fun available(datasource: DataSource):Boolean {
+        val source = datasource
+        val user = source.user
+        val pass = source.pass
+        val path = source.path
+        try {
+            val connectionProps = Properties()
+            connectionProps.put("user", user)
+            connectionProps.put("password", pass)
+            println("Looking for driver [${source.driver}] for connection [$path] with user [$user].")
+            Class.forName(source.driver).newInstance()
+            val conn = DriverManager.getConnection(
+                    path, connectionProps)
+            val schema = conn.schema
+            conn.close()
+        } catch (ex: Exception) {
+            return false
+        }
+        return true
+    }
+
     fun create(datasource: DataSource, sqlcreate: String) {
         val source = datasource
         val user = source.user

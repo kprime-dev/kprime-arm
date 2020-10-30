@@ -43,6 +43,8 @@ class YAMLSerializerDatabaseTest {
                 parent: null
                 columns: []
                 labels: null
+                catalog: null
+                schema: null
               - name: ""
                 id: ""
                 view: ""
@@ -50,6 +52,8 @@ class YAMLSerializerDatabaseTest {
                 parent: null
                 columns: []
                 labels: null
+                catalog: null
+                schema: null
               constraints: []
             mappings: []
             source: ""

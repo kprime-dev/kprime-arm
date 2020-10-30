@@ -71,7 +71,7 @@ class XMLSerializerChangeSetTest  {
         assertEquals("""
             <changeSet id="">
               <createView path="" schemaName="" viewName="">select * from table</createView>
-              <createMapping name="film1">
+              <createMapping id="" name="film1">
                 <select>
                   <attributes>
                     <attributes name="Name"/>

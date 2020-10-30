@@ -26,6 +26,12 @@ class Table (): Labelled {
     @JacksonXmlProperty(isAttribute = true)
     var labels: String? = null
 
+    @JacksonXmlProperty(isAttribute = true)
+    var catalog: String? = null
+
+    @JacksonXmlProperty(isAttribute = true)
+    var schema: String? = null
+
     private var labeller = Labeller()
 
     fun hasColumn(nameToFind:String): Boolean {

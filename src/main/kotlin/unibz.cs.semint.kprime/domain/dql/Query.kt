@@ -8,6 +8,8 @@ import unibz.cs.semint.kprime.domain.ddl.Database
 @JacksonXmlRootElement(localName = "query")
 class Query {
     @JacksonXmlProperty(isAttribute = true)
+    var id = ""
+    @JacksonXmlProperty(isAttribute = true)
     var name = ""
     var select = Select()
     @JacksonXmlElementWrapper(useWrapping=false)

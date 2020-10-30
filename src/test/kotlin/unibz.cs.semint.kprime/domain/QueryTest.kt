@@ -44,7 +44,7 @@ class QueryTest {
         var queryXml = XMLSerializerJacksonAdapter().prettyQuery(query) as String
         // then
         assertEquals("""
-            <query name="">
+            <query id="" name="">
               <select>
                 <attributes>
                   <attributes name="Name"/>
@@ -175,7 +175,7 @@ class QueryTest {
         var queryXml = XMLSerializerJacksonAdapter().prettyQuery(query) as String
         // then
         assertEquals("""
-            <query name="">
+            <query id="" name="">
               <select>
                 <attributes>
                   <attributes name="Name"/>

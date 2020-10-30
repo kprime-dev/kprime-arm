@@ -1,12 +1,17 @@
 package unibz.cs.semint.kprime.usecase.common
 
+import liquibase.database.core.H2Database
+import liquibase.sqlgenerator.SqlGenerator
+import liquibase.sqlgenerator.SqlGeneratorChain
+import liquibase.sqlgenerator.core.AddColumnGenerator
+import liquibase.statement.NotNullConstraint
+import liquibase.statement.SqlStatement
+import liquibase.statement.core.AddColumnStatement
 import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.domain.dml.ChangeSet
-import unibz.cs.semint.kprime.domain.dml.CreateConstraint
-import unibz.cs.semint.kprime.domain.dml.CreateTable
-import unibz.cs.semint.kprime.domain.dml.CreateView
+import unibz.cs.semint.kprime.domain.dml.*
 import unibz.cs.semint.kprime.domain.dql.*
+import java.util.*
 
 class SQLizeCreateUseCase {
 
@@ -40,7 +45,28 @@ class SQLizeCreateUseCase {
             commands.add(createViewCommand(createMapping))
         for (createConstraint in changeset.createConstraint)
             commands.add(createConstraintCommand(createConstraint))
+        for (creatColumn in changeset.createColumn)
+            commands.addAll(creatColumnCommands(creatColumn))
         return commands
+    }
+
+    class TreeSetSqlGeneratorChain: SqlGeneratorChain<SqlStatement>(TreeSet<SqlGenerator<SqlStatement>>()) {}
+
+    private fun creatColumnCommands(createTableColumn: CreateColumn): List<String> {
+        val addColumns = createTableColumn.columns.map {
+            col ->  AddColumnStatement(createTableColumn.catalog,
+                                        createTableColumn.schema,
+                                        createTableColumn.name,
+                                        col.name,
+                             col.type?:"varchar",
+                                        null,
+                                        NotNullConstraint())}
+        val addColumnsStatement = AddColumnStatement(addColumns)
+        val generateSql = AddColumnGenerator().generateSql(
+                addColumnsStatement,
+                H2Database(),
+                TreeSetSqlGeneratorChain())
+        return generateSql.map { gs -> gs.toSql() }
     }
 
     private fun createConstraintCommand(createConstraint: CreateConstraint):String {

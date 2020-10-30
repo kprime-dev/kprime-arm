@@ -74,7 +74,7 @@ class XMLSerializerDatabaseTest {
                 <constraints/>
               </schema>
               <mappings>
-                <query name="query1">
+                <query id="" name="query1">
                   <select>
                     <attributes>
                       <attributes name="name"/>

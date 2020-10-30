@@ -33,6 +33,9 @@ class ChangeSet() {
     @JacksonXmlElementWrapper(useWrapping=false)
     var createTable= ArrayList<CreateTable>()
 
+    @JacksonXmlElementWrapper(useWrapping = false)
+    var createColumn= ArrayList<CreateColumn>()
+
     @JacksonXmlElementWrapper(useWrapping=false)
     var createConstraint= ArrayList<CreateConstraint>()
 
@@ -44,6 +47,9 @@ class ChangeSet() {
 
     @JacksonXmlElementWrapper(useWrapping=false)
     var dropTable= ArrayList<DropTable>()
+
+    @JacksonXmlElementWrapper(useWrapping = false)
+    var dropColumn = ArrayList<DropColumn>()
 
     @JacksonXmlElementWrapper(useWrapping=false)
     var dropConstraint= ArrayList<DropConstraint>()
