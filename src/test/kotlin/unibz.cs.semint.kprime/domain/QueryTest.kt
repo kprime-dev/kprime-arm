@@ -70,7 +70,7 @@ class QueryTest {
         var querySql = SQLizeSelectUseCase().sqlize(query)
         // then
         assertEquals1("""
-            SELECT Name,Surname
+            SELECT 'Name','Surname'
             FROM   Table1
             WHERE Name='Gigi' LIMIT 10
             """.trimIndent(),querySql)
@@ -89,10 +89,10 @@ class QueryTest {
         select.from.add(from)
         select.where.condition="a = b"
         // when
-        val selectSql = SQLizeSelectUseCase().sqlize(select)
+        val selectSql = SQLizeSelectUseCase().sqlizeSelect(select)
         // then
         assertEquals1("""
-            SELECT ww
+            SELECT 'ww'
             FROM   tab
             WHERE a = b LIMIT 10
         """.trimIndent(),selectSql)
@@ -117,10 +117,10 @@ class QueryTest {
         select.from.add(from)
         select.where.condition="a = b"
         // when
-        val selectSql = SQLizeSelectUseCase().sqlize(select)
+        val selectSql = SQLizeSelectUseCase().sqlizeSelect(select)
         // then
         assertEquals1("""
-            SELECT ww
+            SELECT 'ww'
             FROM   Orders
             INNER JOIN Customer
             ON Orders.customerId = Customer.customerId
@@ -154,10 +154,10 @@ class QueryTest {
         select.from.add(from)
         select.where.condition="a = b"
         // when
-        val selectSql = SQLizeSelectUseCase().sqlize(select)
+        val selectSql = SQLizeSelectUseCase().sqlizeSelect(select)
         // then
         assertEquals1("""
-            SELECT ww
+            SELECT 'ww'
             FROM   Orders
             INNER JOIN Customer
             ON Orders.customerId = Customer.customerId
@@ -214,11 +214,11 @@ class QueryTest {
         var querySql = SQLizeSelectUseCase().sqlize(query)
         // then
         assertEquals1("""
-            SELECT Name,Surname
+            SELECT 'Name','Surname'
             FROM   Table1
             WHERE Name='Gigi' LIMIT 10
             UNION
-            SELECT Name,Surname
+            SELECT 'Name','Surname'
             FROM   Table2
             WHERE Name='Gigi' LIMIT 10
             """.trimIndent(),querySql)
@@ -321,15 +321,15 @@ class QueryTest {
 
         val sqlize = SQLizeSelectUseCase().sqlize(query)
         assertEquals("""
-            SELECT alfa,beta
+            SELECT 'alfa','beta'
             FROM   tab1
             WHERE a = b LIMIT 10
             UNION
-            SELECT gamma,theta
+            SELECT 'gamma','theta'
             FROM   tab2
             WHERE c = d LIMIT 10
             UNION
-            SELECT delta,zeta
+            SELECT 'delta','zeta'
             FROM   tab3
             WHERE e = f LIMIT 10
         """.trimIndent(),sqlize)
