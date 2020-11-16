@@ -138,18 +138,6 @@ class Schema () {
         return addMultivalued(tableName,setExpression)
     }
 
-    fun addInclusion(commandArgs:String): Schema {
-        val tableName:String = commandArgs.split(":")[0]
-        val setExpression: String= commandArgs.split(":")[1]
-        return addInclusion(tableName,setExpression)
-    }
-
-    fun addDoubleInclusion(commandArgs:String): Schema {
-        val tableName:String = commandArgs.split(":")[0]
-        val setExpression: String= commandArgs.split(":")[1]
-        return addDoubleInclusion(tableName,setExpression)
-    }
-
     fun addTable(commandArgs:String) : Schema {
         val table = SchemaCmdParser.parseTable(commandArgs)
         tables().add(table)
@@ -206,30 +194,6 @@ class Schema () {
         return this
     }
 
-    fun addInclusion(tableName:String, setExpression: String): Schema {
-        val constraintsToAdd = Constraint.set(setExpression)
-        for (constraint in constraintsToAdd) {
-            constraint.name=tableName+".included"
-            constraint.type=Constraint.TYPE.MULTIVALUED.name
-            constraint.source.table=tableName
-            constraint.target.table=tableName
-        }
-        constraints().addAll(constraintsToAdd)
-        return this
-    }
-
-    fun addDoubleInclusion(tableName:String, setExpression: String): Schema {
-        val constraintsToAdd = Constraint.set(setExpression)
-        for (constraint in constraintsToAdd) {
-            constraint.name=tableName+".doubleinc"
-            constraint.type=Constraint.TYPE.MULTIVALUED.name
-            constraint.source.table=tableName
-            constraint.target.table=tableName
-        }
-        constraints().addAll(constraintsToAdd)
-        return this
-    }
-
     fun addKey(commandArgs:String):Schema {
         val tableName:String = commandArgs.split(":")[0]
         val attributeNames = commandArgs.split(":")[1]
@@ -275,6 +239,26 @@ class Schema () {
 
         val constraint = Constraint.doubleInclusion {}
         constraint.name = "${sourceTableName}_${targetTableName}.doubleInc"
+        constraint.source.table=sourceTableName
+        constraint.target.table=targetTableName
+        constraint.source.columns.addAll(Column.set(sourceAttributeNames))
+        constraint.target.columns.addAll(Column.set(targetAttributeNames))
+        constraints().add(constraint)
+        return this
+    }
+
+    fun addInclusion(commandArgs:String):Schema {
+        val source:String = commandArgs.split("-->")[0]
+        val target:String = commandArgs.split("-->")[1]
+
+        val sourceTableName:String = source.split(":")[0]
+        val sourceAttributeNames = source.split(":")[1]
+
+        val targetTableName:String = target.split(":")[0]
+        val targetAttributeNames = target.split(":")[1]
+
+        val constraint = Constraint.inclusion {}
+        constraint.name = "${sourceTableName}_${targetTableName}.inclusion"
         constraint.source.table=sourceTableName
         constraint.target.table=targetTableName
         constraint.source.columns.addAll(Column.set(sourceAttributeNames))
