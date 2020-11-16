@@ -132,6 +132,12 @@ class Schema () {
         return addFunctional(tableName,setExpression)
     }
 
+    fun addMultivalued(commandArgs:String): Schema {
+        val tableName:String = commandArgs.split(":")[0]
+        val setExpression: String= commandArgs.split(":")[1]
+        return addMultivalued(tableName,setExpression)
+    }
+
     fun addTable(commandArgs:String) : Schema {
         val table = SchemaCmdParser.parseTable(commandArgs)
         tables().add(table)
@@ -169,6 +175,18 @@ class Schema () {
         for (constraint in constraintsToAdd) {
             constraint.name=tableName+".functional"
             constraint.type=Constraint.TYPE.FUNCTIONAL.name
+            constraint.source.table=tableName
+            constraint.target.table=tableName
+        }
+        constraints().addAll(constraintsToAdd)
+        return this
+    }
+
+    fun addMultivalued(tableName:String, setExpression: String): Schema {
+        val constraintsToAdd = Constraint.set(setExpression)
+        for (constraint in constraintsToAdd) {
+            constraint.name=tableName+".multivalued"
+            constraint.type=Constraint.TYPE.MULTIVALUED.name
             constraint.source.table=tableName
             constraint.target.table=tableName
         }

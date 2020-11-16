@@ -24,6 +24,7 @@ class Constraint(): Labelled {
         CANDIDATE_KEY,
         SURROGATE_KEY,
         FUNCTIONAL,
+        MULTIVALUED,
         DOUBLE_INCLUSION,
         INCLUSION,
         PARTITION,
