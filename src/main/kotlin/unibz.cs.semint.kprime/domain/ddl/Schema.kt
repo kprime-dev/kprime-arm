@@ -138,6 +138,18 @@ class Schema () {
         return addMultivalued(tableName,setExpression)
     }
 
+    fun addInclusion(commandArgs:String): Schema {
+        val tableName:String = commandArgs.split(":")[0]
+        val setExpression: String= commandArgs.split(":")[1]
+        return addInclusion(tableName,setExpression)
+    }
+
+    fun addDoubleInclusion(commandArgs:String): Schema {
+        val tableName:String = commandArgs.split(":")[0]
+        val setExpression: String= commandArgs.split(":")[1]
+        return addDoubleInclusion(tableName,setExpression)
+    }
+
     fun addTable(commandArgs:String) : Schema {
         val table = SchemaCmdParser.parseTable(commandArgs)
         tables().add(table)
@@ -186,6 +198,30 @@ class Schema () {
         val constraintsToAdd = Constraint.set(setExpression)
         for (constraint in constraintsToAdd) {
             constraint.name=tableName+".multivalued"
+            constraint.type=Constraint.TYPE.MULTIVALUED.name
+            constraint.source.table=tableName
+            constraint.target.table=tableName
+        }
+        constraints().addAll(constraintsToAdd)
+        return this
+    }
+
+    fun addInclusion(tableName:String, setExpression: String): Schema {
+        val constraintsToAdd = Constraint.set(setExpression)
+        for (constraint in constraintsToAdd) {
+            constraint.name=tableName+".included"
+            constraint.type=Constraint.TYPE.MULTIVALUED.name
+            constraint.source.table=tableName
+            constraint.target.table=tableName
+        }
+        constraints().addAll(constraintsToAdd)
+        return this
+    }
+
+    fun addDoubleInclusion(tableName:String, setExpression: String): Schema {
+        val constraintsToAdd = Constraint.set(setExpression)
+        for (constraint in constraintsToAdd) {
+            constraint.name=tableName+".doubleinc"
             constraint.type=Constraint.TYPE.MULTIVALUED.name
             constraint.source.table=tableName
             constraint.target.table=tableName
