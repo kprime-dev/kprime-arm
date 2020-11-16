@@ -58,6 +58,10 @@ class Table (): Labelled {
         return false
     }
 
+    fun colByName(colName:String):Column? {
+        return columns?.filter { c-> c.name==colName }?.first()
+    }
+
     infix fun id(id: String ) = apply {
         this.id = id
     }
