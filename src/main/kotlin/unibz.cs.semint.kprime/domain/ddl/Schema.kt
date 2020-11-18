@@ -171,14 +171,8 @@ class Schema () {
     }
 
     fun addFunctional(tableName:String, setExpression: String): Schema {
-        val constraintsToAdd = Constraint.set(setExpression)
-        for (constraint in constraintsToAdd) {
-            constraint.name=tableName+".functional"
-            constraint.type=Constraint.TYPE.FUNCTIONAL.name
-            constraint.source.table=tableName
-            constraint.target.table=tableName
-        }
-        constraints().addAll(constraintsToAdd)
+        constraints().addAll(SchemaCmdParser
+                .parseFunctionals(tableName, setExpression))
         return this
     }
 

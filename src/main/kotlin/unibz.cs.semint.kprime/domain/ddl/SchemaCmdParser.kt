@@ -11,5 +11,16 @@ object SchemaCmdParser {
         return table
     }
 
+    fun parseFunctionals(tableName: String,setExpression: String): Set<Constraint> {
+        val constraintsToAdd = Constraint.set(setExpression)
+        for (constraint in constraintsToAdd) {
+            constraint.name = tableName + ".functional"
+            constraint.type = Constraint.TYPE.FUNCTIONAL.name
+            constraint.source.table = tableName
+            constraint.target.table = tableName
+        }
+        return constraintsToAdd
+    }
+
 
 }
