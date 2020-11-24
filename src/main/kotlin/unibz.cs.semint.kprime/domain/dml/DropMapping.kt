@@ -7,4 +7,9 @@ class DropMapping {
 
     @JacksonXmlProperty(isAttribute = true)
     var name :String = ""
+
+    infix fun withName(newname: String) = apply {
+        this.name = newname
+    }
+
 }
