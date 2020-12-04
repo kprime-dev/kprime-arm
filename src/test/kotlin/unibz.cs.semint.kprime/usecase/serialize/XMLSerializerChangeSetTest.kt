@@ -77,9 +77,7 @@ class XMLSerializerChangeSetTest  {
                     <attributes name="Name"/>
                     <attributes name="Surname"/>
                   </attributes>
-                  <from>
-                    <from tableName="film" alias=""/>
-                  </from>
+                  <from tableName="film" alias=""/>
                   <where condition="Name='Gigi'"/>
                 </select>
                 <union/>

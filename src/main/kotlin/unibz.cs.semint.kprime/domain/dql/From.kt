@@ -3,7 +3,16 @@ package unibz.cs.semint.kprime.domain.dql
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import unibz.cs.semint.kprime.domain.ddl.Column
 
-class From {
+class From() {
+
+    constructor(name:String): this(){
+        tableName = name
+    }
+    constructor(name:String,alias:String): this(){
+        this.tableName = name
+        this.alias = alias
+    }
+
     @JacksonXmlProperty(isAttribute = true)
     var tableName=String()
     @JacksonXmlProperty(isAttribute = true)
@@ -14,5 +23,9 @@ class From {
     fun addJoin(join: Join ) {
         if (joins==null) joins = ArrayList<Join>()
         joins!!.add(join)
+    }
+
+    infix fun withName(name:String) {
+        this.tableName = name
     }
 }

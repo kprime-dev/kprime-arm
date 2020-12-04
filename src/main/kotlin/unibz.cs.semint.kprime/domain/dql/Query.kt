@@ -40,7 +40,7 @@ class Query {
             select.attributes.add(attr)
             val fromT1 = From()
             fromT1.tableName = tableName
-            select.from.add(fromT1)
+            select.from = fromT1
             return query
         }
 
@@ -52,7 +52,7 @@ class Query {
             select.attributes.add(attr)
             val fromT1 = From()
             fromT1.tableName = tableName
-            select.from.add(fromT1)
+            select.from = fromT1
             select.where.condition = condition
             return query
         }
@@ -64,7 +64,7 @@ class Query {
             select.attributes.addAll(colNames)
             val fromT1 = From()
             fromT1.tableName = tableName
-            select.from.add(fromT1)
+            select.from = fromT1
             select.where.condition = condition
             return query
         }
@@ -76,7 +76,7 @@ class Query {
             select.attributes.addAll(colNames)
             val fromT1 = From()
             fromT1.tableName = database.lineage(tableName).last()
-            select.from.add(fromT1)
+            select.from = fromT1
             return query
         }
 

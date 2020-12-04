@@ -52,15 +52,20 @@ class SQLizeSelectUseCase {
 
     private fun sqlizeFrom(select: Select, sql: String): String {
         var sql1 = sql
-        for (from in select.from) {
-            sql1 += "  ${from.tableName}"
-            if (!from.alias.isEmpty()) sql1 += " AS ${from.alias}"
-            sql1 += System.lineSeparator()
-            if (from.joins != null) {
-                for (join in from.joins as ArrayList<Join>) {
-                    sql1 += "${join.joinType} JOIN ${join.joinRightTable}" + System.lineSeparator()
-                    sql1 += "ON ${join.joinLeftTable}.${join.joinOnLeft} = ${join.joinRightTable}.${join.joinOnRight}" + System.lineSeparator()
+        val from = select.from
+        sql1 += "  ${from.tableName}"
+        if (!from.alias.isEmpty()) sql1 += " AS ${from.alias}"
+        sql1 += System.lineSeparator()
+        if (from.joins != null) {
+            for (join in from.joins as ArrayList<Join>) {
+                sql1 += "${join.joinType} JOIN ${join.joinRightTable}"
+                var rightTableToJoin = join.joinRightTable
+                if (join.joinRightTableAlias!=null && join.joinRightTableAlias!!.isNotEmpty()) {
+                    rightTableToJoin = join.joinRightTableAlias!!
+                    sql1 += " AS ${join.joinRightTableAlias}"
                 }
+                sql1 += System.lineSeparator()
+                sql1 += "ON ${join.joinLeftTableAlias}.${join.joinOnLeft} = ${rightTableToJoin}.${join.joinOnRight}" + System.lineSeparator()
             }
         }
         return sql1

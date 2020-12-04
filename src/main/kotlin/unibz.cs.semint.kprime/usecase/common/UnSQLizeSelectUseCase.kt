@@ -1,8 +1,31 @@
 package unibz.cs.semint.kprime.usecase.common
 
+import liquibase.change.core.RawSQLChange
+import liquibase.database.Database
+import net.sf.jsqlparser.parser.CCJSqlParserManager
+import net.sf.jsqlparser.parser.CCJSqlParserUtil
+import net.sf.jsqlparser.schema.Table
+import net.sf.jsqlparser.statement.StatementVisitor
+import net.sf.jsqlparser.statement.select.PlainSelect
+import net.sf.jsqlparser.statement.select.SelectVisitorAdapter
+import net.sf.jsqlparser.util.TablesNamesFinder
+import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.dql.*
+import java.io.StringReader
 
 class UnSQLizeSelectUseCase {
+
+    fun fromsql2(queryname: String, sqlquery : String):Query {
+        val query = Query()
+        query.name = queryname
+        val parserManager = CCJSqlParserManager();
+        val stmt = parserManager.parse(StringReader(sqlquery)) as net.sf.jsqlparser.statement.select.Select;
+        val plainSelect = stmt.selectBody as PlainSelect
+        query.select.from = From((plainSelect.fromItem as Table).name)
+        query.select.attributes = (plainSelect.selectItems as List<net.sf.jsqlparser.schema.Column>).map { c -> Attribute(c.columnName) }.toMutableList()
+        query.select.where = Where(plainSelect.where.toString())
+        return query
+    }
 
     fun fromsql(queryname: String, sqlquery : String):Query {
         val query = Query()
@@ -48,7 +71,7 @@ class UnSQLizeSelectUseCase {
     private fun parseFrom(select: Select, sqlline: String) {
         if (sqlline.startsWith("FROM ")) {
             val split = sqlline.drop(5).split(",")
-            select.from = split.map { aname -> var a = From(); a.tableName=aname.trim(); a }.toCollection(ArrayList<From>())
+            select.from = From(split[0].trim())
         }
     }
     private fun parseWhere(select: Select, sqlline: String) {

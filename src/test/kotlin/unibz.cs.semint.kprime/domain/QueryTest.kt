@@ -21,7 +21,7 @@ class QueryTest {
         select.attributes.add(attr)
         val fromT1 = From()
         fromT1.tableName = tableName
-        select.from.add(fromT1)
+        select.from = fromT1
         select.where.condition = "Name='Gigi'"
         return query
     }
@@ -50,9 +50,7 @@ class QueryTest {
                   <attributes name="Name"/>
                   <attributes name="Surname"/>
                 </attributes>
-                <from>
-                  <from tableName="Table1" alias=""/>
-                </from>
+                <from tableName="Table1" alias=""/>
                 <where condition="Name='Gigi'"/>
               </select>
               <union/>
@@ -86,7 +84,7 @@ class QueryTest {
         select.attributes.add(att)
         val from = From()
         from.tableName="tab"
-        select.from.add(from)
+        select.from = from
         select.where.condition="a = b"
         // when
         val selectSql = SQLizeSelectUseCase().sqlizeSelect(select)
@@ -108,13 +106,13 @@ class QueryTest {
         val from = From()
         from.tableName="Orders"
         val join = Join()
-        join.joinLeftTable = "Orders"
+        join.joinLeftTableAlias = "Orders"
         join.joinOnLeft = "customerId"
         join.joinRightTable = "Customer"
         join.joinOnRight = "customerId"
         join.joinType = "INNER"
         from.addJoin(join)
-        select.from.add(from)
+        select.from = from
         select.where.condition="a = b"
         // when
         val selectSql = SQLizeSelectUseCase().sqlizeSelect(select)
@@ -138,20 +136,20 @@ class QueryTest {
         val from = From()
         from.tableName="Orders"
         val join = Join()
-        join.joinLeftTable = "Orders"
+        join.joinLeftTableAlias = "Orders"
         join.joinOnLeft = "customerId"
         join.joinRightTable = "Customer"
         join.joinOnRight = "customerId"
         join.joinType = "INNER"
         from.addJoin(join)
         val join2 = Join()
-        join2.joinLeftTable = "Customer"
+        join2.joinLeftTableAlias = "Customer"
         join2.joinOnLeft = "orderId"
         join2.joinRightTable = "Sales"
         join2.joinOnRight = "orderId"
         join2.joinType = "LEFT"
         from.addJoin(join2)
-        select.from.add(from)
+        select.from= from
         select.where.condition="a = b"
         // when
         val selectSql = SQLizeSelectUseCase().sqlizeSelect(select)
@@ -181,9 +179,7 @@ class QueryTest {
                   <attributes name="Name"/>
                   <attributes name="Surname"/>
                 </attributes>
-                <from>
-                  <from tableName="Table1" alias=""/>
-                </from>
+                <from tableName="Table1" alias=""/>
                 <where condition="Name='Gigi'"/>
               </select>
               <union>
@@ -193,9 +189,7 @@ class QueryTest {
                       <attributes name="Name"/>
                       <attributes name="Surname"/>
                     </attributes>
-                    <from>
-                      <from tableName="Table2" alias=""/>
-                    </from>
+                    <from tableName="Table2" alias=""/>
                     <where condition="Name='Gigi'"/>
                   </selects>
                 </selects>
@@ -240,7 +234,7 @@ class QueryTest {
         """.trimIndent()
         val query = UnSQLizeSelectUseCase().fromsql("query1",sqlQuery)
         assertEquals("*",query.select.attributes[0].name)
-        assertEquals("tab1",query.select.from[0].tableName)
+        assertEquals("tab1",query.select.from.tableName)
     }
 
     @Test
@@ -254,7 +248,7 @@ class QueryTest {
         val query = UnSQLizeSelectUseCase().fromsql("query1",sqlQuery)
         assertEquals("alfa",query.select.attributes[0].name)
         assertEquals("beta",query.select.attributes[1].name)
-        assertEquals("tab1",query.select.from[0].tableName)
+        assertEquals("tab1",query.select.from.tableName)
         assertEquals("a = b",query.select.where.condition)
     }
 
@@ -274,13 +268,13 @@ class QueryTest {
         assertEquals(1,query.union?.selects()?.size)
         assertEquals("alfa",   query.select.attributes[0].name)
         assertEquals("beta",   query.select.attributes[1].name)
-        assertEquals("tab1",    query.select.from[0].tableName)
+        assertEquals("tab1",    query.select.from.tableName)
         assertEquals("a = b",   query.select.where.condition)
 
         val select = query.union!!.selects()[0]
         assertEquals("gamma",    select.attributes[0].name)
         assertEquals("theta",    select.attributes[1].name)
-        assertEquals("tab2",    select.from[0].tableName)
+        assertEquals("tab2",    select.from.tableName)
         assertEquals("c = d",    select.where.condition)
     }
 
@@ -304,19 +298,19 @@ class QueryTest {
         assertEquals(2,query.union!!.selects().size)
         assertEquals("alfa",   query.select.attributes[0].name)
         assertEquals("beta",   query.select.attributes[1].name)
-        assertEquals("tab1",    query.select.from[0].tableName)
+        assertEquals("tab1",    query.select.from.tableName)
         assertEquals("a = b",   query.select.where.condition)
 
         val select = query.union!!.selects()[0]
         assertEquals("gamma",    select.attributes[0].name)
         assertEquals("theta",    select.attributes[1].name)
-        assertEquals("tab2",    select.from[0].tableName)
+        assertEquals("tab2",    select.from.tableName)
         assertEquals("c = d",    select.where.condition)
 
         val select1 = query.union!!.selects()[1]
         assertEquals("delta",    select1.attributes[0].name)
         assertEquals("zeta",    select1.attributes[1].name)
-        assertEquals("tab3",    select1.from[0].tableName)
+        assertEquals("tab3",    select1.from.tableName)
         assertEquals("e = f",    select1.where.condition)
 
         val sqlize = SQLizeSelectUseCase().sqlize(query)

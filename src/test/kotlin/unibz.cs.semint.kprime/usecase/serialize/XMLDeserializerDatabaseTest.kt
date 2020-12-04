@@ -64,9 +64,7 @@ class XMLDeserializerDatabaseTest {
                     <attributes>
                       <attributes name="name"/>
                     </attributes>
-                    <from>
                       <from tableName="people" alias=""/>
-                    </from>
                     <where condition=""/>
                   </select>
                 </query>
@@ -75,9 +73,7 @@ class XMLDeserializerDatabaseTest {
                     <attributes>
                       <attributes name="name"/>
                     </attributes>
-                    <from>
                       <from tableName="people" alias=""/>
-                    </from>
                     <where condition=""/>
                   </select>
                 </query>
@@ -93,7 +89,7 @@ class XMLDeserializerDatabaseTest {
         assertNotNull(database.mappings)
         assertEquals(database.mappings().size,2)
         assertNotNull(database.mapping("query1"))
-        assertEquals("people",deserialized!!.ok!!.mapping("query1")!!.select!!.from[0]?.tableName)
+        assertEquals("people",deserialized!!.ok!!.mapping("query1")!!.select!!.from?.tableName)
 
         val db = deserialized.ok!!
 
@@ -105,7 +101,7 @@ class XMLDeserializerDatabaseTest {
         assertEquals(3, db.mappings().size)
         assertNotNull(database.mapping("query2"))
         assertEquals("*",deserialized!!.ok!!.mapping("query2")!!.select!!.attributes[0]?.name)
-        assertEquals("alias",deserialized!!.ok!!.mapping("query2")!!.select!!.from[0]?.tableName)
+        assertEquals("alias",deserialized!!.ok!!.mapping("query2")!!.select!!.from?.tableName)
 
     }
 

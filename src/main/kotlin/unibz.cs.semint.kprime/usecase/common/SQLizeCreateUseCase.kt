@@ -27,10 +27,10 @@ class SQLizeCreateUseCase {
         return sqlCommands
     }
 
-    private fun createViewCommand(mapping: Query): String {
+    fun createViewCommand(mapping: Query): String {
         var command = """
-    CREATE OR REPLACE VIEW public.${mapping.name} AS
-    ${SQLizeSelectUseCase().sqlize(mapping)}
+CREATE OR REPLACE VIEW public.${mapping.name} AS
+${SQLizeSelectUseCase().sqlize(mapping)}
                     """.trimIndent()
         return command
     }
@@ -75,7 +75,6 @@ class SQLizeCreateUseCase {
             Constraint.TYPE.FOREIGN_KEY.name -> { return createForeignKey(createConstraint)}
             else -> return ""
         }
-
     }
 
     private fun createForeignKey(createConstraint: CreateConstraint): String {

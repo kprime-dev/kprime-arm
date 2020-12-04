@@ -55,9 +55,7 @@ class XMLSerializerDatabaseTest {
         val attr = Attribute()
         attr.name="name"
         query.select.attributes.add(attr)
-        val from = From()
-        from.tableName="people"
-        query.select.from.add(from)
+        query.select.from = From("people")
         query.name = "query1"
         database.mappings!!.add(query)
         // when
@@ -79,9 +77,7 @@ class XMLSerializerDatabaseTest {
                     <attributes>
                       <attributes name="name"/>
                     </attributes>
-                    <from>
-                      <from tableName="people" alias=""/>
-                    </from>
+                    <from tableName="people" alias=""/>
                     <where condition=""/>
                   </select>
                   <union/>

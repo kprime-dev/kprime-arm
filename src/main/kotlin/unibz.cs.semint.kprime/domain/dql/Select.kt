@@ -6,8 +6,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 @JacksonXmlRootElement(localName = "select")
 class Select {
 
-    var attributes = ArrayList<Attribute>()
-    var from = ArrayList<From>()
+    var attributes : MutableList<Attribute> = ArrayList<Attribute>()
+    var from = From()
     var where = Where()
     @JacksonXmlProperty(isAttribute = true)
     var limit : String? = null
