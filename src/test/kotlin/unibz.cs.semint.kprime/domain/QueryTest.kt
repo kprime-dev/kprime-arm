@@ -107,9 +107,9 @@ class QueryTest {
         from.tableName="Orders"
         val join = Join()
         join.joinLeftTableAlias = "Orders"
-        join.joinOnLeft = "customerId"
+        join.joinOnLeft = "Orders.customerId"
         join.joinRightTable = "Customer"
-        join.joinOnRight = "customerId"
+        join.joinOnRight = "Customer.customerId"
         join.joinType = "INNER"
         from.addJoin(join)
         select.from = from
@@ -137,16 +137,16 @@ class QueryTest {
         from.tableName="Orders"
         val join = Join()
         join.joinLeftTableAlias = "Orders"
-        join.joinOnLeft = "customerId"
+        join.joinOnLeft = "Orders.customerId"
         join.joinRightTable = "Customer"
-        join.joinOnRight = "customerId"
+        join.joinOnRight = "Customer.customerId"
         join.joinType = "INNER"
         from.addJoin(join)
         val join2 = Join()
         join2.joinLeftTableAlias = "Customer"
-        join2.joinOnLeft = "orderId"
+        join2.joinOnLeft = "Customer.orderId"
         join2.joinRightTable = "Sales"
-        join2.joinOnRight = "orderId"
+        join2.joinOnRight = "Sales.orderId"
         join2.joinType = "LEFT"
         from.addJoin(join2)
         select.from= from

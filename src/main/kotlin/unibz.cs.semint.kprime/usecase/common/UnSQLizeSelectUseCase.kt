@@ -1,15 +1,8 @@
 package unibz.cs.semint.kprime.usecase.common
 
-import liquibase.change.core.RawSQLChange
-import liquibase.database.Database
 import net.sf.jsqlparser.parser.CCJSqlParserManager
-import net.sf.jsqlparser.parser.CCJSqlParserUtil
 import net.sf.jsqlparser.schema.Table
-import net.sf.jsqlparser.statement.StatementVisitor
 import net.sf.jsqlparser.statement.select.PlainSelect
-import net.sf.jsqlparser.statement.select.SelectVisitorAdapter
-import net.sf.jsqlparser.util.TablesNamesFinder
-import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.dql.*
 import java.io.StringReader
 
@@ -30,11 +23,13 @@ class UnSQLizeSelectUseCase {
     fun fromsql(queryname: String, sqlquery : String):Query {
         val query = Query()
         query.name = queryname
-        val lines = sqlquery.split(System.lineSeparator())
+        val lines = splitSqlToLines(sqlquery).map { line -> uppercaseSqlKeyWords(line) }
         for (line in lines){
             val select = query.select
             parseSelect(select,line)
             parseFrom(select,line)
+            parseJoin(select,line)
+            parseJoinOn(select,line)
             parseWhere(select,line)
             parseUnionMinus(query,line)
         }
@@ -51,6 +46,51 @@ class UnSQLizeSelectUseCase {
         return query
     }
 
+    private fun uppercaseSqlKeyWords(sqlquery: String): String {
+        return sqlquery.split(" ")
+                .map { s->s.trim() }
+                .map { s-> uppercaseKey(s) }
+                .joinToString(" ")
+    }
+    private  val sqlKeywords = listOf(
+            "select","as","from","where","union","minus","join","on"
+    )
+
+    private fun uppercaseKey(key: String):String {
+        if (sqlKeywords.contains(key.trim())) return key.toUpperCase()
+        return key
+    }
+
+    private fun splitSqlToLines(sqlquery: String): List<String> {
+        val lines = sqlquery.split(System.lineSeparator())
+        return lines.flatMap { line->splitOnKeyWords(line) }
+    }
+
+    private  val sqlKeywordsLineSeparators = listOf(
+            "SELECT","FROM","WHERE","UNION","MINUS"," JOIN "," ON ",
+            "select","from","where","union","minus"," join "," on "
+    )
+
+    internal fun splitOnKeyWords(line:String): List<String> {
+        println("to split: '$line'")
+        val result = mutableListOf<String>()
+        var token = line
+        do {
+            var found = false
+            for (keyword in sqlKeywordsLineSeparators) {
+                val indexOfKeyWord = token.indexOf(keyword)
+                if (indexOfKeyWord >1) {
+                    result.add(token.substring(0,indexOfKeyWord).trim())
+                    token = token.substring(indexOfKeyWord)
+                    found = true
+                }
+            }
+        } while(found)
+        result.add(token.trim())
+        result.forEach { println(it) }
+        return result
+    }
+
     private fun parseUnionMinus(query: Query, sqlline: String) {
         if (sqlline.startsWith("UNION")) {
             query.safeUnion().selects().add(query.select)
@@ -65,15 +105,57 @@ class UnSQLizeSelectUseCase {
     private fun parseSelect(select: Select, sqlline: String) {
         if (sqlline.startsWith("SELECT ")) {
             val split = sqlline.drop(7).split(",")
-            select.attributes= split.map { aname -> var a = Attribute(); a.name=aname.trim(); a }.toCollection(ArrayList<Attribute>())
+            select.attributes= split.map { aname -> parseAttribute(aname) }.toCollection(ArrayList<Attribute>())
         }
     }
+
+    private fun parseAttribute(sqlAttribute: String):Attribute {
+        val indexOfAS = sqlAttribute.indexOf("AS ")
+        return if (indexOfAS>0) {
+            val tokens = sqlAttribute.trim().split(" ")
+            val name = tokens[0].trim()
+            val asName = tokens[2].trim()
+            Attribute(name, asName)
+        } else {
+            val name = sqlAttribute.trim()
+            Attribute(name, "")
+        }
+    }
+
     private fun parseFrom(select: Select, sqlline: String) {
         if (sqlline.startsWith("FROM ")) {
-            val split = sqlline.drop(5).split(",")
+            val split = sqlline.drop(5).split("AS")
             select.from = From(split[0].trim())
+            if (split.size>1)
+                select.from.alias = split[1].trim()
         }
     }
+
+    private fun parseJoin(select: Select, sqlline: String) {
+        if (sqlline.startsWith("JOIN ")) {
+            val split = sqlline.drop(5).split("AS")
+            val join = Join()
+            join.joinLeftTableAlias = select.from.tableName
+            if (select.from.alias?.isNotEmpty())
+                join.joinLeftTableAlias = select.from.alias
+            join.joinRightTable = split[0].trim()
+            if (split.size>1)
+                join.joinRightTableAlias = split[1].trim()
+            select.from.addJoin(join)
+        }
+    }
+
+    private fun parseJoinOn(select: Select, sqlline: String) {
+        if (sqlline.startsWith("ON ")) {
+            val split = sqlline.drop(3).split("=")
+            val join = select.from.joins?.last()
+            if (join!=null) {
+                join.joinOnLeft = split[0].trim()
+                join.joinOnRight = split[1].trim()
+            }
+        }
+    }
+
     private fun parseWhere(select: Select, sqlline: String) {
         if (sqlline.startsWith("WHERE ")) {
             val condition = sqlline.drop(6)

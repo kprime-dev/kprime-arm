@@ -65,7 +65,7 @@ class SQLizeSelectUseCase {
                     sql1 += " AS ${join.joinRightTableAlias}"
                 }
                 sql1 += System.lineSeparator()
-                sql1 += "ON ${join.joinLeftTableAlias}.${join.joinOnLeft} = ${rightTableToJoin}.${join.joinOnRight}" + System.lineSeparator()
+                sql1 += "ON ${join.joinOnLeft} = ${join.joinOnRight}" + System.lineSeparator()
             }
         }
         return sql1
