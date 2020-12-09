@@ -28,6 +28,12 @@ class Schema () {
         return ArrayList()
     }
 
+    fun constraintsByType(type :Constraint.TYPE): Set<Constraint> {
+        var resultCols = mutableSetOf<Column>()
+        return constraints().filter { c ->
+            c.type == type.name }.toSet()
+    }
+
     fun tables():ArrayList<Table> {
         if (tables!=null) return tables as ArrayList<Table>
         return ArrayList()
@@ -54,13 +60,18 @@ class Schema () {
     }
 
     fun addKey(tableName:String, k:Set<Column>): Constraint {
+        val primaryConstraint = buildKey(tableName, k)
+        constraints().add(primaryConstraint)
+        return primaryConstraint
+    }
+
+    fun buildKey(tableName: String, k: Set<Column>): Constraint {
         val primaryConstraint = Constraint()
-        primaryConstraint.name="pkey_$tableName"
-        primaryConstraint.source.table="$tableName"
+        primaryConstraint.name = "pkey_$tableName"
+        primaryConstraint.source.table = "$tableName"
         primaryConstraint.source.columns.addAll(k)
         primaryConstraint.target.columns.addAll(k)
-        primaryConstraint.type= Constraint.TYPE.PRIMARY_KEY.name
-        constraints().add(primaryConstraint)
+        primaryConstraint.type = Constraint.TYPE.PRIMARY_KEY.name
         return primaryConstraint
     }
 

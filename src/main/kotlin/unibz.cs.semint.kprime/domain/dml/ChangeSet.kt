@@ -94,9 +94,7 @@ class ChangeSet() {
     }
 
     fun size(): Int {
-        return createView.size +createTable.size + createConstraint.size
-            + dropView.size + dropTable.size + dropConstraint.size
-            + dropMapping.size
+        return createView.size +createTable.size + createConstraint.size + createMapping.size + dropView.size + dropTable.size + dropConstraint.size + dropMapping.size
     }
 
     @JsonIgnore
