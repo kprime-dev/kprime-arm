@@ -28,10 +28,10 @@ class Schema () {
         return ArrayList()
     }
 
-    fun constraintsByType(type :Constraint.TYPE): Set<Constraint> {
+    fun constraintsByType(type :Constraint.TYPE): List<Constraint> {
         var resultCols = mutableSetOf<Column>()
         return constraints().filter { c ->
-            c.type == type.name }.toSet()
+            c.type == type.name }
     }
 
     fun tables():ArrayList<Table> {
@@ -125,18 +125,6 @@ class Schema () {
         return first[0].target.columns.toSet()
     }
 
-    internal fun addFunctional(tableName:String, lhs:Set<Column>, rhs:Set<Column>){
-        val functionalConstraint = Constraint()
-        functionalConstraint.name="functional.$tableName"
-        functionalConstraint.source.table="$tableName"
-        functionalConstraint.source.columns.addAll(lhs)
-        functionalConstraint.target.table="$tableName"
-        functionalConstraint.target.columns.addAll(rhs)
-        functionalConstraint.type= Constraint.TYPE.FUNCTIONAL.name
-        constraints().add(functionalConstraint)
-
-    }
-
     fun addFunctional(commandArgs:String): Schema {
         val tableName:String = commandArgs.split(":")[0]
         val setExpression: String= commandArgs.split(":")[1]
@@ -151,6 +139,8 @@ class Schema () {
 
     fun addTable(commandArgs:String) : Schema {
         val table = SchemaCmdParser.parseTable(commandArgs)
+        val tablePos=tables().size+1
+        table.id="t$tablePos"
         tables().add(table)
         return this
     }
@@ -187,10 +177,26 @@ class Schema () {
         return this
     }
 
+    internal fun addFunctional(tableName:String, lhs:Set<Column>, rhs:Set<Column>){
+        val constraintPos = constraintsByType(Constraint.TYPE.FUNCTIONAL).size+1
+        val functionalConstraint = Constraint()
+        functionalConstraint.id="cf$constraintPos"
+        functionalConstraint.name="functional$constraintPos.$tableName"
+        functionalConstraint.source.table="$tableName"
+        functionalConstraint.source.columns.addAll(lhs)
+        functionalConstraint.target.table="$tableName"
+        functionalConstraint.target.columns.addAll(rhs)
+        functionalConstraint.type= Constraint.TYPE.FUNCTIONAL.name
+        constraints().add(functionalConstraint)
+
+    }
+
     fun addMultivalued(tableName:String, setExpression: String): Schema {
+        val constraintPos = constraintsByType(Constraint.TYPE.MULTIVALUED).size+1
         val constraintsToAdd = Constraint.set(setExpression)
         for (constraint in constraintsToAdd) {
-            constraint.name=tableName+".multivalued"
+            constraint.id="cm$constraintPos"
+            constraint.name=tableName+".multivalued$constraintPos"
             constraint.type=Constraint.TYPE.MULTIVALUED.name
             constraint.source.table=tableName
             constraint.target.table=tableName
@@ -203,6 +209,7 @@ class Schema () {
         val tableName:String = commandArgs.split(":")[0]
         val attributeNames = commandArgs.split(":")[1]
         val constraint = Constraint.addKey {}
+        constraint.id="ck_$tableName"
         constraint.name = tableName+".primaryKey"
         constraint.source.table=tableName
         constraint.target.table=tableName
@@ -222,8 +229,10 @@ class Schema () {
         val targetTableName:String = target.split(":")[0]
         val targetAttributeNames = target.split(":")[1]
 
+        val constraintPos = constraintsByType(Constraint.TYPE.FOREIGN_KEY).size+1
         val constraint = Constraint.foreignkey {}
-        constraint.name = "${sourceTableName}_${targetTableName}.foreignKey"
+        constraint.id="cfk$constraintPos"
+        constraint.name = "${sourceTableName}_${targetTableName}.foreignKey$constraintPos"
         constraint.source.table=sourceTableName
         constraint.target.table=targetTableName
         constraint.source.columns.addAll(Column.set(sourceAttributeNames))
@@ -242,8 +251,10 @@ class Schema () {
         val targetTableName:String = target.split(":")[0]
         val targetAttributeNames = target.split(":")[1]
 
+        val constraintPos = constraintsByType(Constraint.TYPE.DOUBLE_INCLUSION).size+1
         val constraint = Constraint.doubleInclusion {}
-        constraint.name = "${sourceTableName}_${targetTableName}.doubleInc"
+        constraint.id="cdi$constraintPos"
+        constraint.name = "${sourceTableName}_${targetTableName}.doubleInc$constraintPos"
         constraint.source.table=sourceTableName
         constraint.target.table=targetTableName
         constraint.source.columns.addAll(Column.set(sourceAttributeNames))
@@ -262,8 +273,10 @@ class Schema () {
         val targetTableName:String = target.split(":")[0]
         val targetAttributeNames = target.split(":")[1]
 
+        val constraintPos = constraintsByType(Constraint.TYPE.INCLUSION).size+1
         val constraint = Constraint.inclusion {}
-        constraint.name = "${sourceTableName}_${targetTableName}.inclusion"
+        constraint.id="ci$constraintPos"
+        constraint.name = "${sourceTableName}_${targetTableName}.inclusion$constraintPos"
         constraint.source.table=sourceTableName
         constraint.target.table=targetTableName
         constraint.source.columns.addAll(Column.set(sourceAttributeNames))

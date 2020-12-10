@@ -214,7 +214,7 @@ class SchemaTest {
         var schema = Schema()
         assertEquals(0,schema.doubleIncs().size)
         // when
-        schema.addDoubleInc("person:dep_id-->department:dep_id")
+        schema.addDoubleInc("table4:DepName-->table4:DepAddress")
         // then
         assertEquals(1,schema.doubleIncs().size)
     }
@@ -241,7 +241,7 @@ class SchemaTest {
         assertEquals(2,schema.constraints().size)
         // when
         schema.dropConstraint("person.primaryKey")
-        schema.dropConstraint("person_employee.foreignKey")
+        schema.dropConstraint("person_employee.foreignKey1")
         // then
         assertEquals(0,schema.constraints().size)
     }
