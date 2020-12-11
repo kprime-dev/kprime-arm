@@ -113,14 +113,19 @@ class ApplyChangeSetUseCase(val serializer: SerializerServiceI) {
 
     fun dropConstraint(db:Database, dropConstraint: DropConstraint):Database {
         if (db.schema.constraints().isEmpty()) return db
-        val c = db.schema.constraint(dropConstraint.constraintName)
-                .let { it ->  if(it !=null) db.schema.constraints().remove(it)}
+        if (dropConstraint.tableName.isNotEmpty()) {
+            db.schema.constraintByTable(dropConstraint.tableName)
+                    .let { it -> if (it != null) db.schema.constraints().remove(it) }
+        } else {
+            db.schema.constraint(dropConstraint.constraintName)
+                    .let { it -> if (it != null) db.schema.constraints().remove(it) }
+        }
         return db
     }
 
     fun dropMapping(db:Database, dropMapping: DropMapping):Database {
         if (db.mappings == null || db.mappings!!.isEmpty()) return db
-        val c = db.mapping(dropMapping.name)
+        db.mapping(dropMapping.name)
                 .let { it ->  if(it !=null) db.mappings!!.remove(it)}
         return db
     }

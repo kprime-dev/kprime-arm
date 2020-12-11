@@ -41,7 +41,17 @@ class Schema () {
 
     fun constraint(name: String): Constraint? {
         if (constraints().isEmpty()) return null
-        return constraints().filter { c -> c.name==name}.firstOrNull()
+        return constraints().filter { c -> c.name==name }.firstOrNull()
+    }
+
+    fun constraintById(id: String): Constraint? {
+        if (constraints().isEmpty()) return null
+        return constraints().filter { c -> c.id==id }.firstOrNull()
+    }
+
+    fun constraintByTable(name: String): Constraint? {
+        if (constraints().isEmpty()) return null
+        return constraints().filter { c -> c.source.table==name || c.target.table==name }.firstOrNull()
     }
 
     fun keys(tableName: String): List<Constraint> {

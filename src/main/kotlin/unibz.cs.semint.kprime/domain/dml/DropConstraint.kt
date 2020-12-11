@@ -23,15 +23,15 @@ class DropConstraint() {
         this.schemaName = schemaName
     }
 
-    infix fun   name(constraintName: String) = apply {
+    infix fun name(constraintName: String) = apply {
         this.constraintName = constraintName
     }
 
-    infix fun type(type:String) {
+    infix fun type(type:String) = apply {
         this.type = type
     }
 
-    infix fun table(table:String) {
+    infix fun table(table:String) = apply {
         this.tableName = table
     }
 }
