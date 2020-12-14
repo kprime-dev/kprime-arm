@@ -14,7 +14,7 @@ object JdbcPrinter {
             result += "-----------------------------------------------------"
             for (i in 1..columnCount) {
                 //if (i >1 ) print(",")
-                print("${metaData.getColumnName(i)} ${resultSet.getString(i)} ")
+                //print("${metaData.getColumnName(i)} ${resultSet.getString(i)} ")
                 result += "${metaData.getColumnName(i)}: ${resultSet.getString(i)}" + System.lineSeparator()
             }
             //println()
