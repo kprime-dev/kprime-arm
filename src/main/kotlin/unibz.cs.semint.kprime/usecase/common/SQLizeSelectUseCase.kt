@@ -40,7 +40,7 @@ class SQLizeSelectUseCase {
     fun sqlizeSelect(select : Select):String {
         var sql = ""
         sql += "SELECT " + select.attributes
-                .map { a -> "'${a.name}'" }.toList().joinToString(",") + System.lineSeparator()
+                .map { a -> "${a.name}" }.toList().joinToString(",") + System.lineSeparator()
         sql += "FROM "
         sql = sqlizeFrom(select, sql)
         if (!select.where.condition.isEmpty()) {

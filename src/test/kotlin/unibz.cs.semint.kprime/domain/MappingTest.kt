@@ -150,7 +150,7 @@ class MappingTest {
         val actualSQL = SQLizeCreateUseCase().createViewCommand(mapping)
         assertEquals("""
 CREATE OR REPLACE VIEW public.query1 AS
-SELECT 'student.first_name','student.last_name','course.name'
+SELECT student.first_name,student.last_name,course.name
 FROM   student
  JOIN student_course
 ON student.id = student_course.student_id
@@ -182,7 +182,7 @@ ON course.id = student_course.course_id
         // then
         assertEquals("""
 CREATE OR REPLACE VIEW public.poid_ssn AS
-SELECT 't1.ssn','t2.ssn'
+SELECT t1.ssn,t2.ssn
 FROM   T AS t1
  JOIN T AS t2
 ON t1.ssn = t2.ssn2
