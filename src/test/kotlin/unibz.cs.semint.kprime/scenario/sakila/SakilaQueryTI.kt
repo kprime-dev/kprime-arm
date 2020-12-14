@@ -2,11 +2,11 @@ package unibz.cs.semint.kprime.scenario.sakila
 
 import junit.framework.Assert.assertEquals
 import org.junit.Test
-import unibz.cs.semint.kprime.adapter.repository.QueryJdbcAdapter
+import unibz.cs.semint.kprime.adapter.repository.JdbcAdapter
+import unibz.cs.semint.kprime.adapter.repository.JdbcPrinter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.dql.Query
-import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
 import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
 
 class SakilaQueryTI {
@@ -24,9 +24,9 @@ class SakilaQueryTI {
     fun test_read_sakila_query_string() {
         //given
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
-        val adapter = QueryJdbcAdapter()
+        val adapter = JdbcAdapter()
         // when
-        val result = adapter.query(sakilaSource,"select * from film where film_id=1",adapter::printResultSet)
+        val result = adapter.query(sakilaSource,"select * from film where film_id=1",JdbcPrinter::printResultSet)
         // then
         assertEquals("""
              film_id: 1
@@ -56,8 +56,8 @@ class SakilaQueryTI {
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
         val sqlquery = Query.build("film")
-        val adapter = QueryJdbcAdapter()
-        val result = adapter.query(sakilaSource, sqlquery,adapter::printResultSet)
+        val adapter = JdbcAdapter()
+        val result = adapter.query(sakilaSource, sqlquery,JdbcPrinter::printResultSet)
         // then
         //assertEquals("read-meta-schema done.","")
     }
@@ -70,8 +70,8 @@ class SakilaQueryTI {
         // when
         val condition = "language_id=2"
         val sqlquery = Query.build("film",condition)
-        val adapter = QueryJdbcAdapter()
-        val result = adapter.query(sakilaSource, sqlquery,adapter::printResultSet)
+        val adapter = JdbcAdapter()
+        val result = adapter.query(sakilaSource, sqlquery,JdbcPrinter::printResultSet)
         // then
         //assertEquals("read-meta-schema done.","")
     }
@@ -121,8 +121,8 @@ class SakilaQueryTI {
         //given
         val sakilaSource = DataSource(type,name,driver,path,user,pass)
         // when
-        val adapter = QueryJdbcAdapter()
-        val result = adapter.query(sakilaSource, "select id,name,address,'zip code' FROM staff_list  LIMIT 10",adapter::printResultSet)
+        val adapter = JdbcAdapter()
+        val result = adapter.query(sakilaSource, "select id,name,address,'zip code' FROM staff_list  LIMIT 10",JdbcPrinter::printResultSet)
         // then
         //assertEquals("read-meta-schema done.","")
     }

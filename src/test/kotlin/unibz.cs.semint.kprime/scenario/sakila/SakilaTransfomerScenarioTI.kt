@@ -1,7 +1,8 @@
 package unibz.cs.semint.kprime.scenario.sakila
 
 import org.junit.Test
-import unibz.cs.semint.kprime.adapter.repository.QueryJdbcAdapter
+import unibz.cs.semint.kprime.adapter.repository.JdbcAdapter
+import unibz.cs.semint.kprime.adapter.repository.JdbcPrinter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.Xrule
@@ -48,9 +49,9 @@ class SakilaTransfomerScenarioTI {
 
         val sqlize = SQLizeSelectUseCase().sqlize(simpleQueryMap1)
         println(sqlize)
-        val adapter = QueryJdbcAdapter()
-        adapter.query(sakilaSource, simpleQueryMap1,adapter::printResultSet)
-        adapter.query(sakilaSource, simpleQueryMap2,adapter::printResultSet)
+        val adapter = JdbcAdapter()
+        adapter.query(sakilaSource, simpleQueryMap1,JdbcPrinter::printResultSet)
+        adapter.query(sakilaSource, simpleQueryMap2,JdbcPrinter::printResultSet)
         // print to console output
     }
 
@@ -84,7 +85,7 @@ class SakilaTransfomerScenarioTI {
         val createList = SQLizeCreateUseCase().createViewCommands(newDb)
         for (createCommand in createList) {
             println(createCommand)
-            QueryJdbcAdapter().create(sakilaSource, createCommand)
+            JdbcAdapter().create(sakilaSource, createCommand)
         }
     }
 
