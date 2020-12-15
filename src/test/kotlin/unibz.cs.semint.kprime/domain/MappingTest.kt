@@ -229,11 +229,11 @@ ON course.id = student_course.course_id
         // then
         assertEquals("""
 CREATE OR REPLACE VIEW public.poid_ssn AS
-SELECT t1.ssn,t2.ssn
+SELECT t1.ssn AS poids,t2.ssn AS ssn
 FROM   T AS t1
  JOIN T AS t2
 ON t1.ssn = t2.ssn2
  LIMIT 10
-         """.trimIndent(), actualSQL)
+          """.trimIndent(), actualSQL)
     }
 }
