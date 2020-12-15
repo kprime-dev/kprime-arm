@@ -57,8 +57,15 @@ class ChangeSet() {
     @JacksonXmlElementWrapper(useWrapping=false)
     var dropMapping= ArrayList<DropMapping>()
 
+    @JacksonXmlElementWrapper(useWrapping=false)
+    var alterTable : MutableList<AlterTable>? = ArrayList()
+
     infix fun withId(id:String) = apply {
         this.id=id
+    }
+
+    infix fun plus(alterTable: AlterTable)= apply {
+        this.alterTable?.add(alterTable)
     }
 
     infix fun plus(createView: CreateView)= apply{

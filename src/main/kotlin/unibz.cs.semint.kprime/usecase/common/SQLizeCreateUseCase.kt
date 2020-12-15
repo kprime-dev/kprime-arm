@@ -47,7 +47,15 @@ ${SQLizeSelectUseCase().sqlize(mapping)}
             commands.add(createConstraintCommand(createConstraint))
         for (creatColumn in changeset.createColumn)
             commands.addAll(creatColumnCommands(creatColumn))
+        if (changeset.alterTable!=null) {
+            for (alterTable in changeset.alterTable!!)
+                commands.add(createAlterTableCommand(alterTable))
+        }
         return commands
+    }
+
+    private fun createAlterTableCommand(alterTable: AlterTable): String {
+        return alterTable.statement
     }
 
     class TreeSetSqlGeneratorChain: SqlGeneratorChain<SqlStatement>(TreeSet<SqlGenerator<SqlStatement>>()) {}

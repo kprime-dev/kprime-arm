@@ -40,13 +40,20 @@ class SQLizeSelectUseCase {
     fun sqlizeSelect(select : Select):String {
         var sql = ""
         sql += "SELECT " + select.attributes
-                .map { a -> "${a.name}" }.toList().joinToString(",") + System.lineSeparator()
+                .map { a -> mapAttribute(a) }.toList().joinToString(",") + System.lineSeparator()
         sql += "FROM "
         sql = sqlizeFrom(select, sql)
         if (!select.where.condition.isEmpty()) {
             sql += "WHERE ${select.where.condition}"  //+ System.lineSeparator()
         }
         sql += if (select.limit!=null) " LIMIT "+select.limit else  " LIMIT 10" //+ System.lineSeparator()
+        return sql
+    }
+
+    private fun mapAttribute(attribute:Attribute) :String {
+        var sql = attribute.name
+        if (attribute.asName!=null && attribute.asName?.isNotEmpty()!!)
+            sql += " AS ${attribute.asName}"
         return sql
     }
 

@@ -6,6 +6,7 @@ import unibz.cs.semint.kprime.domain.dql.From
 import unibz.cs.semint.kprime.domain.dql.Join
 import unibz.cs.semint.kprime.domain.dql.Mapping
 import unibz.cs.semint.kprime.usecase.common.SQLizeCreateUseCase
+import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
 import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
 import kotlin.test.assertEquals
 
@@ -100,6 +101,7 @@ class MappingTest {
         """.trimIndent()
         // when
         val query = UnSQLizeSelectUseCase().fromsql("query1", sqlQuery)
+        val actualSql = SQLizeSelectUseCase().sqlize(query)
         // then
         assertEquals("t1.ssn", query.select.attributes[0].name)
         assertEquals("poid", query.select.attributes[0].asName)
@@ -113,6 +115,13 @@ class MappingTest {
         assertEquals("t1", query.select.from.joins?.get(0)?.joinLeftTableAlias)
         assertEquals("t1.ssn", query.select.from.joins?.get(0)?.joinOnLeft)
         assertEquals("t2.ssn2", query.select.from.joins?.get(0)?.joinOnRight)
+        assertEquals("""
+SELECT t1.ssn AS poid,t2.ssn AS ssn
+FROM   T AS t1
+ JOIN T AS t2
+ON t1.ssn = t2.ssn2
+ LIMIT 10
+          """.trimIndent(),actualSql)
     }
 
     @Test

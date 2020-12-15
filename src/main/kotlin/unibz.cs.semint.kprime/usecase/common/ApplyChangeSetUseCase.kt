@@ -19,13 +19,25 @@ class ApplyChangeSetUseCase(val serializer: SerializerServiceI) {
         for (cc in changeset.createConstraint) { newdb = createConstraint(newdb,cc) }
         for (ct in changeset.createTable) { newdb = createTable(newdb,ct,db) }
         for (cm in changeset.createMapping) {newdb = createMapping(newdb,cm) }
+        if (changeset.alterTable!=null)
+            for (at in changeset.alterTable!!) { newdb = alterTable(newdb,at) }
         return newdb
     }
 
-    private fun createMapping(db: Database, cm: CreateMapping): Database {
-        if (db.mappings==null) return db
-        db.mappings!!.add(cm)
-        return db
+    private fun alterTable(newdb: Database, at: AlterTable): Database {
+        val table = newdb.schema.table(at.tableName) ?: return newdb
+        // ALTER TABLE $tableName ADD COLUMN self INT
+        if (at.statement.toLowerCase().contains("add column")) {
+            val colName = at.statement.split(" ")[5]
+            table.columns.add(Column.of(colName))
+        }
+        return newdb
+    }
+
+    private fun createMapping(newdb: Database, cm: CreateMapping): Database {
+        if (newdb.mappings==null) return newdb
+        newdb.mappings!!.add(cm)
+        return newdb
     }
 
     fun createTable(newdb:Database, createTable: CreateTable, olddb:Database): Database {
