@@ -137,6 +137,23 @@ WHERE DepName is not null and DepAddress is not null LIMIT 10
     }
 
     @Test
+    fun test_mapping_with_where_oneline() {
+        // given
+        val sqlQuery = "select SSN,DepName,DepAddress from table0 where DepName is not null and DepAddress is not null"
+        // when
+        val mapping = UnSQLizeSelectUseCase().fromsql("query1", sqlQuery)
+        val actualSQL = SQLizeCreateUseCase().createViewCommand(mapping)
+        // then
+        assertEquals("DepName is not null and DepAddress is not null", mapping.select.where.condition)
+        assertEquals("""
+CREATE OR REPLACE VIEW public.query1 AS
+SELECT SSN,DepName,DepAddress
+FROM   table0
+WHERE DepName is not null and DepAddress is not null LIMIT 10
+        """.trimIndent(),actualSQL)
+    }
+
+    @Test
     fun test_multi_join() {
         // given
         val sqlQuery = """
