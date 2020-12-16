@@ -182,8 +182,9 @@ class Schema () {
     }
 
     fun addFunctional(tableName:String, setExpression: String): Schema {
-        constraints().addAll(SchemaCmdParser
-                .parseFunctionals(tableName, setExpression))
+        val constraints = constraints()
+        constraints.addAll(SchemaCmdParser
+                .parseFunctionals(constraints.size, tableName, setExpression))
         return this
     }
 
@@ -229,6 +230,7 @@ class Schema () {
         return this
     }
 
+    // FIXME Use SchemaCmdParser
     fun addForeignKey(commandArgs:String):Schema {
         val source:String = commandArgs.split("-->")[0]
         val target:String = commandArgs.split("-->")[1]
@@ -251,6 +253,7 @@ class Schema () {
         return this
     }
 
+    // FIXME Use SchemaCmdParser
     fun addDoubleInc(commandArgs:String):Schema {
         val source:String = commandArgs.split("-->")[0]
         val target:String = commandArgs.split("-->")[1]
