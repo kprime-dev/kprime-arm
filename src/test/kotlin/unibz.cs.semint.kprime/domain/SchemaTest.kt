@@ -214,7 +214,7 @@ class SchemaTest {
         var schema = Schema()
         assertEquals(0,schema.doubleIncs().size)
         // when
-        schema.addDoubleInc("table4:DepName-->table4:DepAddress")
+        schema.addDoubleInc("table4:DepName<->table4:DepAddress")
         // then
         assertEquals(1,schema.doubleIncs().size)
     }

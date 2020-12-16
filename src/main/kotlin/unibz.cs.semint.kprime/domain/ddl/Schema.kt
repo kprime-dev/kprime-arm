@@ -255,8 +255,8 @@ class Schema () {
 
     // FIXME Use SchemaCmdParser
     fun addDoubleInc(commandArgs:String):Schema {
-        val source:String = commandArgs.split("-->")[0]
-        val target:String = commandArgs.split("-->")[1]
+        val source:String = commandArgs.split("<->")[0]
+        val target:String = commandArgs.split("<->")[1]
 
         val sourceTableName:String = source.split(":")[0]
         val sourceAttributeNames = source.split(":")[1]
