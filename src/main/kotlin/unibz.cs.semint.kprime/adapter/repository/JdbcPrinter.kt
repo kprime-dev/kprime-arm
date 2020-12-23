@@ -13,11 +13,8 @@ object JdbcPrinter {
         while( resultSet.next()) {
             result += "-----------------------------------------------------"
             for (i in 1..columnCount) {
-                //if (i >1 ) print(",")
-                //print("${metaData.getColumnName(i)} ${resultSet.getString(i)} ")
-                result += "${metaData.getColumnName(i)}: ${resultSet.getString(i)}" + System.lineSeparator()
+                result += "${metaData.getColumnLabel(i)}: ${resultSet.getString(i)}" + System.lineSeparator()
             }
-            //println()
         }
         return result
     }
