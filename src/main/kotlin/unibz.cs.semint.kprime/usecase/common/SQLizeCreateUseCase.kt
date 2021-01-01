@@ -27,6 +27,13 @@ class SQLizeCreateUseCase {
         return sqlCommands
     }
 
+    fun createViewCommands(changeSet: ChangeSet): List<String> {
+        val commands = mutableListOf<String>()
+        for (createMapping in changeSet.createMapping)
+            commands.add(createViewCommand(createMapping))
+        return commands
+    }
+    
     fun createViewCommand(mapping: Query): String {
         var command = """
 CREATE OR REPLACE VIEW public.${mapping.name} AS
