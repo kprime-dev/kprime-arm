@@ -33,7 +33,7 @@ class SQLizeCreateUseCase {
             commands.add(createViewCommand(createMapping))
         return commands
     }
-    
+
     fun createViewCommand(mapping: Query): String {
         var command = """
 CREATE OR REPLACE VIEW public.${mapping.name} AS

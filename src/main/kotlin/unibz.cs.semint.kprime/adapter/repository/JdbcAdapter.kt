@@ -54,6 +54,11 @@ class JdbcAdapter {
         }
     }
 
+    fun commit(datasource: DataSource) {
+        val conn = openConnection(datasource) ?: throw IllegalArgumentException("No connection")
+        conn.commit()
+    }
+
     private fun openConnection(datasource: DataSource): Connection? {
         val source = datasource
         val user = source.user
