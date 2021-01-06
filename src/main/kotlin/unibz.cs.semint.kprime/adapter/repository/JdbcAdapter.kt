@@ -46,11 +46,16 @@ class JdbcAdapter {
 
 
     private fun closeConnection(datasource: DataSource, conn: Connection) {
-        println(" Check close connection ${datasource.connection?.id}: ${datasource.connection?.closed}")
-        if (datasource.connection == null || datasource.connection?.closed!!) {
+        val connectionDescriptor = datasource.connection
+        println(" Check close connection ${connectionDescriptor?.id}: ${connectionDescriptor?.closed}")
+        if (connectionDescriptor != null) {
+            if (connectionDescriptor.closed) {
+                conn.close()
+                datasource.remResource(connectionDescriptor.id)
+                println("closed connection ${connectionDescriptor.id}")
+            }
+        } else {
             conn.close()
-            datasource.remResource(datasource.connection?.id!!)
-            println("closed connection ${datasource.connection?.id}")
         }
     }
 
@@ -79,14 +84,13 @@ class JdbcAdapter {
                     path, connectionProps)
             conn.autoCommit = true
         } else {
-            println("Connection from POOL")
+            println("Connection from POOL ${datasource.connection?.id}")
             var resource = datasource.getResource(datasource.connection?.id!!)
             if (resource == null) {
                 val connectionProps = Properties()
                 connectionProps.put("user", datasource.connection?.username)
                 connectionProps.put("password", datasource.connection?.pass)
-                conn = DriverManager.getConnection(
-                        path, connectionProps)
+                conn = DriverManager.getConnection(path, connectionProps)
                 conn.autoCommit = datasource.connection?.commited!!
                 datasource.setResource(datasource.connection?.id!!, conn)
             } else {
