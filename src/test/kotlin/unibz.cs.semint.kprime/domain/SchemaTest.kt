@@ -422,4 +422,5 @@ class SchemaTest {
         assertEquals(1,lostBCNFConstraints.size)
         assertTrue(lostBCNFConstraints.equals(Constraint.set("A,B --> C")))
     }
+
 }

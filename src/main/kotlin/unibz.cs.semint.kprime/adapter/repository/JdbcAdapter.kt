@@ -44,7 +44,6 @@ class JdbcAdapter {
         closeConnection(datasource,conn)
     }
 
-
     private fun closeConnection(datasource: DataSource, conn: Connection) {
         val connectionDescriptor = datasource.connection
         println(" Check close connection ${connectionDescriptor?.id}: ${connectionDescriptor?.closed}")
