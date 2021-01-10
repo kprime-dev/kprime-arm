@@ -51,7 +51,7 @@ ${SQLizeSelectUseCase().sqlize(mapping)}
         for (createMapping in changeset.createMapping)
             commands.add(createViewCommand(createMapping))
         for (createConstraint in changeset.createConstraint)
-            commands.add(createConstraintCommand(createConstraint))
+            commands.addAll(createConstraintCommand(createConstraint))
         for (createColumn in changeset.createColumn)
             commands.addAll(createColumnCommands(createColumn))
         if (changeset.alterTable!=null) {
@@ -66,7 +66,7 @@ ${SQLizeSelectUseCase().sqlize(mapping)}
         for (createMapping in changeset.createMapping)
             commands.add(createMappingCommand(createMapping))
         for (createConstraint in changeset.createConstraint)
-            commands.add(createConstraintCommand(createConstraint))
+            commands.addAll(createConstraintCommand(createConstraint))
         for (createColumn in changeset.createColumn)
             commands.addAll(createColumnCommands(createColumn))
         if (changeset.alterTable!=null) {
@@ -99,26 +99,31 @@ ${SQLizeSelectUseCase().sqlize(mapping)}
         return generateSql.map { gs -> gs.toSql() }
     }
 
-    private fun createConstraintCommand(createConstraint: CreateConstraint):String {
-        when (createConstraint.type) {
-            Constraint.TYPE.PRIMARY_KEY.name -> { return createPrimaryKey(createConstraint)}
-            Constraint.TYPE.FOREIGN_KEY.name -> { return createForeignKey(createConstraint)}
-            else -> return ""
+    private fun createConstraintCommand(createConstraint: CreateConstraint):List<String> {
+        return when (createConstraint.type) {
+            Constraint.TYPE.PRIMARY_KEY.name -> { createPrimaryKey(createConstraint) }
+            Constraint.TYPE.FOREIGN_KEY.name -> { createForeignKey(createConstraint) }
+            else -> emptyList()
         }
     }
 
-    private fun createForeignKey(createConstraint: CreateConstraint): String {
+    private fun createForeignKey(createConstraint: CreateConstraint): List<String> {
         val srcTable = createConstraint.source.table
         val trgTable = createConstraint.target.table
         val srcCols = createConstraint.source.columns.joinToString(",")
         val trgCols = createConstraint.target.columns.joinToString(",")
-        return "ALTER TABLE $srcTable\n" +
-                "ADD FOREIGN KEY ($srcCols) REFERENCES $trgTable($trgCols); "
+        return listOf("ALTER TABLE $srcTable\n" +
+                "ADD FOREIGN KEY ($srcCols) REFERENCES $trgTable($trgCols); ")
     }
 
-    private fun createPrimaryKey(createConstraint: CreateConstraint):String {
+    private fun createPrimaryKey(createConstraint: CreateConstraint):List<String> {
         val cols = createConstraint.source.columns.joinToString(",")
-        return "ALTER TABLE ${createConstraint.source.table} ADD PRIMARY KEY ($cols)"
+        var sql = mutableListOf<String>()
+        for (col in createConstraint.source.columns.map { it -> it.name }) {
+            sql.add("ALTER TABLE ${createConstraint.source.table} ALTER COLUMN $col Varchar NOT NULL;")
+        }
+        sql.add("ALTER TABLE ${createConstraint.source.table} ADD PRIMARY KEY ($cols)")
+        return sql
     }
 
     private fun createTableCommand(createTable: CreateTable): String {
