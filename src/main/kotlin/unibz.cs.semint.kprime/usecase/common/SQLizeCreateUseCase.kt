@@ -52,8 +52,23 @@ ${SQLizeSelectUseCase().sqlize(mapping)}
             commands.add(createViewCommand(createMapping))
         for (createConstraint in changeset.createConstraint)
             commands.add(createConstraintCommand(createConstraint))
-        for (creatColumn in changeset.createColumn)
-            commands.addAll(creatColumnCommands(creatColumn))
+        for (createColumn in changeset.createColumn)
+            commands.addAll(createColumnCommands(createColumn))
+        if (changeset.alterTable!=null) {
+            for (alterTable in changeset.alterTable!!)
+                commands.add(createAlterTableCommand(alterTable))
+        }
+        return commands
+    }
+
+    fun createTableMappings(changeset: ChangeSet): List<String> {
+        val commands = mutableListOf<String>()
+        for (createMapping in changeset.createMapping)
+            commands.add(createMappingCommand(createMapping))
+        for (createConstraint in changeset.createConstraint)
+            commands.add(createConstraintCommand(createConstraint))
+        for (createColumn in changeset.createColumn)
+            commands.addAll(createColumnCommands(createColumn))
         if (changeset.alterTable!=null) {
             for (alterTable in changeset.alterTable!!)
                 commands.add(createAlterTableCommand(alterTable))
@@ -67,7 +82,7 @@ ${SQLizeSelectUseCase().sqlize(mapping)}
 
     class TreeSetSqlGeneratorChain: SqlGeneratorChain<SqlStatement>(TreeSet<SqlGenerator<SqlStatement>>()) {}
 
-    private fun creatColumnCommands(createTableColumn: CreateColumn): List<String> {
+    private fun createColumnCommands(createTableColumn: CreateColumn): List<String> {
         val addColumns = createTableColumn.columns.map {
             col -> AddColumnStatement(createTableColumn.catalog,
                                         createTableColumn.schema,
@@ -119,5 +134,13 @@ ${SQLizeSelectUseCase().sqlize(mapping)}
 
     private fun createViewCommand(createView: CreateView):String {
         return "CREATE VIEW ${createView.viewName} AS ${createView.text};"
+    }
+
+    private fun createMappingCommand(mapping: CreateMapping):String {
+        var command = """
+CREATE TABLE public.${mapping.name} AS
+${SQLizeSelectUseCase().sqlize(mapping)}
+                    """.trimIndent()
+        return command
     }
 }
