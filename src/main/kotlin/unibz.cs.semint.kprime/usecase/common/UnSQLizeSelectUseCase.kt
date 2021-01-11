@@ -103,10 +103,16 @@ class UnSQLizeSelectUseCase {
     }
 
     private fun parseSelect(select: Select, sqlline: String) {
-        if (sqlline.startsWith("SELECT ")) {
-            val split = sqlline.drop(7).split(",")
-            select.attributes= split.map { aname -> parseAttribute(aname) }.toCollection(ArrayList<Attribute>())
+        lateinit var attributeNames : List<String>
+        if (sqlline.startsWith("SELECT DISTINCT ")) {
+            attributeNames = sqlline.drop(16).split(",")
+            select.distinct = true
         }
+        else if (sqlline.startsWith("SELECT ")) {
+            attributeNames = sqlline.drop(7).split(",")
+        }
+        else return
+        select.attributes= attributeNames.map { aname -> parseAttribute(aname) }.toCollection(ArrayList<Attribute>())
     }
 
     private fun parseAttribute(sqlAttribute: String):Attribute {

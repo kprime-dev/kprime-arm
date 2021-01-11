@@ -38,8 +38,11 @@ class SQLizeSelectUseCase {
     }
 
     fun sqlizeSelect(select : Select):String {
-        var sql = ""
-        sql += "SELECT " + select.attributes
+        var sql = "SELECT"
+        if (select.distinct) {
+            sql = "SELECT DISTINCT"
+        }
+        sql += " " + select.attributes
                 .map { a -> mapAttribute(a) }.toList().joinToString(",") + System.lineSeparator()
         sql += "FROM "
         sql = sqlizeFrom(select, sql)

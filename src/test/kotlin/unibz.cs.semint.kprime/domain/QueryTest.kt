@@ -46,6 +46,7 @@ class QueryTest {
         assertEquals("""
             <query id="" name="">
               <select>
+                <distinct>false</distinct>
                 <attributes>
                   <attributes name="Name"/>
                   <attributes name="Surname"/>
@@ -175,6 +176,7 @@ class QueryTest {
         assertEquals("""
             <query id="" name="">
               <select>
+                <distinct>false</distinct>
                 <attributes>
                   <attributes name="Name"/>
                   <attributes name="Surname"/>
@@ -185,6 +187,7 @@ class QueryTest {
               <union>
                 <selects>
                   <selects>
+                    <distinct>false</distinct>
                     <attributes>
                       <attributes name="Name"/>
                       <attributes name="Surname"/>

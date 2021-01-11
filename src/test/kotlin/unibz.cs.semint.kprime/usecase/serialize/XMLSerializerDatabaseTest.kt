@@ -74,6 +74,7 @@ class XMLSerializerDatabaseTest {
               <mappings>
                 <query id="" name="query1">
                   <select>
+                    <distinct>false</distinct>
                     <attributes>
                       <attributes name="name"/>
                     </attributes>

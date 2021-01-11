@@ -73,6 +73,7 @@ class XMLSerializerChangeSetTest  {
               <createView path="" schemaName="" viewName="">select * from table</createView>
               <createMapping id="" name="film1">
                 <select>
+                  <distinct>false</distinct>
                   <attributes>
                     <attributes name="Name"/>
                     <attributes name="Surname"/>

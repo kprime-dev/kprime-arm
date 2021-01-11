@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 @JacksonXmlRootElement(localName = "select")
 class Select {
 
+    var distinct: Boolean = false
     var attributes : MutableList<Attribute> = ArrayList<Attribute>()
     var from = From()
     var where = Where()
