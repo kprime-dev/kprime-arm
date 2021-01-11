@@ -2,10 +2,7 @@ package unibz.cs.semint.kprime.domain.ddl
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
-import unibz.cs.semint.kprime.domain.ddl.schemalgo.check3NF
-import unibz.cs.semint.kprime.domain.ddl.schemalgo.checkBCNF
-import unibz.cs.semint.kprime.domain.ddl.schemalgo.decomposeTo3NF
-import unibz.cs.semint.kprime.domain.ddl.schemalgo.decomposeToBCNF
+import unibz.cs.semint.kprime.domain.ddl.schemalgo.*
 
 @JacksonXmlRootElement(localName = "schema")
 class Schema () {
@@ -350,5 +347,9 @@ class Schema () {
         return false
     }
      */
+
+    fun oidForTable(tableName:String):List<String> {
+        return oid(this,tableName)
+    }
 
 }
