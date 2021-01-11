@@ -3,6 +3,7 @@ package unibz.cs.semint.kprime.domain.schemalgo
 import org.junit.Test
 import unibz.cs.semint.kprime.domain.ddl.Schema
 import unibz.cs.semint.kprime.domain.ddl.schemalgo.oid
+import kotlin.test.assertEquals
 
 class OidsTest {
 
@@ -10,8 +11,14 @@ class OidsTest {
     fun test_oid_addition_single_table() {
         // given
         val schema = Schema()
-        val originTableName = ""
+        schema.addTable("person:name,surname,address")
+        schema.addKey("person:name,surname")
+        val originTableName = "person"
         // when
-        oid(schema,originTableName)
+        val sqlCommands = oid(schema, originTableName)
+        // then
+        assertEquals("ALTER TABLE person ADD COLUMN sid int NOT NULL auto_increment UNIQUE",sqlCommands[0])
+        assertEquals("CREATE TABLE SKEYperson AS SELECT sid,surname,name FROM person",sqlCommands[1])
+        assertEquals("ALTER TABLE person DROP COLUMN surname,name",sqlCommands[2])
     }
 }
