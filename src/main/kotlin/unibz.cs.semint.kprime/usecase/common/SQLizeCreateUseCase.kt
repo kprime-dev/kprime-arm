@@ -120,7 +120,7 @@ ${SQLizeSelectUseCase().sqlize(mapping)}
         val cols = createConstraint.source.columns.joinToString(",")
         var sql = mutableListOf<String>()
         for (col in createConstraint.source.columns.map { it -> it.name }) {
-            sql.add("ALTER TABLE ${createConstraint.source.table} ALTER COLUMN $col Varchar NOT NULL;")
+            sql.add("ALTER TABLE ${createConstraint.source.table} ALTER COLUMN $col Varchar NOT NULL")
         }
         sql.add("ALTER TABLE ${createConstraint.source.table} ADD PRIMARY KEY ($cols)")
         return sql
