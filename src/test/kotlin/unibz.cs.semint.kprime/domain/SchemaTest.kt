@@ -78,7 +78,6 @@ class SchemaTest {
         assertTrue(equivalent(setA,setB))
     }
 
-
     @Test
     fun test_powerset() {
         // given
@@ -300,7 +299,6 @@ class SchemaTest {
 
     }
 
-
     @Test
     fun test_deomposeTo3NF() {
         // given
@@ -409,7 +407,6 @@ class SchemaTest {
         }
 
     }
-
 
     @Test
     fun test_lostBCNFConstraints() {

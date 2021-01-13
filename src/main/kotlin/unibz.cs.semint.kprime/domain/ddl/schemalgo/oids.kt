@@ -12,12 +12,12 @@ fun oid(schema: Schema, originTableName: String): List<String> {
         // create a key-table with projection of oid and pk
         val keyCols = originTableKey.map { c -> c.name }.joinToString(",")
         sqlCommands.add("CREATE TABLE SKEY$originTableName AS SELECT sid,$keyCols FROM $originTableName")
-        sqlCommands.add("ALTER TABLE $originTableName DROP COLUMN $keyCols")
         // search ftables with foreign keys od double-inc as pk
         // for each ftable adds one column oid with join with corresponding to fkey values
         // replace pk origin-table
         // replace fks to new surrogate id column
         // remove ex-pk columns from origin-table
+        sqlCommands.add("ALTER TABLE $originTableName DROP COLUMN $keyCols")
         // remove ex-pk columns from fk tables
         return sqlCommands
 }
