@@ -98,11 +98,17 @@ class Schema () {
         return constraints().filter { c -> c.type.equals(Constraint.TYPE.FOREIGN_KEY.name) }
     }
 
-    fun foreignsTable(tableName: String): List<Constraint> {
+    fun foreignsWithSource(tableName: String): List<Constraint> {
         return foreignKeys().filter { f -> f.source.name.equals(tableName) }
     }
 
-    fun foreignsTargets(tableName: String): List<Constraint> {
+//    fun referencesTable(tableName: String): List<Constraint> {
+//        var rTables = foreignKeys().filter { f -> f.source.name.equals(tableName) }.toMutableList()
+//        rTables.addAll()
+//        return rTables
+//    }
+
+    fun foreignsWithTarget(tableName: String): List<Constraint> {
         return foreignKeys().filter { f -> f.target.name.equals(tableName) }
     }
 

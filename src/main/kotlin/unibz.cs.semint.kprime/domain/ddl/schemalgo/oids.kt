@@ -13,6 +13,7 @@ fun oid(schema: Schema, originTableName: String): List<String> {
         val keyCols = originTableKey.map { c -> c.name }.joinToString(",")
         sqlCommands.add("CREATE TABLE SKEY$originTableName AS SELECT sid,$keyCols FROM $originTableName")
         // search ftables with foreign keys od double-inc as pk
+        // var ftables = schema.foreignsTable(originTableName)
         // for each ftable adds one column oid with join with corresponding to fkey values
         // replace pk origin-table
         // replace fks to new surrogate id column
