@@ -23,8 +23,6 @@ class Schema () {
     fun constraints(): MutableList<Constraint> {
         if (constraints==null) constraints = ArrayList()
         return constraints as MutableList<Constraint>
-//        if (constraints!=null) return  constraints as MutableList<Constraint>
-//        return ArrayList()
     }
 
     fun constraintsByType(type :Constraint.TYPE): List<Constraint> {
@@ -36,8 +34,6 @@ class Schema () {
     fun tables():ArrayList<Table> {
         if (tables==null) tables = ArrayList()
         return tables as ArrayList<Table>
-//        if (tables!=null) return tables as ArrayList<Table>
-//        return ArrayList()
     }
 
     fun constraint(name: String): Constraint? {
