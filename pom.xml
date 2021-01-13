@@ -12,9 +12,9 @@
     <properties>
         <main.class>unibz.cs.semint.kprime.Starter</main.class>
 
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <java.version>1.8</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <java.version>11</java.version>
         <kotlin.version>1.3.30</kotlin.version>
         <junit.version>4.12</junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

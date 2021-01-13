@@ -112,7 +112,9 @@ class ApplyChangeSetUseCase(val serializer: SerializerServiceI) {
     }
 
     fun createConstraint(db:Database, createConstraint: CreateConstraint): Database {
+        println("apply create constraint ${createConstraint}")
         db.schema.constraints().add(createConstraint)
+        println("apply constraint size ${db.schema.constraints().size}")
         return db
     }
 

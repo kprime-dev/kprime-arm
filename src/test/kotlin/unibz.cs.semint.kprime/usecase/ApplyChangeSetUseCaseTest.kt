@@ -176,4 +176,82 @@ class ApplyChangeSetUseCaseTest {
         vsplitChangeSet plus table1 plus  table2 plus doubleInc plus person2Key
         return vsplitChangeSet
     }
+
+    private fun setUpPersonChangeSet2(): ChangeSet {
+        val changeSet = ChangeSet()
+        val schema = Schema()
+        val key = schema.buildKey("person",Column.set("name,surname"))
+        changeSet plus key
+        assertEquals(1,changeSet.createConstraint.size)
+        return changeSet
+    }
+
+    @Test
+    fun test_apply_changeset_to_person_db2() {
+        // given
+        val personDB = Database()
+        personDB.schema.addTable("person:name,surname,address")
+        val personCS = setUpPersonChangeSet2()
+        assertEquals(1, personCS.createConstraint.size)
+        val serializer = XMLSerializerJacksonAdapter()
+        val cs_xml = serializer.prettyChangeSet(personCS)
+        assertEquals("""
+<changeSet id="">
+  <createConstraint name="pkey_person" id="" type="PRIMARY_KEY">
+    <source name="" id="" table="person">
+      <columns>
+        <columns name="surname" id="" dbname="" nullable="false" dbtype=""/>
+        <columns name="name" id="" dbname="" nullable="false" dbtype=""/>
+      </columns>
+    </source>
+    <target name="" id="" table="person">
+      <columns>
+        <columns name="surname" id="" dbname="" nullable="false" dbtype=""/>
+        <columns name="name" id="" dbname="" nullable="false" dbtype=""/>
+      </columns>
+    </target>
+  </createConstraint>
+</changeSet>
+        """.trimIndent(),cs_xml)
+        // when
+        val newDB = ApplyChangeSetUseCase(serializer).apply(personDB, personCS)
+        //then
+        assertEquals(1,newDB.schema.constraints?.size)
+        // checks identity
+        val serializeNewDb = serializer.prettyDatabase(newDB)
+        val expectedDb = """
+<database name="" id="" source="">
+  <schema name="" id="">
+    <tables>
+      <tables name="person" id="t1" view="" condition="">
+        <columns>
+          <columns name="name" id="" dbname="" nullable="false" dbtype=""/>
+          <columns name="surname" id="" dbname="" nullable="false" dbtype=""/>
+          <columns name="address" id="" dbname="" nullable="false" dbtype=""/>
+        </columns>
+      </tables>
+    </tables>
+    <constraints>
+      <constraints name="pkey_person" id="" type="PRIMARY_KEY">
+        <source name="" id="" table="person">
+          <columns>
+            <columns name="surname" id="" dbname="" nullable="false" dbtype=""/>
+            <columns name="name" id="" dbname="" nullable="false" dbtype=""/>
+          </columns>
+        </source>
+        <target name="" id="" table="person">
+          <columns>
+            <columns name="surname" id="" dbname="" nullable="false" dbtype=""/>
+            <columns name="name" id="" dbname="" nullable="false" dbtype=""/>
+          </columns>
+        </target>
+      </constraints>
+    </constraints>
+  </schema>
+  <mappings/>
+</database>
+        """.trimIndent()
+        assertEquals(expectedDb,serializeNewDb)
+
+    }
 }

@@ -16,8 +16,8 @@ class SchemaTest {
         val fd = Constraint.of("${time.name},${classroom.name}","${course.name}")
 
         assertEquals(" Time , Classroom , Course"," $time , $classroom , $course")
-        assertEquals(" Time , Classroom --> Course ; "," $fd")
-        assertEquals("Time , Classroom --> Course ; ",fd.toString())
+        assertEquals("  :Time,Classroom --> :Course ; "," $fd")
+        assertEquals(" :Time,Classroom --> :Course ; ",fd.toString())
     }
 
     @Test
@@ -68,7 +68,7 @@ class SchemaTest {
                 + "C-->C;"
                 + "C,D,E,F-->C,D,F")
         val result= removeTrivial(constraints)
-        assertEquals("[A --> B ; ]",result.toString())
+        assertEquals("[ :A --> :B ; ]",result.toString())
     }
 
     @Test
@@ -117,7 +117,7 @@ class SchemaTest {
         var fds = Constraint.set("A-->B,C;B-->C;A-->B;A,B-->C")
         fds = splitRight(fds)
         val removed = removeUnnecessaryEntireFD(fds)
-        assertEquals("[B --> C ; , A --> B ; ]",removed.toString())
+        assertEquals("[ :A --> :B ; ,  :B --> :C ; ]",removed.toString())
     }
 
     @Test
@@ -158,9 +158,10 @@ class SchemaTest {
         fds = removeTrivial(fds)
         // then
         assertEquals(3,fds.size)
-        assertTrue(fds.contains(Constraint.of("A , B --> C")))
-        assertTrue(fds.contains(Constraint.of("B , C --> D , E")))
-        assertTrue(fds.contains(Constraint.of("A --> B, C")))
+        assertEquals("[ :B,C --> :E,D ; ,  :A --> :C,B ; ,  :A,B --> :C ; ]",fds.toString().trim())
+        assertTrue(fds.contains(Constraint.of("A,B --> C")))
+        assertTrue(fds.contains(Constraint.of("B,C --> E,D")))
+        assertTrue(fds.contains(Constraint.of("A --> C,B")))
     }
 
     @Test
@@ -207,7 +208,6 @@ class SchemaTest {
         assertEquals(1,schema.foreignKeys().size)
     }
 
-
     @Test
     fun test_addDoubleInc() {
         // given
@@ -240,7 +240,7 @@ class SchemaTest {
         schema.addForeignKey("person:id-->employee:id")
         assertEquals(2,schema.constraints().size)
         // when
-        schema.dropConstraint("person.primaryKey")
+        schema.dropConstraint("pkey_person")
         schema.dropConstraint("person_employee.foreignKey1")
         // then
         assertEquals(0,schema.constraints().size)
@@ -265,7 +265,7 @@ class SchemaTest {
         // when
         val check3NF = check3NF(attrs, fds)
         // then
-        assertEquals("[C --> D ; ]",check3NF.toString())
+        assertEquals("[ :C --> :D ; ]",check3NF.toString())
         assertEquals(1, check3NF.size)
     }
 

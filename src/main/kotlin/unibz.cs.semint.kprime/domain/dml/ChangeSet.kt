@@ -27,6 +27,9 @@ class ChangeSet() {
     @JacksonXmlProperty(isAttribute = true)
     var parent: String? = null
 
+    @JacksonXmlProperty(isAttribute = true)
+    var sqlCommands: List<String>? = null
+
     @JacksonXmlElementWrapper(useWrapping=false)
     var createView= ArrayList<CreateView>()
 
@@ -77,6 +80,7 @@ class ChangeSet() {
     }
 
     infix fun plus(createConstraint: CreateConstraint)= apply{
+        println("plus  $createConstraint")
         this.createConstraint.add(createConstraint)
     }
 

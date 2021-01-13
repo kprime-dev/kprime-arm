@@ -21,8 +21,10 @@ class Schema () {
     }
 
     fun constraints(): MutableList<Constraint> {
-        if (constraints!=null) return  constraints as MutableList<Constraint>
-        return ArrayList()
+        if (constraints==null) constraints = ArrayList()
+        return constraints as MutableList<Constraint>
+//        if (constraints!=null) return  constraints as MutableList<Constraint>
+//        return ArrayList()
     }
 
     fun constraintsByType(type :Constraint.TYPE): List<Constraint> {
@@ -32,8 +34,10 @@ class Schema () {
     }
 
     fun tables():ArrayList<Table> {
-        if (tables!=null) return tables as ArrayList<Table>
-        return ArrayList()
+        if (tables==null) tables = ArrayList()
+        return tables as ArrayList<Table>
+//        if (tables!=null) return tables as ArrayList<Table>
+//        return ArrayList()
     }
 
     fun constraint(name: String): Constraint? {
@@ -72,10 +76,18 @@ class Schema () {
         return primaryConstraint
     }
 
+    fun addKey(commandArgs:String):Schema {
+        val tableName:String = commandArgs.split(":")[0]
+        val attributeNames = commandArgs.split(":")[1]
+        constraints().add(buildKey(tableName,Column.set(attributeNames)))
+        return this
+    }
+
     fun buildKey(tableName: String, k: Set<Column>): Constraint {
-        val primaryConstraint = Constraint()
+        val primaryConstraint = Constraint.addKey {}
         primaryConstraint.name = "pkey_$tableName"
-        primaryConstraint.source.table = "$tableName"
+        primaryConstraint.source.table = tableName
+        primaryConstraint.target.table = tableName
         primaryConstraint.source.columns.addAll(k)
         primaryConstraint.target.columns.addAll(k)
         primaryConstraint.type = Constraint.TYPE.PRIMARY_KEY.name
@@ -210,20 +222,6 @@ class Schema () {
             constraint.target.table=tableName
         }
         constraints().addAll(constraintsToAdd)
-        return this
-    }
-
-    fun addKey(commandArgs:String):Schema {
-        val tableName:String = commandArgs.split(":")[0]
-        val attributeNames = commandArgs.split(":")[1]
-        val constraint = Constraint.addKey {}
-        constraint.id="ck_$tableName"
-        constraint.name = tableName+".primaryKey"
-        constraint.source.table=tableName
-        constraint.target.table=tableName
-        constraint.source.columns.addAll(Column.set(attributeNames))
-        constraint.target.columns.addAll(Column.set(attributeNames))
-        constraints().add(constraint)
         return this
     }
 

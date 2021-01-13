@@ -172,10 +172,10 @@ class Constraint(): Labelled {
         if (source.columns==null || source.columns.isEmpty()) return "no source columns"
         if (target==null) return "no target"
         if (target.columns==null || right().isEmpty()) return "no target columns"
-        var result = source.columns[0].toString()
+        var result = type +" " +source.table+":"+source.columns[0].toString()
         for(col in source.columns.drop(1))
-            result += " , " + col.toString()
-        result +=" --> "
+            result += "," + col.toString()
+        result +=" --> " +target.table+":"
         if (target.columns.size>0) {
             result+= target.columns[0].toString()
             for (col in target.columns.drop(1))
