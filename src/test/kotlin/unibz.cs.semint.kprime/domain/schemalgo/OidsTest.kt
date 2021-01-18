@@ -12,7 +12,9 @@ class OidsTest {
         // given
         val schema = Schema()
         schema.addTable("person:name,surname,address")
+        schema.addTable("teacher:name,surname,course")
         schema.addKey("person:name,surname")
+        schema.addDoubleInc("person:name,surname<->teacher:name,surname")
         val originTableName = "person"
         // when
         val sqlCommands = oid(schema, originTableName)

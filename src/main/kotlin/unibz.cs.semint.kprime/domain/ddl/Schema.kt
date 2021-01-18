@@ -99,17 +99,49 @@ class Schema () {
     }
 
     fun foreignsWithSource(tableName: String): List<Constraint> {
-        return foreignKeys().filter { f -> f.source.name.equals(tableName) }
+        return foreignKeys().filter { f -> f.source.table.equals(tableName) }
     }
 
-//    fun referencesTable(tableName: String): List<Constraint> {
-//        var rTables = foreignKeys().filter { f -> f.source.name.equals(tableName) }.toMutableList()
-//        rTables.addAll()
-//        return rTables
-//    }
+    fun referencedTablesOf(tableName: String): List<Table> {
+        var rTables = foreignTablesOf(tableName)
+        val diTables = doubleIncTablesOf(tableName)
+        println(diTables)
+        rTables.addAll(diTables)
+        return rTables
+    }
+
+    private fun foreignTablesOf(tableName: String): ArrayList<Table> {
+        var rTables = ArrayList<Table>()
+        var foreignConstr = foreignsWithSource(tableName)
+        for (foreign in foreignConstr) {
+            var t = table(foreign.target.table)
+            if (t != null) rTables.add(t)
+        }
+        return rTables
+    }
+
+    private fun doubleIncTablesOf(tableName: String): ArrayList<Table> {
+        var rTables = ArrayList<Table>()
+        val doubleTargets = doubleIncs().filter { di -> di.source.table.equals(tableName)}
+        println(doubleTargets)
+        for (double in doubleTargets) {
+            val name1 = double.target.table
+            println(" target $name1")
+            var t = table(name1)
+            if (t != null) rTables.add(t)
+        }
+        val doubleSources = doubleIncs().filter { di -> di.target.table.equals(tableName)}
+        for (double in doubleSources) {
+            val name1 = double.source.table
+            println(" source $name1")
+            var t = table(name1)
+            if (t != null) rTables.add(t)
+        }
+        return rTables
+    }
 
     fun foreignsWithTarget(tableName: String): List<Constraint> {
-        return foreignKeys().filter { f -> f.target.name.equals(tableName) }
+        return foreignKeys().filter { f -> f.target.table.equals(tableName) }
     }
 
     fun doubleIncs(): List<Constraint> {
@@ -227,7 +259,6 @@ class Schema () {
         return this
     }
 
-    // FIXME Use SchemaCmdParser
     fun addForeignKey(commandArgs:String):Schema {
         val source:String = commandArgs.split("-->")[0]
         val target:String = commandArgs.split("-->")[1]
@@ -250,7 +281,6 @@ class Schema () {
         return this
     }
 
-    // FIXME Use SchemaCmdParser
     fun addDoubleInc(commandArgs:String):Schema {
         val source:String = commandArgs.split("<->")[0]
         val target:String = commandArgs.split("<->")[1]
@@ -261,16 +291,21 @@ class Schema () {
         val targetTableName:String = target.split(":")[0]
         val targetAttributeNames = target.split(":")[1]
 
-        val constraintPos = constraintsByType(Constraint.TYPE.DOUBLE_INCLUSION).size+1
-        val constraint = Constraint.doubleInclusion {}
-        constraint.id="cdi$constraintPos"
-        constraint.name = "${sourceTableName}_${targetTableName}.doubleInc$constraintPos"
-        constraint.source.table=sourceTableName
-        constraint.target.table=targetTableName
-        constraint.source.columns.addAll(Column.set(sourceAttributeNames))
-        constraint.target.columns.addAll(Column.set(targetAttributeNames))
+        val constraint = buildDoubleInc(sourceTableName, targetTableName, sourceAttributeNames, targetAttributeNames)
         constraints().add(constraint)
         return this
+    }
+
+    internal fun buildDoubleInc(sourceTableName: String, targetTableName: String, sourceAttributeNames: String, targetAttributeNames: String): Constraint {
+        val constraintPos = constraintsByType(Constraint.TYPE.DOUBLE_INCLUSION).size + 1
+        val constraint = Constraint.doubleInclusion {}
+        constraint.id = "cdi$constraintPos"
+        constraint.name = "${sourceTableName}_${targetTableName}.doubleInc$constraintPos"
+        constraint.source.table = sourceTableName
+        constraint.target.table = targetTableName
+        constraint.source.columns.addAll(Column.set(sourceAttributeNames))
+        constraint.target.columns.addAll(Column.set(targetAttributeNames))
+        return constraint
     }
 
     fun addInclusion(commandArgs:String):Schema {
@@ -283,16 +318,21 @@ class Schema () {
         val targetTableName:String = target.split(":")[0]
         val targetAttributeNames = target.split(":")[1]
 
-        val constraintPos = constraintsByType(Constraint.TYPE.INCLUSION).size+1
-        val constraint = Constraint.inclusion {}
-        constraint.id="ci$constraintPos"
-        constraint.name = "${sourceTableName}_${targetTableName}.inclusion$constraintPos"
-        constraint.source.table=sourceTableName
-        constraint.target.table=targetTableName
-        constraint.source.columns.addAll(Column.set(sourceAttributeNames))
-        constraint.target.columns.addAll(Column.set(targetAttributeNames))
+        val constraint = buildInclusion(sourceTableName, targetTableName, sourceAttributeNames, targetAttributeNames)
         constraints().add(constraint)
         return this
+    }
+
+    internal fun buildInclusion(sourceTableName: String, targetTableName: String, sourceAttributeNames: String, targetAttributeNames: String): Constraint {
+        val constraintPos = constraintsByType(Constraint.TYPE.INCLUSION).size + 1
+        val constraint = Constraint.inclusion {}
+        constraint.id = "ci$constraintPos"
+        constraint.name = "${sourceTableName}_${targetTableName}.inclusion$constraintPos"
+        constraint.source.table = sourceTableName
+        constraint.target.table = targetTableName
+        constraint.source.columns.addAll(Column.set(sourceAttributeNames))
+        constraint.target.columns.addAll(Column.set(targetAttributeNames))
+        return constraint
     }
 
     fun decomposeBCNF(): Set<Relation> {

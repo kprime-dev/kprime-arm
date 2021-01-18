@@ -93,7 +93,7 @@ class ApplyChangeSetUseCaseTest {
     fun test_apply_changeset_to_person_db() {
         //given
         val db = setUpPersonDb()
-        val changeset = setUpPersonChangeSet()
+        val changeset = setUpPersonChangeSetSplitTable()
         val serializer = XMLSerializerJacksonAdapter()
         // when
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeset)
@@ -164,7 +164,7 @@ class ApplyChangeSetUseCaseTest {
     }
 
 
-    private fun setUpPersonChangeSet(): ChangeSet {
+    private fun setUpPersonChangeSetSplitTable(): ChangeSet {
         val dropPersonTable = DropTable()  name "person"
         val dropPrimaryKeyConstraint = DropConstraint() name "person.primaryKey"
         val vsplitChangeSet = initChangeSet {} withId  "234"
@@ -177,7 +177,7 @@ class ApplyChangeSetUseCaseTest {
         return vsplitChangeSet
     }
 
-    private fun setUpPersonChangeSet2(): ChangeSet {
+    private fun setUpPersonChangeSetAddKey(): ChangeSet {
         val changeSet = ChangeSet()
         val schema = Schema()
         val key = schema.buildKey("person",Column.set("name,surname"))
@@ -191,7 +191,7 @@ class ApplyChangeSetUseCaseTest {
         // given
         val personDB = Database()
         personDB.schema.addTable("person:name,surname,address")
-        val personCS = setUpPersonChangeSet2()
+        val personCS = setUpPersonChangeSetAddKey()
         assertEquals(1, personCS.createConstraint.size)
         val serializer = XMLSerializerJacksonAdapter()
         val cs_xml = serializer.prettyChangeSet(personCS)
@@ -254,4 +254,91 @@ class ApplyChangeSetUseCaseTest {
         assertEquals(expectedDb,serializeNewDb)
 
     }
+
+
+    private fun setUpPersonChangeSetAddDoubleInc(): ChangeSet {
+        val changeSet = ChangeSet()
+        val schema = Schema()
+        val doubleInc = schema.buildDoubleInc("person",
+                "employee","name,surname","name,surname")
+        changeSet plus doubleInc
+        return changeSet
+    }
+
+
+    // TODO Test Person with inclusion constraint changeset.
+    @Test
+    fun test_apply_changeset_to_person_double_inc() {
+        // given
+        val personDB = Database()
+        personDB.schema.addTable("person:name,surname,address")
+        personDB.schema.addTable("employee:name,surname,salary")
+        val personCS = setUpPersonChangeSetAddDoubleInc()
+        assertEquals(1, personCS.createConstraint.size)
+        val serializer = XMLSerializerJacksonAdapter()
+        val cs_xml = serializer.prettyChangeSet(personCS)
+        assertEquals("""<changeSet id="">
+  <createConstraint name="person_employee.doubleInc1" id="cdi1" type="DOUBLE_INCLUSION">
+    <source name="" id="" table="person">
+      <columns>
+        <columns name="surname" id="" dbname="" nullable="false" dbtype=""/>
+        <columns name="name" id="" dbname="" nullable="false" dbtype=""/>
+      </columns>
+    </source>
+    <target name="" id="" table="employee">
+      <columns>
+        <columns name="surname" id="" dbname="" nullable="false" dbtype=""/>
+        <columns name="name" id="" dbname="" nullable="false" dbtype=""/>
+      </columns>
+    </target>
+  </createConstraint>
+</changeSet>""",cs_xml)
+        // when
+        val newDB = ApplyChangeSetUseCase(serializer).apply(personDB, personCS)
+        //then
+        assertEquals(1,newDB.schema.constraints?.size)
+        // checks identity
+        val serializeNewDb = serializer.prettyDatabase(newDB)
+        val expectedDb ="""<database name="" id="" source="">
+  <schema name="" id="">
+    <tables>
+      <tables name="person" id="t1" view="" condition="">
+        <columns>
+          <columns name="name" id="" dbname="" nullable="false" dbtype=""/>
+          <columns name="surname" id="" dbname="" nullable="false" dbtype=""/>
+          <columns name="address" id="" dbname="" nullable="false" dbtype=""/>
+        </columns>
+      </tables>
+      <tables name="employee" id="t2" view="" condition="">
+        <columns>
+          <columns name="name" id="" dbname="" nullable="false" dbtype=""/>
+          <columns name="surname" id="" dbname="" nullable="false" dbtype=""/>
+          <columns name="salary" id="" dbname="" nullable="false" dbtype=""/>
+        </columns>
+      </tables>
+    </tables>
+    <constraints>
+      <constraints name="person_employee.doubleInc1" id="cdi1" type="DOUBLE_INCLUSION">
+        <source name="" id="" table="person">
+          <columns>
+            <columns name="surname" id="" dbname="" nullable="false" dbtype=""/>
+            <columns name="name" id="" dbname="" nullable="false" dbtype=""/>
+          </columns>
+        </source>
+        <target name="" id="" table="employee">
+          <columns>
+            <columns name="surname" id="" dbname="" nullable="false" dbtype=""/>
+            <columns name="name" id="" dbname="" nullable="false" dbtype=""/>
+          </columns>
+        </target>
+      </constraints>
+    </constraints>
+  </schema>
+  <mappings/>
+</database>"""
+        assertEquals(expectedDb,serializeNewDb)
+
+    }
+
+
 }
