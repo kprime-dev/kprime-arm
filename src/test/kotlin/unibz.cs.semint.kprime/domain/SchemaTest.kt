@@ -420,4 +420,17 @@ class SchemaTest {
         assertTrue(lostBCNFConstraints.equals(Constraint.set("A,B --> C")))
     }
 
+    @Test
+    fun test_not_key_col_finder() {
+        // given
+        val schema = Schema()
+        schema.addTable("person:name,surname,age,address")
+        schema.addKey("person:name,surname")
+        // when
+        val notkey = schema.notkey("person")
+        // then
+        assertEquals(2,notkey.size)
+        assertTrue(notkey.contains(Column.of("age")))
+        assertTrue(notkey.contains(Column.of("address")))
+    }
 }

@@ -66,6 +66,14 @@ class Schema () {
         return keys[0].source.columns.toSet()
     }
 
+    fun notkey(tableName: String): Set<Column> {
+        val keyCols = key(tableName)
+        val table = table(tableName) ?: return emptySet()
+        val cols = table.columns.toMutableSet()
+        cols.removeAll(keyCols)
+        return cols
+    }
+
     fun addKey(tableName:String, k:Set<Column>): Constraint {
         val primaryConstraint = buildKey(tableName, k)
         constraints().add(primaryConstraint)
@@ -98,26 +106,54 @@ class Schema () {
         return constraints().filter { c -> c.type.equals(Constraint.TYPE.FOREIGN_KEY.name) }
     }
 
+    fun inclusions(): List<Constraint> {
+        return constraints().filter { c -> c.type.equals(Constraint.TYPE.INCLUSION.name) }
+    }
+
     fun foreignsWithSource(tableName: String): List<Constraint> {
         return foreignKeys().filter { f -> f.source.table.equals(tableName) }
     }
 
-    fun referencedTablesOf(tableName: String): List<Table> {
+    fun foreignsWithTarget(tableName: String): List<Constraint> {
+        return foreignKeys().filter { f -> f.target.table.equals(tableName) }
+    }
+
+    fun inclusionsWithSource(tableName: String): List<Constraint> {
+        return inclusions().filter { f -> f.source.table.equals(tableName) }
+    }
+
+    fun inclusionsWithTarget(tableName: String): List<Constraint> {
+        return inclusions().filter { f -> f.target.table.equals(tableName) }
+    }
+
+    fun referencedTablesOf(tableName: String): Set<Table> {
         var rTables = foreignTablesOf(tableName)
         val diTables = doubleIncTablesOf(tableName)
+        val iTables = inclusionTablesOf(tableName)
         println(diTables)
         rTables.addAll(diTables)
-        return rTables
+        rTables.addAll(iTables)
+        return rTables.toSet()
     }
 
     private fun foreignTablesOf(tableName: String): ArrayList<Table> {
         var rTables = ArrayList<Table>()
-        var foreignConstr = foreignsWithSource(tableName)
+        var foreignConstr = foreignsWithTarget(tableName)
         for (foreign in foreignConstr) {
-            var t = table(foreign.target.table)
+            var t = table(foreign.source.table)
             if (t != null) rTables.add(t)
         }
         return rTables
+    }
+
+    private fun inclusionTablesOf(tableName: String): ArrayList<Table> {
+        var iTables = ArrayList<Table>()
+        var inclusionConstraints = inclusionsWithTarget(tableName)
+        for (inclusion in inclusionConstraints) {
+            var t = table(inclusion.source.table)
+            if (t != null) iTables.add(t)
+        }
+        return iTables
     }
 
     private fun doubleIncTablesOf(tableName: String): ArrayList<Table> {
@@ -138,10 +174,6 @@ class Schema () {
             if (t != null) rTables.add(t)
         }
         return rTables
-    }
-
-    fun foreignsWithTarget(tableName: String): List<Constraint> {
-        return foreignKeys().filter { f -> f.target.table.equals(tableName) }
     }
 
     fun doubleIncs(): List<Constraint> {

@@ -37,6 +37,17 @@ object SchemaCmdParser {
     }
 
     // table1:a-->table2:b
+    fun parseForeignKey(index: Int, constraintExpression: String): Constraint {
+        val split = constraintExpression.split("-->")
+        val tableSourceString = split[0]
+        val tableTargetString = split[1]
+        val tableSource = parseTable(tableSourceString)
+        val tableTarget = parseTable(tableTargetString)
+        val type = Constraint.TYPE.FOREIGN_KEY.name
+        return buildConstraint(tableSource, tableTarget, type, index)
+    }
+
+    // table1:a-->table2:b
     fun parseInclusion(index: Int, constraintExpression: String): Constraint {
         val split = constraintExpression.split("-->")
         val tableSourceString = split[0]
