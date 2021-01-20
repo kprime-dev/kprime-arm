@@ -27,6 +27,8 @@ class Column (): Labelled {
     var labels: String? = null
     @JacksonXmlProperty(isAttribute = true)
     var default: Any? = null
+    @JacksonXmlProperty(isAttribute = true)
+    var dbtable: String? = null
 
     private var labeller = Labeller()
 
@@ -57,11 +59,24 @@ class Column (): Labelled {
 
         fun of(name:String):Column {
             val c = Column()
-            c.name = name.trim()
+            val (colname,tableName) = splitName(name)
+            println(colname)
+            println(tableName)
+            c.name = colname
+            c.dbtable = tableName
             return c
 
         }
 
+        private fun splitName(name:String):Pair<String,String> {
+            val tokens = name.trim().split(".")
+            println(tokens)
+            return if (tokens.size==1) {
+                Pair(tokens[0],"")
+            } else {
+                Pair(tokens[1],tokens[0])
+            }
+        }
     }
     override fun resetLabels(labelsAsString: String): String {
         labels = labeller.resetLabels(labelsAsString)

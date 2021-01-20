@@ -16,7 +16,7 @@ class OidsTest {
         schema.addDoubleInc("person:name,surname<->teacher:name,surname")
         val originTableName = "person"
         // when
-        val sqlCommands = oid(schema, originTableName)
+        val sqlCommands = oid(schema, originTableName).sqlCommands!!
         // then
         assertEquals("ALTER TABLE person ADD COLUMN sidperson int NOT NULL auto_increment UNIQUE",sqlCommands[0])
         assertEquals("CREATE TABLE SKEYperson AS SELECT sidperson,surname,name FROM person",sqlCommands[1])
@@ -58,7 +58,7 @@ table8: DepName , DepAddress
         schema.addTable("table8:depname,depaddress")
         schema.addDoubleInc("table8:depname<->table7:depname")
         // when
-        val sqlCommands = oid(schema,"table3")
+        val sqlCommands = oid(schema,"table3").sqlCommands!!
         // then
         assertEquals(5,sqlCommands.size)
     }

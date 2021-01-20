@@ -433,4 +433,21 @@ class SchemaTest {
         assertTrue(notkey.contains(Column.of("age")))
         assertTrue(notkey.contains(Column.of("address")))
     }
+
+    @Test
+    fun test_move_constraints_from_table_to_table() {
+        // given
+        val schema = Schema()
+        schema.addTable("person:name")
+        schema.addTable("employee:name")
+        schema.addDoubleInc("person:name<->employee:name")
+        schema.addTable("employee_1:name")
+        assertEquals(1,schema.constraintsByTable("employee").size)
+        // when
+        schema.constraintsFromTableToTable("employee","employee_1")
+        // then
+        assertEquals(0,schema.constraintsByTable("employee").size)
+        assertEquals(1,schema.constraintsByTable("employee_1").size)
+        assertEquals("[DOUBLE_INCLUSION person:name --> employee_1:name ; ]",schema.constraintsByTable("employee_1").toString())
+    }
 }

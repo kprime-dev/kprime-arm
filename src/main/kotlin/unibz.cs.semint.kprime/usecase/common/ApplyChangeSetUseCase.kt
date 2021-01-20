@@ -128,7 +128,7 @@ class ApplyChangeSetUseCase(val serializer: SerializerServiceI) {
     fun dropConstraint(db:Database, dropConstraint: DropConstraint):Database {
         if (db.schema.constraints().isEmpty()) return db
         if (dropConstraint.tableName.isNotEmpty()) {
-            db.schema.constraintByTable(dropConstraint.tableName)
+            db.schema.constraintsByTable(dropConstraint.tableName).firstOrNull()
                     .let { it -> if (it != null) db.schema.constraints().remove(it) }
         } else {
             db.schema.constraint(dropConstraint.constraintName)

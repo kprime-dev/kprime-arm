@@ -46,9 +46,22 @@ class Schema () {
         return constraints().filter { c -> c.id==id }.firstOrNull()
     }
 
-    fun constraintByTable(name: String): Constraint? {
-        if (constraints().isEmpty()) return null
-        return constraints().filter { c -> c.source.table==name || c.target.table==name }.firstOrNull()
+    fun constraintsByTable(name: String): List<Constraint> {
+        if (constraints().isEmpty()) return emptyList()
+        return constraints().filter { c -> c.source.table==name || c.target.table==name }
+    }
+
+    fun constraintsFromTableToTable(sourceTableName: String, targetTableName:String) {
+        val sourceTableConstraints = constraintsByTable(sourceTableName)
+        for (constr in sourceTableConstraints) {
+            if (constr.source.table==sourceTableName) {
+                constr.source.table=targetTableName
+            }
+            if (constr.target.table==sourceTableName) {
+                constr.target.table=targetTableName
+            }
+            println("MOVED CONSTRAINT FROM $sourceTableName TO:"+constr.toString())
+        }
     }
 
     fun keys(tableName: String): List<Constraint> {
@@ -421,7 +434,7 @@ class Schema () {
      */
 
     fun oidForTable(tableName:String):List<String> {
-        return oid(this,tableName)
+        return oid(this,tableName).sqlCommands?: emptyList()
     }
 
 }

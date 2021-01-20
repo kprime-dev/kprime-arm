@@ -71,8 +71,8 @@ class Table (): Labelled {
     }
 
     infix fun withColumn(name: String ) = apply {
-        val col = Column()
-        col.name = name
+        val col = Column.of(name)
+        //col.name = name
         this.columns.add(col)
     }
 
