@@ -193,6 +193,10 @@ class Schema () {
         return constraints().filter { c -> c.type.equals(Constraint.TYPE.DOUBLE_INCLUSION.name) }
     }
 
+    fun doubleIncs(tableName:String): List<Constraint> {
+        return doubleIncs().filter { f -> f.source.table.equals(tableName) }
+    }
+
     fun functionalLHS(tableName: String): Set<Column> {
         var resultCols = mutableSetOf<Column>()
         val first = constraints().filter { c ->
