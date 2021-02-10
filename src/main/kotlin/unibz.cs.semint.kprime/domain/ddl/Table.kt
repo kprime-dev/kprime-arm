@@ -35,7 +35,6 @@ class Table (): Labelled {
     @JacksonXmlProperty(isAttribute = true)
     var source: String? = null
 
-    private var labeller = Labeller()
 
     fun hasColumn(nameToFind:String): Boolean {
         for (col in columns) {
@@ -81,31 +80,30 @@ class Table (): Labelled {
     }
 
     override fun resetLabels(labelsAsString: String): String {
-        labels = labeller.resetLabels(labelsAsString)
-        return labelsAsString()
+        labels = labelsAsString
+        return labels!!
     }
 
     override fun addLabels(labelsAsString: String): String {
-        labels = labeller.addLabels(labelsAsString)
-        return labelsAsString()
-    }
-
-    fun addColomunsLabels(labelsAsString: String): String {
-        for (column in columns) column.addLabels(labelsAsString)
-        return ""
+        if (labels==null) labels = labelsAsString
+        else labels += labelsAsString
+        return labels!!
     }
 
     override fun addLabels(newLabels: List<Label>): String {
-        labels = labeller.addLabels(newLabels)
-        return labelsAsString()
+        return addLabels(newLabels.joinToString(","))
+    }
+
+    override fun hasLabel(label: String): Boolean {
+        return labels?.contains(label)?:false
     }
 
     override fun labelsAsString(): String {
         return labels?: ""
     }
 
-    override fun hasLabel(label: String): Boolean {
-        return labeller.hasLabel(label)
+    fun addColomunsLabels(labelsAsString: String): String {
+        for (column in columns) column.addLabels(labelsAsString)
+        return ""
     }
-
 }

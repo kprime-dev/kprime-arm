@@ -46,8 +46,6 @@ class Constraint(): Labelled {
     @JacksonXmlProperty(isAttribute = true)
     var labels: String? = null
 
-    private var labeller = Labeller()
-
     fun clone():Constraint {
         val objectMapper = ObjectMapper()
         val asString = objectMapper.writeValueAsString(this)
@@ -145,26 +143,26 @@ class Constraint(): Labelled {
     }
 
     override fun resetLabels(labelsAsString: String): String {
-        labels = labeller.resetLabels(labelsAsString)
-        return labelsAsString()
+        labels = labelsAsString
+        return labels!!
     }
 
     override fun addLabels(labelsAsString: String): String {
-        labels = labeller.addLabels(labelsAsString)
-        return labelsAsString()
+        if (labels==null) labels = labelsAsString
+        else labels += labelsAsString
+        return labels!!
     }
 
     override fun addLabels(newLabels: List<Label>): String {
-        labels = labeller.addLabels(newLabels)
-        return labelsAsString()
+        return addLabels(newLabels.joinToString(","))
+    }
+
+    override fun hasLabel(label: String): Boolean {
+        return labels?.contains(label)?:false
     }
 
     override fun labelsAsString(): String {
         return labels?: ""
-    }
-
-    override fun hasLabel(label: String): Boolean {
-        return labeller.hasLabel(label)
     }
 
     override fun toString(): String {
