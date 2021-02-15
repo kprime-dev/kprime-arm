@@ -194,7 +194,15 @@ class Schema () {
     }
 
     fun doubleIncs(tableName:String): List<Constraint> {
-        return doubleIncs().filter { f -> f.source.table.equals(tableName) }
+        return doubleIncs().filter { f -> f.source.table.equals(tableName) || f.target.table.equals(tableName)}
+    }
+
+    fun multivalued(): List<Constraint> {
+        return constraints().filter { c -> c.type.equals(Constraint.TYPE.MULTIVALUED.name) }
+    }
+
+    fun multivalued(tableName:String): List<Constraint> {
+        return multivalued().filter { f -> f.source.table.equals(tableName) }
     }
 
     fun functionalLHS(tableName: String): Set<Column> {
