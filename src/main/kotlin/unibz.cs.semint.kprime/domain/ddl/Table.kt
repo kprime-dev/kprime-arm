@@ -106,4 +106,10 @@ class Table (): Labelled {
         for (column in columns) column.addLabels(labelsAsString)
         return ""
     }
+
+    override fun toString(): String {
+        return "Table(name='$name', id='$id', view='$view', condition='$condition', parent=$parent, columns=$columns, labels=$labels, catalog=$catalog, schema=$schema, source=$source)"
+    }
+
+
 }

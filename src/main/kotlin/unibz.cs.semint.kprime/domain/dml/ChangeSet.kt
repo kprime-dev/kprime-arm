@@ -28,7 +28,7 @@ class ChangeSet() {
     var parent: String? = null
 
     @JacksonXmlProperty(isAttribute = true)
-    var sqlCommands: List<String>? = null
+    var sqlCommands: MutableList<String>? = null
 
     @JacksonXmlElementWrapper(useWrapping=false)
     var createView= ArrayList<CreateView>()
@@ -126,5 +126,21 @@ class ChangeSet() {
         }
     }
 
+    fun add(changeSetToMerge:ChangeSet) {
+        this.sqlCommands = this.sqlCommands?:ArrayList()
+        if (changeSetToMerge.sqlCommands!=null) {
+            this.sqlCommands!!.addAll(changeSetToMerge.sqlCommands!!)
+        }
+        this.createConstraint.addAll(changeSetToMerge.createConstraint)
+        this.createTable.addAll(changeSetToMerge.createTable)
+        this.createMapping.addAll(changeSetToMerge.createMapping)
+        this.createColumn.addAll(changeSetToMerge.createColumn)
+        this.createView.addAll(changeSetToMerge.createView)
 
+        this.dropConstraint.addAll(changeSetToMerge.dropConstraint)
+        this.dropTable.addAll(changeSetToMerge.dropTable)
+        this.dropMapping.addAll(changeSetToMerge.dropMapping)
+        this.dropColumn.addAll(changeSetToMerge.dropColumn)
+        this.dropView.addAll(changeSetToMerge.dropView)
+    }
 }

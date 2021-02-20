@@ -3,6 +3,7 @@ package unibz.cs.semint.kprime.domain.ddl
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.ddl.schemalgo.*
+import unibz.cs.semint.kprime.domain.dml.ChangeSet
 
 @JacksonXmlRootElement(localName = "schema")
 class Schema () {
@@ -121,6 +122,10 @@ class Schema () {
 
     fun inclusions(): List<Constraint> {
         return constraints().filter { c -> c.type.equals(Constraint.TYPE.INCLUSION.name) }
+    }
+
+    fun inclusions(tableName:String): List<Constraint> {
+        return inclusions().filter { f -> f.source.table.equals(tableName) || f.target.table.equals(tableName)}
     }
 
     fun foreignsWithSource(tableName: String): List<Constraint> {
@@ -445,8 +450,8 @@ class Schema () {
     }
      */
 
-    fun oidForTable(tableName:String):List<String> {
-        return oid(this,tableName).sqlCommands?: emptyList()
+    fun oidForTable(tableName:String): ChangeSet {
+        return oid(this,tableName)
     }
 
 }
