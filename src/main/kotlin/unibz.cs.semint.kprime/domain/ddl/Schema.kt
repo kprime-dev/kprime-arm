@@ -52,7 +52,7 @@ class Schema () {
         return constraints().filter { c -> c.source.table==name || c.target.table==name }
     }
 
-    fun constraintsFromTableToTable(sourceTableName: String, targetTableName:String) {
+    fun moveConstraintsFromTableToTable(sourceTableName: String, targetTableName:String) {
         val sourceTableConstraints = constraintsByTable(sourceTableName)
         for (constr in sourceTableConstraints) {
             if (constr.source.table==sourceTableName) {
@@ -62,6 +62,22 @@ class Schema () {
                 constr.target.table=targetTableName
             }
             println("MOVED CONSTRAINT FROM $sourceTableName TO:"+constr.toString())
+        }
+    }
+
+    fun copyConstraintsFromTableToTable(sourceTableName: String, targetTableName:String) {
+        val sourceTableConstraints = constraintsByTable(sourceTableName)
+        for (constr in sourceTableConstraints) {
+            val copyconstr = constr.clone()
+            if (constr.source.table==sourceTableName) {
+                copyconstr.source.table=targetTableName
+            }
+            if (constr.target.table==sourceTableName) {
+                copyconstr.target.table=targetTableName
+            }
+            if (constraints==null) constraints = ArrayList()
+            constraints?.add(copyconstr)
+            println("COPIED CONSTRAINT FROM $sourceTableName TO:"+constr.toString())
         }
     }
 

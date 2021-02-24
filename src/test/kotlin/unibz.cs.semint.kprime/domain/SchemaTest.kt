@@ -444,7 +444,7 @@ class SchemaTest {
         schema.addTable("employee_1:name")
         assertEquals(1,schema.constraintsByTable("employee").size)
         // when
-        schema.constraintsFromTableToTable("employee","employee_1")
+        schema.moveConstraintsFromTableToTable("employee","employee_1")
         // then
         assertEquals(0,schema.constraintsByTable("employee").size)
         assertEquals(1,schema.constraintsByTable("employee_1").size)

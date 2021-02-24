@@ -191,5 +191,4 @@ class Constraint(): Labelled {
         return this.toString().hashCode()
     }
 
-
 }

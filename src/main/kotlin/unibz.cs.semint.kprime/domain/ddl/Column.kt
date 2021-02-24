@@ -115,5 +115,4 @@ class Column (): Labelled {
         return name.hashCode()
     }
 
-
 }

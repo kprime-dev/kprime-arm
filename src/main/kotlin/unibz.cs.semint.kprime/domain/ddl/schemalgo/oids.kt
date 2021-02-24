@@ -2,10 +2,7 @@ package unibz.cs.semint.kprime.domain.ddl.schemalgo
 
 import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.Schema
-import unibz.cs.semint.kprime.domain.ddl.SchemaCmdParser
-import unibz.cs.semint.kprime.domain.dml.AlterTable
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
-import unibz.cs.semint.kprime.domain.dml.CreateTable
 
 // FIXME in realtà non dovrebbe fermarsi al primo livello ma proseguire in modo ricorsivo e cominciare dalla coda.
 // FIXME in realtà dovrebbe rimuovere tutti i constraint prima di operare le sostituzioni di colonna chiave per poi rimetterli.
@@ -26,10 +23,12 @@ fun oid(schema: Schema, originTableName: String): ChangeSet {
 
         // create a key-table with projection of oid and pk
         val keyCols = originTableKey.map { c -> c.name }.joinToString(",")
-        sqlCommands.add("CREATE TABLE SKEY$originTableName AS SELECT $sid,$keyCols FROM $originTableName")
-        schema.addTable("SKEY$originTableName:$sid,$keyCols")
+        val surrogateTableName = "SKEY$originTableName"
+        sqlCommands.add("CREATE TABLE $surrogateTableName AS SELECT $sid,$keyCols FROM $originTableName")
+        schema.addTable("$surrogateTableName:$sid,$keyCols")
         //TODO changeSet.createTable.add(CreateTable() name "SKEY$originTableName" withCols Column.set("$sid,$keyCols"))
 
+        schema.copyConstraintsFromTableToTable(originTableName,surrogateTableName)
         // search ftables with foreign keys od double-inc as pk
         val rTables = schema.referencedTablesOf(originTableName)
         println("==============REFERENCED:")
@@ -41,11 +40,11 @@ fun oid(schema: Schema, originTableName: String): ChangeSet {
                 val notKeyCols = rTableColsToKeep.map { notKeyColName -> "${rTable.name}.$notKeyColName" }.joinToString(",")
                 // crea una nuova tabella con chiave surrogata + attributi non chiave
                 val rTableNewName =  "${rTable.name}_1"
-                val newTableCommand = "CREATE TABLE ${rTableNewName} AS SELECT SKEY$originTableName.$sid,$notKeyCols FROM SKEY$originTableName JOIN ${rTable.name} ON SKEY$originTableName.${originTableKey.first()} = ${rTable.name}.${originTableKey.first()}"
-                schema.addTable("${rTableNewName}:SKEY$originTableName.$sid,$notKeyCols")
+                val newTableCommand = "CREATE TABLE ${rTableNewName} AS SELECT $surrogateTableName.$sid,$notKeyCols FROM SKEY$originTableName JOIN ${rTable.name} ON SKEY$originTableName.${originTableKey.first()} = ${rTable.name}.${originTableKey.first()}"
+                schema.addTable("${rTableNewName}:$surrogateTableName.$sid,$notKeyCols")
                 //TODO changeSet.createTable.add(CreateTable() name rTableNewName withCols Column.set("SKEY$originTableName.$sid,$notKeyCols"))
 
-                schema.constraintsFromTableToTable(rTable.name,rTableNewName)
+                schema.moveConstraintsFromTableToTable(rTable.name,rTableNewName)
                 println(newTableCommand)
                 sqlCommands.add(newTableCommand)
                 // add constraint to new table (from memory)
@@ -54,7 +53,7 @@ fun oid(schema: Schema, originTableName: String): ChangeSet {
 
         // crea una double-inc tra tabella-chiave e tabella origine.
         val index = (schema.constraints?.size?: 0) + changeSet.size()
-        schema.addDoubleInc("SKEY$originTableName:$sid<->${originTableName}:$sid")
+        schema.addDoubleInc("$surrogateTableName:$sid<->${originTableName}:$sid")
         //TODO changeSet plus SchemaCmdParser.parseDoubleInclusion(index,"SKEY$originTableName:$sid<->${originTableName}:$sid")
 
         // var ftables = schema.foreignsTable(originTableName)

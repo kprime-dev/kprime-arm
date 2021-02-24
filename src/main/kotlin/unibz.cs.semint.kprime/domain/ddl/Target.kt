@@ -6,6 +6,7 @@ import unibz.cs.semint.kprime.domain.ddl.Column
 
 @JacksonXmlRootElement(localName = "target")
 class Target () {
+
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""
     @JacksonXmlProperty(isAttribute = true)

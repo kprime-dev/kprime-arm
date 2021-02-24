@@ -5,6 +5,7 @@ import org.junit.Test
 import unibz.cs.semint.kprime.domain.ddl.Schema
 import unibz.cs.semint.kprime.domain.ddl.schemalgo.oid
 import kotlin.test.assertEquals
+
 class OidsTest {
 
     @Test
@@ -43,7 +44,6 @@ table8: DepName , DepAddress
  table7_table1.INCLUSION13  INCLUSION  SSN  ->  SSN
  table7_table8.DOUBLE_INCLUSION14  DOUBLE_INCLUSION  DepName  ->  DepName
      */
-    @Ignore
     // TODO oid fun using changeset
     fun test_oid_two_tables() {
         // given
@@ -67,24 +67,19 @@ table8: DepName , DepAddress
         val sqlCommands = changeset.sqlCommands!!
         // then
         assertEquals(5,sqlCommands.size)
-        assertEquals(4,changeset.size())
-        assertEquals(3,changeset.createTable.size)
-        assertEquals("Table(name='SKEYtable3', id='', view='', condition='', parent=null, columns=[sidtable3, ssn], labels=null, catalog=null, schema=null, source=null)",changeset.createTable[0].toString())
-        assertEquals("Table(name='table1_1', id='', view='', condition='', parent=null, columns=[phone, sidtable3], labels=null, catalog=null, schema=null, source=null)",changeset.createTable[1].toString())
-        assertEquals("Table(name='table7_1', id='', view='', condition='', parent=null, columns=[sidtable3, depname], labels=null, catalog=null, schema=null, source=null)",changeset.createTable[2].toString())
-        assertEquals(1,changeset.createConstraint.size)
-        assertEquals("DOUBLE_INCLUSION SKEYtable3:sidtable3 --> table3:sidtable3 ; ",changeset.createConstraint[0].toString())
+        assertEquals(0,changeset.size())
 
         val changeset2 = oid(schema, "table8")
         val sqlCommands2 = changeset2.sqlCommands!!
         // then
-        assertEquals(3,sqlCommands2.size)
-        assertEquals(2,changeset2.size())
-        assertEquals(1,changeset2.createTable.size)
-        assertEquals("Table(name='SKEYtable8', id='', view='', condition='', parent=null, columns=[sidtable8, depname], labels=null, catalog=null, schema=null, source=null)",changeset2.createTable[0].toString())
-        //assertEquals("Table(name='table7_1_1', id='', view='', condition='', parent=null, columns=[sidtable8, sidtable3], labels=null, catalog=null, schema=null, source=null)",changeset2.createTable[1].toString())
-        assertEquals(1,changeset2.createConstraint.size)
-        assertEquals("DOUBLE_INCLUSION SKEYtable8:sidtable8 --> table8:sidtable8 ; ",changeset2.createConstraint[0].toString())
+        assertEquals(4,sqlCommands2.size)
+        assertEquals(0,changeset2.size())
+        val constraintsTable3 = schema.constraintsByTable("SKEYtable3")
+        assertEquals(4, constraintsTable3.size)
+        assertEquals("PRIMARY_KEY SKEYtable3:ssn --> SKEYtable3:ssn ; ",constraintsTable3[0].toString())
+        assertEquals("DOUBLE_INCLUSION table1_1:ssn --> SKEYtable3:ssn ; ",constraintsTable3[1].toString())
+        assertEquals("INCLUSION table7_1_1:ssn --> SKEYtable3:ssn ; ",constraintsTable3[2].toString())
+        assertEquals("DOUBLE_INCLUSION SKEYtable3:sidtable3 --> table3:sidtable3 ; ",constraintsTable3[3].toString())
 
     }
 
