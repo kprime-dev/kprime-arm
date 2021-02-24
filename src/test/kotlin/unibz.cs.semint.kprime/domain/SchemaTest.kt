@@ -450,4 +450,18 @@ class SchemaTest {
         assertEquals(1,schema.constraintsByTable("employee_1").size)
         assertEquals("[DOUBLE_INCLUSION person:name --> employee_1:name ; ]",schema.constraintsByTable("employee_1").toString())
     }
+
+    @Test
+    fun test_move_constraint_from_cols_to_col() {
+        // given
+        val schema = Schema()
+        schema.addTable("Person:name,surname")
+        schema.addKey("Person:name")
+        // when
+        schema.moveConstraintsFromColsToCol("Person","name","surname")
+        //then
+        val key = schema.key("Person")
+        assertEquals("surname",key.first().name)
+        assertEquals(1,key.size)
+    }
 }

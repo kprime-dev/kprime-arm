@@ -23,6 +23,7 @@ fun oid(schema: Schema, originTableName: String): ChangeSet {
 
         // create a key-table with projection of oid and pk
         val keyCols = originTableKey.map { c -> c.name }.joinToString(",")
+
         val surrogateTableName = "SKEY$originTableName"
         sqlCommands.add("CREATE TABLE $surrogateTableName AS SELECT $sid,$keyCols FROM $originTableName")
         schema.addTable("$surrogateTableName:$sid,$keyCols")
@@ -31,25 +32,24 @@ fun oid(schema: Schema, originTableName: String): ChangeSet {
         schema.copyConstraintsFromTableToTable(originTableName,surrogateTableName)
         // search ftables with foreign keys od double-inc as pk
         val rTables = schema.referencedTablesOf(originTableName)
-        println("==============REFERENCED:")
         for (rTable in rTables) {
                 // remove constraint from old table (and remember)
-                println(rTable.name)
                 val rTableColsToKeep = schema.table(rTable.name)!!.columns.toMutableSet()
                 rTableColsToKeep.removeAll(originTable!!.columns)
                 val notKeyCols = rTableColsToKeep.map { notKeyColName -> "${rTable.name}.$notKeyColName" }.joinToString(",")
                 // crea una nuova tabella con chiave surrogata + attributi non chiave
                 val rTableNewName =  "${rTable.name}_1"
+                // FIXME funziona solo per chiavi a colonna singola
                 val newTableCommand = "CREATE TABLE ${rTableNewName} AS SELECT $surrogateTableName.$sid,$notKeyCols FROM SKEY$originTableName JOIN ${rTable.name} ON SKEY$originTableName.${originTableKey.first()} = ${rTable.name}.${originTableKey.first()}"
                 schema.addTable("${rTableNewName}:$surrogateTableName.$sid,$notKeyCols")
                 //TODO changeSet.createTable.add(CreateTable() name rTableNewName withCols Column.set("SKEY$originTableName.$sid,$notKeyCols"))
 
                 schema.moveConstraintsFromTableToTable(rTable.name,rTableNewName)
-                println(newTableCommand)
+                val rTableKeys = schema.key(rTable.name).map { col -> col.name }.joinToString(",")
+                schema.moveConstraintsFromColsToCol(rTableNewName,rTableKeys,sid)
                 sqlCommands.add(newTableCommand)
                 // add constraint to new table (from memory)
         }
-        println("________________________")
 
         // crea una double-inc tra tabella-chiave e tabella origine.
         val index = (schema.constraints?.size?: 0) + changeSet.size()
@@ -63,6 +63,9 @@ fun oid(schema: Schema, originTableName: String): ChangeSet {
         // remove ex-pk columns from origin-table
         sqlCommands.add("ALTER TABLE $originTableName DROP COLUMN $keyCols")
         schema.table(originTableName)!!.columns.removeAll(originTableKey)
+
+        schema.moveConstraintsFromColsToCol(originTableName,keyCols,sid)
+
         //TODO changeset remove columns
         changeSet.sqlCommands = sqlCommands
         return changeSet

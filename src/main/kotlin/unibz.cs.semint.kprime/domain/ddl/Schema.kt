@@ -65,6 +65,19 @@ class Schema () {
         }
     }
 
+    fun moveConstraintsFromColsToCol(originTableName: String, keyCols: String, sid: String) {
+        val colNames = keyCols.split(",")
+        val constraints = constraintsByTable(originTableName)
+        for (constr in constraints) {
+            for (col in constr.source.columns) {
+                if (keyCols.contains(col.name)) col.name = sid
+            }
+            for (col in constr.target.columns) {
+                if (keyCols.contains(col.name)) col.name = sid
+            }
+        }
+    }
+
     fun copyConstraintsFromTableToTable(sourceTableName: String, targetTableName:String) {
         val sourceTableConstraints = constraintsByTable(sourceTableName)
         for (constr in sourceTableConstraints) {
