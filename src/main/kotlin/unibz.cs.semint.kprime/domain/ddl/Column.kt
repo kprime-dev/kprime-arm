@@ -58,8 +58,6 @@ class Column (): Labelled {
         fun of(name:String):Column {
             val c = Column()
             val (colname,tableName) = splitName(name)
-            println(colname)
-            println(tableName)
             c.name = colname
             c.dbtable = tableName
             return c
@@ -68,7 +66,6 @@ class Column (): Labelled {
 
         private fun splitName(name:String):Pair<String,String> {
             val tokens = name.trim().split(".")
-            println(tokens)
             return if (tokens.size==1) {
                 Pair(tokens[0],"")
             } else {

@@ -1,6 +1,5 @@
 package unibz.cs.semint.kprime.domain.schemalgo
 
-import org.junit.Ignore
 import org.junit.Test
 import unibz.cs.semint.kprime.domain.ddl.Schema
 import unibz.cs.semint.kprime.domain.ddl.schemalgo.oid
@@ -46,42 +45,61 @@ table8: DepName , DepAddress
  table7_table8.DOUBLE_INCLUSION14  DOUBLE_INCLUSION  DepName  ->  DepName
      */
     // TODO oid fun using changeset
-    fun test_oid_two_tables() {
+    fun test_two_oid_four_tables() {
         // given
         val schema = Schema()
 //        table1: SSN , Phone
-        schema.addTable("table1:ssn,phone")
+        schema.addTable("ssn_phone:ssn,phone")
+        schema.addKey("ssn_phone:ssn,phone")
 //        table3: SSN , Name ->double-inc table1
-        schema.addTable("table3:ssn,name")
-        schema.addKey("table3:ssn")
-        schema.addDoubleInc("table1:ssn<->table3:ssn")
+        schema.addTable("ssn_name:ssn,name")
+        schema.addKey("ssn_name:ssn")
+        schema.addDoubleInc("ssn_phone:ssn<->ssn_name:ssn")
 //        table7: SSN , DepName
-        schema.addTable("table7:ssn,depname")
-        schema.addInclusion("table7:ssn-->table3:ssn")
-        schema.addInclusion("table7:ssn-->table1:ssn")
-//        table8: DepName , DepAddress -> double-inc table7
-        schema.addTable("table8:depname,depaddress")
-        schema.addKey("table8:depname")
-        schema.addDoubleInc("table8:depname<->table7:depname")
+        schema.addTable("ssn_depname:ssn,depname")
+        schema.addInclusion("ssn_depname:ssn-->ssn_name:ssn")
+        schema.addInclusion("ssn_depname:ssn-->ssn_phone:ssn")
+//        table8: DepName , DepAddress -> double-inc ssn_depname
+        schema.addTable("ssn_depaddress:depname,depaddress")
+        schema.addKey("ssn_depaddress:depname")
+        schema.addDoubleInc("ssn_depaddress:depname<->ssn_depname:depname")
         // when
-        val changeset = oid(schema, "table3")
+        val changeset = oid(schema, "ssn_name")
         val sqlCommands = changeset.sqlCommands!!
         // then
         assertEquals(5,sqlCommands.size)
         assertEquals(0,changeset.size())
 
-        val changeset2 = oid(schema, "table8")
+        val changeset2 = oid(schema, "ssn_depaddress")
         val sqlCommands2 = changeset2.sqlCommands!!
         // then
         assertEquals(4,sqlCommands2.size)
         assertEquals(0,changeset2.size())
-        val constraintsTable3 = schema.constraintsByTable("SKEYtable3")
-        assertEquals(4, constraintsTable3.size)
-        assertEquals("PRIMARY_KEY SKEYtable3:ssn --> SKEYtable3:ssn ; ",constraintsTable3[0].toString())
-        assertEquals("DOUBLE_INCLUSION table1_1:ssn --> SKEYtable3:ssn ; ",constraintsTable3[1].toString())
-        assertEquals("INCLUSION table7_1_1:ssn --> SKEYtable3:ssn ; ",constraintsTable3[2].toString())
-        assertEquals("DOUBLE_INCLUSION SKEYtable3:sidtable3 --> table3:sidtable3 ; ",constraintsTable3[3].toString())
 
+        assertEquals(
+                "[ssn_phone, ssn_name, ssn_depname, ssn_depaddress, SKEYssn_name, ssn_phone_1, ssn_depname_1, SKEYssn_depaddress, ssn_depname_1_1]",
+                schema.tables?.map { it.name }.toString())
+
+
+        val constraintsSsnPhone1 = schema.constraintsByTable("ssn_phone_1")
+        assertEquals(3, constraintsSsnPhone1.size)
+//        assertEquals("ssn_phone_ssn_name.doubleInc1:DOUBLE_INCLUSION ssn_phone_1:sidssn_name --> ssn_name:sidssn_name ; ",constraintsSsnPhone1[0].toStringWithName())
+        assertEquals("ssn_depname_ssn_phone.inclusion2:INCLUSION ssn_depname_1_1:sidssn_name --> ssn_phone_1:sidssn_name ; ",constraintsSsnPhone1[0].toStringWithName())
+        assertEquals("pkey_ssn_phone_1:SURROGATE_KEY ssn_phone_1:sidssn_name --> ssn_phone_1:sidssn_name ; ",constraintsSsnPhone1[1].toStringWithName())
+        assertEquals("ssn_phone_ssn_name.doubleInc1_1:DOUBLE_INCLUSION ssn_phone_1:sidssn_name --> SKEYssn_name:sidssn_name ; ",constraintsSsnPhone1[2].toStringWithName()) //TO FIX
+
+        val constraintsSsnDepname11 = schema.constraintsByTable("ssn_depname_1_1")
+        assertEquals(5, constraintsSsnDepname11.size)
+//        assertEquals("INCLUSION ssn_depname_1_1:sidssn_name --> ssn_name:sidssn_name ; ",constraintsSsnDepname11[0].toString())
+        assertEquals("INCLUSION ssn_depname_1_1:sidssn_name --> ssn_phone_1:sidssn_name ; ",constraintsSsnDepname11[0].toString())
+//        assertEquals("DOUBLE_INCLUSION ssn_depaddress:sidssn_depaddress --> ssn_depname_1_1:sidssn_depaddress ; ",constraintsSsnDepname11[1].toString())
+        assertEquals("SURROGATE_KEY ssn_depname_1_1:sidssn_name --> ssn_depname_1_1:sidssn_name ; ",constraintsSsnDepname11[1].toString())
+
+        assertEquals("ssn_depname_ssn_name.inclusion1_1:INCLUSION ssn_depname_1_1:ssn --> SKEYssn_name:ssn ; ",constraintsSsnDepname11[2].toStringWithName())//TO FIX
+
+        assertEquals("pkey_ssn_depname_1_1:SURROGATE_KEY ssn_depname_1_1:sidssn_depaddress --> ssn_depname_1_1:sidssn_depaddress ; ",constraintsSsnDepname11[3].toStringWithName())
+
+        assertEquals("ssn_depaddress_ssn_depname.doubleInc2_1:DOUBLE_INCLUSION SKEYssn_depaddress:depname --> ssn_depname_1_1:depname ; ",constraintsSsnDepname11[4].toStringWithName())//TO FIX
     }
 
 }

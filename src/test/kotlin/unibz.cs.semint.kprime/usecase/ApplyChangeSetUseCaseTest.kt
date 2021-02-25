@@ -180,7 +180,7 @@ class ApplyChangeSetUseCaseTest {
     private fun setUpPersonChangeSetAddKey(): ChangeSet {
         val changeSet = ChangeSet()
         val schema = Schema()
-        val key = schema.buildKey("person",Column.set("name,surname"))
+        val key = schema.buildKey("person", Column.set("name,surname"), Constraint.TYPE.PRIMARY_KEY.name)
         changeSet plus key
         assertEquals(1,changeSet.createConstraint.size)
         return changeSet

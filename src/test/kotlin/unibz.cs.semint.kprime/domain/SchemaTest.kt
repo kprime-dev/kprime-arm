@@ -460,7 +460,7 @@ class SchemaTest {
         // when
         schema.moveConstraintsFromColsToCol("Person","name","surname")
         //then
-        val key = schema.key("Person")
+        val key = schema.keyCols("Person")
         assertEquals("surname",key.first().name)
         assertEquals(1,key.size)
     }

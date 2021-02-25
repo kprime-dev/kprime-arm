@@ -61,12 +61,11 @@ class Schema () {
             if (constr.target.table==sourceTableName) {
                 constr.target.table=targetTableName
             }
-            println("MOVED CONSTRAINT FROM $sourceTableName TO:"+constr.toString())
+            println("MOVED CONSTRAINT FROM $sourceTableName TO ${constr.name}:"+constr.toString())
         }
     }
 
     fun moveConstraintsFromColsToCol(originTableName: String, keyCols: String, sid: String) {
-        val colNames = keyCols.split(",")
         val constraints = constraintsByTable(originTableName)
         for (constr in constraints) {
             for (col in constr.source.columns) {
@@ -78,10 +77,23 @@ class Schema () {
         }
     }
 
+    fun removeKeyConstraint(originTableName: String) {
+        val constraints = constraintsByTable(originTableName)
+        var toRemove : Constraint? = null
+        for (constr in constraints) {
+            if (constr.type == Constraint.TYPE.PRIMARY_KEY.name)
+                toRemove = constr
+        }
+        if (toRemove!=null) this.constraints?.remove(toRemove)
+    }
+
     fun copyConstraintsFromTableToTable(sourceTableName: String, targetTableName:String) {
         val sourceTableConstraints = constraintsByTable(sourceTableName)
+        var constrToRemove = mutableListOf<Constraint>()
         for (constr in sourceTableConstraints) {
             val copyconstr = constr.clone()
+            constrToRemove.add(constr)
+            copyconstr.name = copyconstr.name+"_1"
             if (constr.source.table==sourceTableName) {
                 copyconstr.source.table=targetTableName
             }
@@ -92,6 +104,7 @@ class Schema () {
             constraints?.add(copyconstr)
             println("COPIED CONSTRAINT FROM $sourceTableName TO:"+constr.toString())
         }
+        this.constraints?.removeAll(constrToRemove)
     }
 
     fun keys(tableName: String): List<Constraint> {
@@ -102,7 +115,24 @@ class Schema () {
         return first
     }
 
-    fun key(tableName: String): Set<Column> {
+    fun keySurrogate(tableName: String): Constraint? {
+        return constraints().filter { c ->
+            c.type == Constraint.TYPE.SURROGATE_KEY.name &&
+                    c.source.table == "${tableName}"
+        }.firstOrNull()
+    }
+
+    fun keysAll(tableName: String): List<Constraint> {
+        val first = constraints().filter { c ->
+            (c.type == Constraint.TYPE.PRIMARY_KEY.name ||
+                    c.type == Constraint.TYPE.SURROGATE_KEY.name) &&
+                    c.source.table == "${tableName}"
+        }.toList()
+        return first
+    }
+
+
+    fun keyCols(tableName: String): Set<Column> {
         var resultCols = mutableSetOf<Column>()
         val keys = keys(tableName)
         if (keys.isEmpty()) return mutableSetOf()
@@ -110,7 +140,7 @@ class Schema () {
     }
 
     fun notkey(tableName: String): Set<Column> {
-        val keyCols = key(tableName)
+        val keyCols = keyCols(tableName)
         val table = table(tableName) ?: return emptySet()
         val cols = table.columns.toMutableSet()
         cols.removeAll(keyCols)
@@ -118,7 +148,7 @@ class Schema () {
     }
 
     fun addKey(tableName:String, k:Set<Column>): Constraint {
-        val primaryConstraint = buildKey(tableName, k)
+        val primaryConstraint = buildKey(tableName, k, Constraint.TYPE.PRIMARY_KEY.name)
         constraints().add(primaryConstraint)
         return primaryConstraint
     }
@@ -126,23 +156,40 @@ class Schema () {
     fun addKey(commandArgs:String):Schema {
         val tableName:String = commandArgs.split(":")[0]
         val attributeNames = commandArgs.split(":")[1]
-        constraints().add(buildKey(tableName,Column.set(attributeNames)))
+        constraints().add(buildKey(tableName, Column.set(attributeNames), Constraint.TYPE.PRIMARY_KEY.name))
         return this
     }
 
-    fun buildKey(tableName: String, k: Set<Column>): Constraint {
-        val primaryConstraint = Constraint.addKey {}
-        primaryConstraint.name = "pkey_$tableName"
-        primaryConstraint.source.table = tableName
-        primaryConstraint.target.table = tableName
-        primaryConstraint.source.columns.addAll(k)
-        primaryConstraint.target.columns.addAll(k)
-        primaryConstraint.type = Constraint.TYPE.PRIMARY_KEY.name
-        return primaryConstraint
+    fun addSurrogateKey(commandArgs:String):Schema {
+        val tableName:String = commandArgs.split(":")[0]
+        val attributeNames = commandArgs.split(":")[1]
+        constraints().add(buildKey(tableName, Column.set(attributeNames), Constraint.TYPE.SURROGATE_KEY.name))
+        return this
+    }
+
+    fun buildKey(tableName: String, k: Set<Column>, keyType: String): Constraint {
+        val keyConstraint = Constraint.addKey {}
+        keyConstraint.name = "pkey_$tableName"
+        keyConstraint.source.table = tableName
+        keyConstraint.target.table = tableName
+        keyConstraint.source.columns.addAll(k)
+        keyConstraint.target.columns.addAll(k)
+        keyConstraint.type = keyType
+        return keyConstraint
     }
 
     fun keys(): List<Constraint> {
         return constraints().filter { c -> c.type.equals(Constraint.TYPE.PRIMARY_KEY.name) }
+    }
+
+    fun keysSurrogate(): List<Constraint> {
+        return constraints().filter { c -> c.type.equals(Constraint.TYPE.SURROGATE_KEY.name) }
+    }
+
+    fun keysAll(): List<Constraint> {
+        return constraints().filter {
+            c -> c.type.equals(Constraint.TYPE.PRIMARY_KEY.name)
+                || c.type.equals(Constraint.TYPE.SURROGATE_KEY.name) }
     }
 
     fun foreignKeys(): List<Constraint> {
@@ -177,7 +224,6 @@ class Schema () {
         var rTables = foreignTablesOf(tableName)
         val diTables = doubleIncTablesOf(tableName)
         val iTables = inclusionTablesOf(tableName)
-        println(diTables)
         rTables.addAll(diTables)
         rTables.addAll(iTables)
         return rTables.toSet()
@@ -206,17 +252,14 @@ class Schema () {
     private fun doubleIncTablesOf(tableName: String): ArrayList<Table> {
         var rTables = ArrayList<Table>()
         val doubleTargets = doubleIncs().filter { di -> di.source.table.equals(tableName)}
-        println(doubleTargets)
         for (double in doubleTargets) {
             val name1 = double.target.table
-            println(" target $name1")
             var t = table(name1)
             if (t != null) rTables.add(t)
         }
         val doubleSources = doubleIncs().filter { di -> di.target.table.equals(tableName)}
         for (double in doubleSources) {
             val name1 = double.source.table
-            println(" source $name1")
             var t = table(name1)
             if (t != null) rTables.add(t)
         }

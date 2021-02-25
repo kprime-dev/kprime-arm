@@ -18,7 +18,7 @@ class VSplitUseCase {
         if (tableWithFunctionalName.isEmpty()) return changeSet
 
         // compute K
-        val keyCols = metadataDatabase.schema.key(tableWithFunctionalName)
+        val keyCols = metadataDatabase.schema.keyCols(tableWithFunctionalName)
         var key = keyCols.map { x -> x.name }.toSet()
         println("key $key")
 
