@@ -16,11 +16,13 @@ fun oid(schema: Schema, originTableName: String): ChangeSet {
         val originTable = schema.table(originTableName)
         val originTableKey = schema.keyCols(originTableName)
 
+        val originTableName2 = originTableName
         // adds one column autoincrement to origin table
         val sid = "sid$originTableName"
         sqlCommands.add("ALTER TABLE $originTableName ADD COLUMN $sid int NOT NULL auto_increment UNIQUE")
         schema.table(originTableName)!!.columns.add(Column.of(sid))
-        schema.addSurrogateKey("$originTable:$sid")
+        // TODO NOTA BENE !!! non togliere lo spazio iniziale altrimenti originTableName assume il valore  di surrogateTableName.
+        schema.addSurrogateKey(" "+originTableName+":"+sid)
         //TODO changeSet.alterTable!!.add(AlterTable() onTable originTableName withStatement "ADD COLUMN $sid int NOT NULL auto_increment UNIQUE")
 
         // create a key-table with projection of oid and pk

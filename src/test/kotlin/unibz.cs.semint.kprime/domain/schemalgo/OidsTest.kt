@@ -1,9 +1,12 @@
 package unibz.cs.semint.kprime.domain.schemalgo
 
 import org.junit.Test
+import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Schema
 import unibz.cs.semint.kprime.domain.ddl.schemalgo.oid
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class OidsTest {
 
@@ -100,6 +103,31 @@ table8: DepName , DepAddress
         assertEquals("pkey_ssn_depname_1_1:SURROGATE_KEY ssn_depname_1_1:sidssn_depaddress --> ssn_depname_1_1:sidssn_depaddress ; ",constraintsSsnDepname11[3].toStringWithName())
 
         assertEquals("ssn_depaddress_ssn_depname.doubleInc2_1:DOUBLE_INCLUSION SKEYssn_depaddress:depname --> ssn_depname_1_1:depname ; ",constraintsSsnDepname11[4].toStringWithName())//TO FIX
+    }
+
+    @Test
+    fun test_one_table() {
+        //given
+        val schema = Schema()
+        schema.addTable("Person:code,name,surname")
+        schema.addKey("Person:code")
+        println(schema.table("Person").toString())
+        // when
+        val changeset = oid(schema,"Person")
+        // then
+        assertNotNull(schema.table("SKEYPerson"))
+        val constraints = schema.constraints()
+        assertEquals(4, constraints.size)
+        assertTrue(constraints.toString().contains("SURROGATE_KEY  Person:sidPerson -->  Person:sidPerson ; "))
+        assertTrue(constraints.toString().contains("PRIMARY_KEY SKEYPerson:code --> SKEYPerson:code ; "))
+        assertTrue(constraints.toString().contains("SURROGATE_KEY SKEYPerson:sidPerson --> SKEYPerson:sidPerson ; "))
+        assertTrue(constraints.toString().contains("DOUBLE_INCLUSION SKEYPerson:sidPerson --> Person:sidPerson ; "))
+    }
+
+    @Test
+    fun test_three_tables() {
+        // given
+        val schema = Schema()
     }
 
 }

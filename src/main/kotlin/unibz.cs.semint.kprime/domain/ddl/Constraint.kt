@@ -168,6 +168,7 @@ class Constraint(): Labelled {
     fun toStringWithName(): String {
         return "${this.name}:${toString()}"
     }
+
     override fun toString(): String {
         if (source==null) return "no source"
         if (source.columns==null || source.columns.isEmpty()) return "no source columns"
