@@ -58,7 +58,7 @@ class Table (): Labelled {
     }
 
     fun colByName(colName:String):Column? {
-        return columns?.filter { c-> c.name==colName }?.first()
+        return columns?.filter { c-> c.name==colName }?.firstOrNull()
     }
 
     infix fun id(id: String ) = apply {
