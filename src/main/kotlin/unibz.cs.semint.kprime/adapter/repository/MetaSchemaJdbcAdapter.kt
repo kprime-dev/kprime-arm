@@ -13,17 +13,16 @@ import java.util.*
 class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
 
     override fun metaDatabase(datasource: DataSource) : Database {
-            val source = datasource
-            val user = source.user
-            val pass = source.pass
-            val path = source.path
-            var table = ""
+            val user = datasource.user
+            val pass = datasource.pass
+            val path = datasource.path
+            val table = "" // TODO accept a single table name as parameter
 
             val connectionProps = Properties()
-            connectionProps.put("user", user)
-            connectionProps.put("password", pass)
+            connectionProps["user"] = user
+            connectionProps["password"] = pass
 //            println("Looking for driver [${source.driver}] for connection [$path] with user [$user].")
-            Class.forName(source.driver).newInstance()
+            Class.forName(datasource.driver).newInstance()
 //            println("--------------------------")
 //            DriverManager.getDrivers().toList().forEach{ println(it.toString()) }
 //            println("--------------------------")
@@ -32,13 +31,13 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
                      path, connectionProps)
             val metaData = conn.metaData
 
-            var db = Database()
+            val db = Database()
             db.name="sourceName"
             db.id=UUID.randomUUID().toString()
             db.schema.name="sourceName"
             db.schema.id=UUID.randomUUID().toString()
             var tableNames  =  mutableListOf<String>()
-            if (table!=null && table.isNotEmpty()) {
+            if (table.isNotEmpty()) {
                 tableNames= mutableListOf(table)
             } else {
                 tableNames.addAll(readTables(metaData,db))
@@ -55,7 +54,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
         val tables = metaData.getTables(null, null, null, arrayOf("TABLE"))
         val tableNames = mutableListOf<String>()
         while (tables.next()) {
-            val tableName = "${tables.getString("TABLE_NAME")}"
+            val tableName = tables.getString("TABLE_NAME")
             tableNames.add(tableName)
             val table = Table()
             table.name=tableName
@@ -71,7 +70,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
         //QueryJdbcAdapter().printResultSet(views)
         //println("++++++++++++++++++++++++++++++++++++++++++++++++")
         while (views.next()) {
-            val viewName = "${views.getString("TABLE_NAME")}"
+            val viewName = views.getString("TABLE_NAME")
             //println(viewName)
             viewNames.add(viewName)
             val table = Table()
@@ -94,7 +93,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
                 column.dbname=colName
                 column.nullable=colNullable
                 column.dbtype= JDBCType.valueOf(columns.getString("DATA_TYPE").toInt()).name
-                db.schema.table(tableName).let { t -> if (t!=null) t.columns.add(column) }
+                db.schema.table(tableName).let { t -> t?.columns?.add(column) }
             }
         }
     }

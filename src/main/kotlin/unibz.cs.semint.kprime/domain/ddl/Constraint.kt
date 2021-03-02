@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
 @JacksonXmlRootElement(localName = "constraint")
-class Constraint(): Labelled {
+class Constraint : Labelled {
     fun left(): Collection<Column> {
         return source.columns
     }
@@ -53,50 +53,50 @@ class Constraint(): Labelled {
     }
 
     fun hasTypeKey():Boolean {
-        return type!=null && type.equals(TYPE.PRIMARY_KEY.name)
+        return type == TYPE.PRIMARY_KEY.name
     }
 
     fun hasTypeFunctional():Boolean {
-        return type!=null && type.equals(TYPE.FUNCTIONAL.name)
+        return type == TYPE.FUNCTIONAL.name
     }
 
 
     companion object {
 
-        fun addKey(alfa:Constraint.()->Unit):Constraint {
+        fun addKey():Constraint {
             val constraint = Constraint()
-            constraint.type = Constraint.TYPE.PRIMARY_KEY.name
+            constraint.type = TYPE.PRIMARY_KEY.name
             return constraint
         }
 
-        fun foreignkey(alfa:Constraint.()->Unit):Constraint {
+        fun foreignkey():Constraint {
             val constraint = Constraint()
-            constraint.type = Constraint.TYPE.FOREIGN_KEY.name
+            constraint.type = TYPE.FOREIGN_KEY.name
             return constraint
         }
 
-        fun addFunctional(alfa:Constraint.()->Unit):Constraint {
+        fun addFunctional():Constraint {
             val constraint = Constraint()
-            constraint.type = Constraint.TYPE.FUNCTIONAL.name
+            constraint.type = TYPE.FUNCTIONAL.name
             return constraint
         }
 
-        fun inclusion(alfa:Constraint.()->Unit):Constraint {
+        fun inclusion():Constraint {
             val constraint = Constraint()
-            constraint.type = Constraint.TYPE.INCLUSION.name
+            constraint.type = TYPE.INCLUSION.name
             return constraint
         }
 
-        fun doubleInclusion(alfa:Constraint.()->Unit):Constraint {
+        fun doubleInclusion():Constraint {
             val constraint = Constraint()
-            constraint.type = Constraint.TYPE.DOUBLE_INCLUSION.name
+            constraint.type = TYPE.DOUBLE_INCLUSION.name
             return constraint
         }
 
 
         fun set(exprs : String ):Set<Constraint> {
-            if (exprs.equals("")) return HashSet<Constraint>()
-            val replace = exprs.replace("\\s+", "")
+            if (exprs == "") return HashSet()
+            val replace = exprs.replace("\\s+", "") // TODO verify
             return set(exprs.split(";"))
         }
 
@@ -114,10 +114,10 @@ class Constraint(): Labelled {
         }
 
         fun of(left:String, right:String):Constraint {
-            var left = left.replace("\\s+","")
-            var right = right.replace("\\s+","")
-            val lefts = left.split(",")
-            val rights = right.split(",")
+            val left1 = left.replace("\\s+","")
+            val right1 = right.replace("\\s+","")
+            val lefts = left1.split(",")
+            val rights = right1.split(",")
             val c = Constraint()
             c.source.columns = cols(lefts)
             c.target.columns = cols(rights)
@@ -170,25 +170,23 @@ class Constraint(): Labelled {
     }
 
     override fun toString(): String {
-        if (source==null) return "no source"
-        if (source.columns==null || source.columns.isEmpty()) return "no source columns"
-        if (target==null) return "no target"
-        if (target.columns==null || right().isEmpty()) return "no target columns"
+        if (source.columns.isEmpty()) return "no source columns"
+        if (right().isEmpty()) return "no target columns"
         var result = type +" " +source.table+":"+source.columns[0].toString()
         for(col in source.columns.drop(1))
-            result += "," + col.toString()
+            result += ",$col"
         result +=" --> " +target.table+":"
         if (target.columns.size>0) {
             result+= target.columns[0].toString()
             for (col in target.columns.drop(1))
-                result += "," + col.toString()
+                result += ",$col"
         }
         result +=" ; "
         return result
     }
 
     override fun equals(other: Any?): Boolean {
-        return this.toString().equals((other as Constraint).toString())
+        return this.toString() == (other as Constraint).toString()
     }
 
     override fun hashCode(): Int {

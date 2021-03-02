@@ -168,7 +168,7 @@ class Schema () {
     }
 
     fun buildKey(tableName: String, k: Set<Column>, keyType: String): Constraint {
-        val keyConstraint = Constraint.addKey {}
+        val keyConstraint = Constraint.addKey()
         keyConstraint.name = "pkey_$tableName"
         keyConstraint.source.table = tableName
         keyConstraint.target.table = tableName
@@ -404,7 +404,7 @@ class Schema () {
         val targetAttributeNames = target.split(":")[1]
 
         val constraintPos = constraintsByType(Constraint.TYPE.FOREIGN_KEY).size+1
-        val constraint = Constraint.foreignkey {}
+        val constraint = Constraint.foreignkey()
         constraint.id="cfk$constraintPos"
         constraint.name = "${sourceTableName}_${targetTableName}.foreignKey$constraintPos"
         constraint.source.table=sourceTableName
@@ -432,7 +432,7 @@ class Schema () {
 
     internal fun buildDoubleInc(sourceTableName: String, targetTableName: String, sourceAttributeNames: String, targetAttributeNames: String): Constraint {
         val constraintPos = constraintsByType(Constraint.TYPE.DOUBLE_INCLUSION).size + 1
-        val constraint = Constraint.doubleInclusion {}
+        val constraint = Constraint.doubleInclusion()
         constraint.id = "cdi$constraintPos"
         constraint.name = "${sourceTableName}_${targetTableName}.doubleInc$constraintPos"
         constraint.source.table = sourceTableName
@@ -459,7 +459,7 @@ class Schema () {
 
     internal fun buildInclusion(sourceTableName: String, targetTableName: String, sourceAttributeNames: String, targetAttributeNames: String): Constraint {
         val constraintPos = constraintsByType(Constraint.TYPE.INCLUSION).size + 1
-        val constraint = Constraint.inclusion {}
+        val constraint = Constraint.inclusion()
         constraint.id = "ci$constraintPos"
         constraint.name = "${sourceTableName}_${targetTableName}.inclusion$constraintPos"
         constraint.source.table = sourceTableName

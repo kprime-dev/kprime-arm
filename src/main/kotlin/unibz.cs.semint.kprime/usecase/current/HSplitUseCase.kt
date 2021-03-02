@@ -1,14 +1,10 @@
 package unibz.cs.semint.kprime.usecase.current
 
-import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Database
 import unibz.cs.semint.kprime.domain.ddl.Table
 import unibz.cs.semint.kprime.usecase.UseCaseResult
-import unibz.cs.semint.kprime.usecase.common.SQLizeCreateUseCase
-import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
-import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 
 class HSplitUseCase {
 
@@ -16,7 +12,8 @@ class HSplitUseCase {
 //        printDb(databaseMetadata)
         val  detected = detect(databaseMetadata)
         if (detected.ok!=null) {
-            val applied = apply(databaseMetadata, detected)
+//            val applied =
+                    apply(databaseMetadata, detected)
 //            if (applied.ok!=null) {
 //                printDb(applied.ok)
 //                printSql(SQLizeCreateUseCase().createViewCommands(applied.ok))

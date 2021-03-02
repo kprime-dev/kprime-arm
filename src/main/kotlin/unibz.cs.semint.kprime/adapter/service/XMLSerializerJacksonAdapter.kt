@@ -47,7 +47,7 @@ class XMLSerializerJacksonAdapter : SerializerServiceI {
         val mapper = XmlMapper()
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
         val newdb = mapper.readValue(s, Database::class.java)
-        if (newdb.schema.tables==null) newdb.schema.tables= ArrayList<Table>()
+        if (newdb.schema.tables==null) newdb.schema.tables= ArrayList()
         if (newdb.mappings==null) newdb.mappings = mutableListOf()
         return newdb
     }
@@ -107,11 +107,11 @@ class XMLSerializerJacksonAdapter : SerializerServiceI {
 
     }
 
-    override fun deserializeTransformer(transformerXml: String): Transformer {
+    override fun deserializeTransformer(transformer: String): Transformer {
 //        println(transformerXml)
         val mapper = XmlMapper()
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        return mapper.readValue(transformerXml,Transformer::class.java)
+        return mapper.readValue(transformer,Transformer::class.java)
     }
 
     // query
