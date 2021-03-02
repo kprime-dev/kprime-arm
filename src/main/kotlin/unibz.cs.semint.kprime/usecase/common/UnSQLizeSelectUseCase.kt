@@ -72,7 +72,6 @@ class UnSQLizeSelectUseCase {
     )
 
     internal fun splitOnKeyWords(line:String): List<String> {
-        println("to split: '$line'")
         val result = mutableListOf<String>()
         var token = line
         do {
@@ -87,7 +86,7 @@ class UnSQLizeSelectUseCase {
             }
         } while(found)
         result.add(token.trim())
-        result.forEach { println(it) }
+//        result.forEach { println(it) }
         return result
     }
 

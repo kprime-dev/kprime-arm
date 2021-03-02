@@ -1,6 +1,5 @@
 package unibz.cs.semint.kprime.adapter.repository
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
@@ -13,6 +12,7 @@ import java.util.*
 
 class JdbcAdapter {
 
+
     private var formatted=false
     constructor() {}
     constructor(formatted: Boolean) {
@@ -20,12 +20,12 @@ class JdbcAdapter {
     }
 
     fun query(datasource: DataSource, query: Query, printer: (rs :ResultSet)->String) :String {
-        var sqlquery = SQLizeSelectUseCase().sqlize(query)
+        val sqlquery = SQLizeSelectUseCase().sqlize(query)
         return query(datasource,sqlquery,printer)
     }
 
     fun query(datasource: DataSource, sqlquery: String, printer:(rs:ResultSet)->String):String {
-        var conn: Connection = openConnection(datasource) ?: throw IllegalArgumentException("No connection")
+        val conn: Connection = openConnection(datasource) ?: throw IllegalArgumentException("No connection")
         val sqlnative = conn.nativeSQL(sqlquery)
         val prepareStatement = conn.prepareStatement(sqlnative)
         val resultSet = prepareStatement.executeQuery()
@@ -39,19 +39,19 @@ class JdbcAdapter {
         val conn = openConnection(datasource) ?: throw IllegalArgumentException("No connection")
         val createStatement = conn.createStatement()
         val resultSet = createStatement.executeUpdate(sqlcreate)
-        println(" Create result : $resultSet")
+//        println(" Create result : $resultSet")
         createStatement.close()
         closeConnection(datasource,conn)
     }
 
     private fun closeConnection(datasource: DataSource, conn: Connection) {
         val connectionDescriptor = datasource.connection
-        println(" Check close connection ${connectionDescriptor?.id}: ${connectionDescriptor?.closed}")
+//        println(" Check close connection ${connectionDescriptor?.id}: ${connectionDescriptor?.closed}")
         if (connectionDescriptor != null) {
             if (connectionDescriptor.closed) {
                 conn.close()
                 datasource.remResource(connectionDescriptor.id)
-                println("closed connection ${connectionDescriptor.id}")
+//                println("closed connection ${connectionDescriptor.id}")
             }
         } else {
             conn.close()
@@ -69,13 +69,13 @@ class JdbcAdapter {
         val pass = source.pass
         val path = source.path
 
-        println("Looking for... driver [${source.driver}] for connection [$path] with user [$user].")
+//        println("Looking for... driver [${source.driver}] for connection [$path] with user [$user].")
         Class.forName(source.driver).newInstance()
 
         var conn: Connection?
-        println("Connection preparing...")
+//        println("Connection preparing...")
         if (datasource.connection == null) {
-            println("Connection NEW")
+//            println("Connection NEW")
             val connectionProps = Properties()
             connectionProps.put("user", user)
             connectionProps.put("password", pass)

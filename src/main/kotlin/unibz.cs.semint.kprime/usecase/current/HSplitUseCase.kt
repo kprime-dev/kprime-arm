@@ -13,28 +13,28 @@ import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 class HSplitUseCase {
 
     fun compute(databaseMetadata: Database) {
-        printDb(databaseMetadata)
+//        printDb(databaseMetadata)
         val  detected = detect(databaseMetadata)
         if (detected.ok!=null) {
             val applied = apply(databaseMetadata, detected)
-            if (applied.ok!=null) {
-                printDb(applied.ok)
-                printSql(SQLizeCreateUseCase().createViewCommands(applied.ok))
-            }
+//            if (applied.ok!=null) {
+//                printDb(applied.ok)
+//                printSql(SQLizeCreateUseCase().createViewCommands(applied.ok))
+//            }
         }
     }
 
-    private fun printSql(sqlines: List<String>) {
-        println()
-        println("--------------------------------------------------------------------------")
-        for (sql in sqlines) println(sql)
-    }
-
-    private fun printDb(db: Database) {
-        println()
-        println("--------------------------------------------------------------------------")
-        println(XMLSerializeUseCase(XMLSerializerJacksonAdapter()).prettyDatabase(db))
-    }
+//    private fun printSql(sqlines: List<String>) {
+//        println()
+//        println("--------------------------------------------------------------------------")
+//        for (sql in sqlines) println(sql)
+//    }
+//
+//    private fun printDb(db: Database) {
+//        println()
+//        println("--------------------------------------------------------------------------")
+//        println(XMLSerializeUseCase(XMLSerializerJacksonAdapter()).prettyDatabase(db))
+//    }
 
     private fun detect(personMetadata: Database): UseCaseResult<Database> {
         val dbDetected = Database()

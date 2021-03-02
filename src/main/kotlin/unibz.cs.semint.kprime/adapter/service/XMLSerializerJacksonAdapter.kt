@@ -108,7 +108,7 @@ class XMLSerializerJacksonAdapter : SerializerServiceI {
     }
 
     override fun deserializeTransformer(transformerXml: String): Transformer {
-        println(transformerXml)
+//        println(transformerXml)
         val mapper = XmlMapper()
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         return mapper.readValue(transformerXml,Transformer::class.java)

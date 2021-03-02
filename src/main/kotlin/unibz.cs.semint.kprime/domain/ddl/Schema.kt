@@ -61,7 +61,7 @@ class Schema () {
             if (constr.target.table==sourceTableName) {
                 constr.target.table=targetTableName
             }
-            println("MOVED CONSTRAINT FROM $sourceTableName TO ${constr.name}:"+constr.toString())
+//            println("MOVED CONSTRAINT FROM $sourceTableName TO ${constr.name}:"+constr.toString())
         }
     }
 

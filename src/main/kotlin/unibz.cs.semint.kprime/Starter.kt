@@ -10,8 +10,7 @@ class Starter {
       */
      fun main(args:Array<String>) {
          val version = "0.1.0-SNAPSHOT"
-         println("KPrime $version")		
-         
+
      }
 
  }

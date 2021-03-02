@@ -26,7 +26,7 @@ class TransformerXCompose (
                 ): Transformation {
         val dbFilePath = fileIOAdapter.writeOnWorkingFilePath(
                 serializer.prettyDatabase(db), workingDir +  "db_worked.xml")
-        println("Updated db file db_worked.xml")
+//        println("Updated db file db_worked.xml")
 
         var xPaths = File(coXPathsFilePath).readLines()
         val tranformerParmeters = mutableMapOf<String,Any>()
