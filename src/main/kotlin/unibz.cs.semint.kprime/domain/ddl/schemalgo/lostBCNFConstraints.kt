@@ -11,19 +11,19 @@ fun lostBCNFConstraints(attrs : Set<Column>, fds: Set<Constraint>): Set<Constrai
 
     var resultConstraints = HashSet<Set<Constraint>>()
     for (relation in result) {
-        println("columns")
-        println(relation.table.columns)
+//        println("columns")
+//        println(relation.table.columns)
         //resultTables.add(relation.table.columns)
-        println("constr")
-        println(relation.constraints)
+//        println("constr")
+//        println(relation.constraints)
         resultConstraints.add(relation.constraints)
-        println()
+//        println()
     }
 
     var lost = mutableSetOf<Constraint>()
     for (constraint in fds) {
         if (!resultConstraints.contains((setOf(constraint)))) {
-            println ( "Lost "+constraint.toString())
+//            println ( "Lost "+constraint.toString())
             lost.add(constraint)
 
         }

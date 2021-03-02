@@ -2,10 +2,10 @@ package unibz.cs.semint.kprime.support
 
 import org.junit.Test
 import org.w3c.dom.NodeList
-import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
 import javax.xml.xpath.XPathConstants
 import javax.xml.xpath.XPathFactory
+import kotlin.test.assertEquals
 
 
 class XPathTest {
@@ -20,9 +20,9 @@ class XPathTest {
         //when
         val result = xpath.compile("changeSet").evaluate(doc, XPathConstants.NODESET) as NodeList
         //then
-        println(result.length)
+        assertEquals(1,result.length)
         val resultMessage= asValueList(result).joinToString(",")
-        println(resultMessage)
+        assertEquals("changeSet",resultMessage)
     }
 
     @Test
@@ -35,16 +35,15 @@ class XPathTest {
         //when
         val result = xpath.compile("xml/changeSet").evaluate(doc, XPathConstants.NODESET) as NodeList
         //then
-        println(result.length)
+        assertEquals(2,result.length)
         val resultMessage= asValueList(result).joinToString(",")
-        println(resultMessage)
+        assertEquals("changeSet,changeSet",resultMessage)
     }
 
     private fun asValueList(xpathResultNodes: NodeList): MutableList<String> {
         val listNodeValues = mutableListOf<String>()
         for (nodeId in 0..xpathResultNodes.length) {
-            val item = xpathResultNodes.item(nodeId)
-            if (item==null) continue
+            val item = xpathResultNodes.item(nodeId) ?: continue
             listNodeValues.add(item.nodeName)
             if (item.nodeValue==null) continue
             listNodeValues.add(item.nodeValue)

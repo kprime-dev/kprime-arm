@@ -83,7 +83,7 @@ class JdbcAdapter {
                     path, connectionProps)
             conn.autoCommit = true
         } else {
-            println("Connection from POOL ${datasource.connection?.id}")
+//            println("Connection from POOL ${datasource.connection?.id}")
             var resource = datasource.getResource(datasource.connection?.id!!)
             if (resource == null) {
                 val connectionProps = Properties()

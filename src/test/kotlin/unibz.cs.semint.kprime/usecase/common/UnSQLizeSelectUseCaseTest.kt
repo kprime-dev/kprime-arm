@@ -12,7 +12,7 @@ class UnSQLizeSelectUseCaseTest {
         // when
         val splitResult = case.splitOnKeyWords("SELECT * FROM people")
         // then
-        splitResult.forEach{ println("'$it'") }
+//        splitResult.forEach{ println("'$it'") }
         assertEquals(2, splitResult.size)
         assertEquals("SELECT *", splitResult[0])
         assertEquals("FROM people", splitResult[1])
@@ -25,7 +25,7 @@ class UnSQLizeSelectUseCaseTest {
         // when
         val splitResult = case.splitOnKeyWords("SELECT a,b FROM people WHERE a<b")
         // then
-        splitResult.forEach{ println("'$it'") }
+//        splitResult.forEach{ println("'$it'") }
         assertEquals(3, splitResult.size)
         assertEquals("SELECT a,b", splitResult[0])
         assertEquals("FROM people", splitResult[1])
@@ -39,7 +39,7 @@ class UnSQLizeSelectUseCaseTest {
         // when
         val splitResult = case.splitOnKeyWords("SELECT a,b FROM people WHERE a<b UNION SELECT c,d FROM jobs WHERE c<d ")
         // then
-        splitResult.forEach{ println("'$it'") }
+//        splitResult.forEach{ println("'$it'") }
         assertEquals(7, splitResult.size)
         assertEquals("SELECT a,b", splitResult[0])
         assertEquals("FROM people", splitResult[1])

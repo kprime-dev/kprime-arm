@@ -27,7 +27,7 @@ view2==+ lhss rhss
         val tranformerParmeters = mutableMapOf<String,Any>()
         val computed = xtransf.compute(dbFilePath, templateFilePath, xPaths, tranformerParmeters)
         // then
-        print(computed)
+//        print(computed)
     }
 
     @Test

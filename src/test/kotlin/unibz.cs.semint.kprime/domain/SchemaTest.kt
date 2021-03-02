@@ -13,7 +13,7 @@ class SchemaTest {
         val time = Column.of("Time")
         val classroom = Column.of("Classroom")
         val course = Column.of("Course")
-        val fd = Constraint.of("${time.name},${classroom.name}","${course.name}")
+        val fd = Constraint.of("${time.name},${classroom.name}", course.name)
 
         assertEquals(" Time , Classroom , Course"," $time , $classroom , $course")
         assertEquals("  :Time,Classroom --> :Course ; "," $fd")
@@ -308,16 +308,16 @@ class SchemaTest {
         // when
         val result = decomposeTo3NF(attrs, fds)
         // then
-        var resultTables = HashSet<List<Column>>()
-        var resultConstraints = HashSet<Set<Constraint>>()
+        val resultTables = HashSet<List<Column>>()
+        val resultConstraints = HashSet<Set<Constraint>>()
         for (relation in result) {
-            println("columns")
-            println(relation.table.columns)
+//            println("columns")
+//            println(relation.table.columns)
             resultTables.add(relation.table.columns)
-            println("constr")
-            println(relation.constraints)
+//            println("constr")
+//            println(relation.constraints)
             resultConstraints.add(relation.constraints)
-            println()
+//            println()
         }
         assertTrue(resultConstraints.contains(Constraint.set("R , H --> C ; C , H --> R")))
         assertTrue(resultConstraints.contains(Constraint.set("C , S --> G")))
@@ -356,13 +356,13 @@ class SchemaTest {
         var resultTables = HashSet<List<Column>>()
         var resultConstraints = HashSet<Set<Constraint>>()
         for (relation in result) {
-            println("columns")
-            println(relation.table.columns)
+//            println("columns")
+//            println(relation.table.columns)
             resultTables.add(relation.table.columns)
-            println("constr")
-            println(relation.constraints)
+//            println("constr")
+//            println(relation.constraints)
             resultConstraints.add(relation.constraints)
-            println()
+//            println()
         }
         assertTrue(resultConstraints.contains(Constraint.set("application --> provider")))
         assertTrue(resultConstraints.contains(Constraint.set("name --> favAppl ; name --> location")))
@@ -386,25 +386,25 @@ class SchemaTest {
         val violations = checkBCNF(attrs, fds)
         assertFalse(violations.isEmpty())
         for (constraint in violations) {
-            println(constraint.toString())
+//            println(constraint.toString())
         }
 
         var resultConstraints = HashSet<Set<Constraint>>()
         for (relation in result) {
-            println("columns")
-            println(relation.table.columns)
+//            println("columns")
+//            println(relation.table.columns)
             //resultTables.add(relation.table.columns)
-            println("constr")
-            println(relation.constraints)
+//            println("constr")
+//            println(relation.constraints)
             resultConstraints.add(relation.constraints)
-            println()
+//            println()
         }
 
-        for (constraint in fds) {
-            if (!resultConstraints.contains((setOf(constraint)))) {
-                println ( "Lost "+constraint.toString())
-            }
-        }
+//        for (constraint in fds) {
+//            if (!resultConstraints.contains((setOf(constraint)))) {
+//                println ( "Lost "+constraint.toString())
+//            }
+//        }
 
     }
 

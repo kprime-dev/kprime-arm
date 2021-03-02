@@ -60,7 +60,7 @@ class XPathTransformUseCase  {
         val db = serializer.deserializeDatabase(dbXml)
         val newdb = ApplyChangeSetUseCase(serializer).apply(db, changeSet)
 
-        println("-----------------------NEW-DB---------------")
+//        println("-----------------------NEW-DB---------------")
         //println(serializer.prettyDatabase(newdb))
         return newdb
     }
@@ -147,7 +147,7 @@ class XPathTransformUseCase  {
             return ChangeSet()
         }
 
-        println("22++++++++++++++++++++++++++++++++++++++++++-------------------------------")
+//        println("22++++++++++++++++++++++++++++++++++++++++++-------------------------------")
 
         val templConfig = Configuration(Configuration.VERSION_2_3_29)
         val classTemplLoader = ClassTemplateLoader(XPathTransformUseCase::javaClass.javaClass, "/")
@@ -175,13 +175,13 @@ class XPathTransformUseCase  {
 //        }
         templ.process(templModel, outWriter)
 
-        println("33++++++++++++++++++++++++++++++++++++++++++-------------------------------")
+//        println("33++++++++++++++++++++++++++++++++++++++++++-------------------------------")
         val changeSetXml = outWriter.buffer.toString()
-        println(changeSetXml)
-        println("44++++++++++++++++++++++++++++++++++++++++++-------------------------------")
+//        println(changeSetXml)
+//        println("44++++++++++++++++++++++++++++++++++++++++++-------------------------------")
         val serializer = XMLSerializerJacksonAdapter()
         val changeSet = XMLSerializeUseCase(serializer).deserializeChangeSet(changeSetXml).ok ?: ChangeSet()
-        println("55++++++++++++++++++++++++++++++++++++++++++-------------------------------")
+//        println("55++++++++++++++++++++++++++++++++++++++++++-------------------------------")
 
         return changeSet
     }
@@ -209,7 +209,7 @@ class XPathTransformUseCase  {
 //                violation = checkCondition(pathTokens, templModel, name, violation, rule)
             }
             else {
-                println("getTemplateModel().xpath.compile(value)="+value)
+//                println("getTemplateModel().xpath.compile(value)="+value)
                 templModel[name] = asValueList(xpath.compile(value).evaluate(doc, XPathConstants.NODESET) as NodeList)
                 //println(" ${name} = ${value}")
                 //println(" ${name} = ${templModel[name]}")

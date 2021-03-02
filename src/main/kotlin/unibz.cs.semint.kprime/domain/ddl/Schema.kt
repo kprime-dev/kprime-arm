@@ -102,7 +102,7 @@ class Schema () {
             }
             if (constraints==null) constraints = ArrayList()
             constraints?.add(copyconstr)
-            println("COPIED CONSTRAINT FROM $sourceTableName TO:"+constr.toString())
+//            println("COPIED CONSTRAINT FROM $sourceTableName TO:"+constr.toString())
         }
         this.constraints?.removeAll(constrToRemove)
     }

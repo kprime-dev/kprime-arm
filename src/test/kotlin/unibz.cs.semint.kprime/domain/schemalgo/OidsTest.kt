@@ -111,7 +111,6 @@ table8: DepName , DepAddress
         val schema = Schema()
         schema.addTable("Person:code,name,surname")
         schema.addKey("Person:code")
-        println(schema.table("Person").toString())
         // when
         val changeset = oid(schema,"Person")
         // then

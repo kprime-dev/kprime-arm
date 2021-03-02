@@ -80,7 +80,7 @@ class ChangeSet() {
     }
 
     infix fun plus(createConstraint: CreateConstraint)= apply{
-        println("plus  $createConstraint")
+//        println("plus  $createConstraint")
         this.createConstraint.add(createConstraint)
     }
 

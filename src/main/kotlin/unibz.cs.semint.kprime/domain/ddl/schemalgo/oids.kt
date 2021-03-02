@@ -70,7 +70,7 @@ private fun updateReferencedTables(schema: Schema, originTableName: String, orig
 //                println(schema.constraints)
 //                println(schema.constraintsByTable(rTableNewName))
 //                println(schema.keys(rTableNewName))
-                println("OID moveConstraintsFromColsToCol ${rTableNewName}:$rTableKeys to $rTableNewName:$sid")
+//                println("OID moveConstraintsFromColsToCol ${rTableNewName}:$rTableKeys to $rTableNewName:$sid")
                 schema.moveConstraintsFromColsToCol(rTableNewName, rTableKeys, sid)
                 schema.removeKeyConstraint(rTableNewName)
 
