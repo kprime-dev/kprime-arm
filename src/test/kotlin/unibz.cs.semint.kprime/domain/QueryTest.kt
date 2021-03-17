@@ -73,7 +73,6 @@ class QueryTest {
             FROM   Table1
             WHERE Name='Gigi' LIMIT 10
             """.trimIndent(),querySql)
-
     }
 
     @Test

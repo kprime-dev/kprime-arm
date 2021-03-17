@@ -29,7 +29,8 @@ class TransfomerTest {
                 </xman>
                 <template filename=""/>
               </splitter>
-            </transformer>, ko=kotlin.Unit)
+            </transformer>
+            , ko=kotlin.Unit)
         """.trimIndent(),serializedTransformer.toString())
 
     }
@@ -63,7 +64,8 @@ class TransfomerTest {
                 </xman>
                 <template filename=""/>
               </splitter>
-            </transformer>, ko=kotlin.Unit)
+            </transformer>
+            , ko=kotlin.Unit)
         """.trimIndent(),serializedTransformer.toString())
 
     }

@@ -55,13 +55,13 @@ class XMLSerializerJacksonAdapter : SerializerServiceI {
     override fun prettyDatabase(db: Database): String {
         val mapper = XmlMapper().registerModule(KotlinModule())
         val writer = mapper.writerWithDefaultPrettyPrinter()
-        return writer.writeValueAsString(db)
+        return writer.writeValueAsString(db).trimEnd()
     }
 
     override fun prettyJsonDatabase(db: Database): String {
         val mapper = ObjectMapper().registerModule(KotlinModule())
         val writer = mapper.writerWithDefaultPrettyPrinter()
-        return writer.writeValueAsString(db)
+        return writer.writeValueAsString(db).trimEnd()
     }
 
     override fun deepclone(database: Database): Database {
@@ -97,7 +97,7 @@ class XMLSerializerJacksonAdapter : SerializerServiceI {
     override fun prettyChangeSet(table: ChangeSet): String {
         val mapper = XmlMapper().registerModule(KotlinModule())
         val writer = mapper.writerWithDefaultPrettyPrinter()
-        return writer.writeValueAsString(table)
+        return writer.writeValueAsString(table).trimEnd()
     }
 
     override fun serializeTransfomer(transformer: Transformer): String {
@@ -119,7 +119,7 @@ class XMLSerializerJacksonAdapter : SerializerServiceI {
     fun prettyQuery(query: Query): String {
         val mapper = XmlMapper().registerModule(KotlinModule())
         val writer = mapper.writerWithDefaultPrettyPrinter()
-        return writer.writeValueAsString(query)
+        return writer.writeValueAsString(query).trimEnd()
     }
 
 }

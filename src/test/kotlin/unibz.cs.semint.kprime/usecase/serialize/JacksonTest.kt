@@ -17,7 +17,7 @@ class JacksonTest {
         // when
         val mapper = XmlMapper().registerModule(KotlinModule())
         val writer = mapper.writerWithDefaultPrettyPrinter()
-        val result = writer.writeValueAsString(map)
+        val result = writer.writeValueAsString(map).trimEnd()
         // then
         assertEquals("""
             <LinkedHashMap>
@@ -34,7 +34,7 @@ class JacksonTest {
         // when
         val mapper = XmlMapper().registerModule(KotlinModule())
         val writer = mapper.writerWithDefaultPrettyPrinter()
-        val result = writer.writeValueAsString(db)
+        val result = writer.writeValueAsString(db).trimEnd()
         // then
         assertEquals("""
             <database name="" id="" source="">
@@ -68,15 +68,18 @@ class JacksonTest {
         val mapper2 = XmlMapper().registerModule(KotlinModule())
         mapper2.setSerializationInclusion(JsonInclude.Include.NON_NULL)
         val writer = mapper2.writerWithDefaultPrettyPrinter()
-        val result = writer.writeValueAsString(newdb)
+        val result = writer.writeValueAsString(newdb).trimEnd()
 
         // then
         assertEquals(0,newdb.schema.tables().size)
         assertEquals("""
             <database name="" id="" source="">
-              <schema name="" id=""/>
+              <schema name="" id="">
+                <tables/>
+                <constraints/>
+              </schema>
+              <mappings/>
             </database>
-        """.trimIndent(),result)
-
+          """.trimIndent(),result)
     }
 }

@@ -15,12 +15,13 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <java.version>11</java.version>
-        <kotlin.version>1.3.30</kotlin.version>
+
+        <kotlin.version>1.4.10</kotlin.version>
 
         <junit.version>4.12</junit.version>
-        <jackson.version>2.6.7</jackson.version>
-        <jackson.databind.version>2.6.7.1</jackson.databind.version>
-        <jackson.kotlin.version>2.6.7</jackson.kotlin.version>
+        <jackson.version>2.12.2</jackson.version>
+        <jackson.databind.version>2.12.2</jackson.databind.version>
+        <jackson.kotlin.version>2.12.2</jackson.kotlin.version>
         <slf4j.version>1.7.28</slf4j.version>
         <log4j.version>2.13.3</log4j.version>
         <woodstox.version>5.1.0</woodstox.version>
@@ -40,8 +41,14 @@
             <artifactId>kotlin-stdlib</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-reflect</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>runtime</scope>
+        </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+        <!-- json xml -->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
@@ -72,16 +79,21 @@
             <artifactId>jackson-dataformat-yaml</artifactId>
             <version>${jackson.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.woodstox</groupId>
             <artifactId>woodstox-core</artifactId>
             <version>${woodstox.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
             <version>${xstream.version}</version>
         </dependency>
+
+        <!-- database -->
+
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
