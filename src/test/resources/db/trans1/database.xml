@@ -1,0 +1,28 @@
+<database name="" id="" source="">
+	<schema name="" id="">
+		<tables>
+			<table id = "1" name = "Employee" condition = "" view = "">
+				<columns>
+					<columns id = "rel1att0" name = " EmpID"  nullable = "false"/>
+					<columns id = "rel1att1" name = " EmpName"  nullable = "false"/>
+					<columns id = "rel1att2" name = " DepID"  nullable = "false"/>
+					<columns id = "rel1att3" name = " DepName"  nullable = "false"/>
+				</columns>
+			</table>
+		</tables>
+		<constraints>
+			<constraints name = "Employee.FUNCTIONAL1" id = "FUNCTIONAL1" type = "FUNCTIONAL" >
+				<source name ="" id ="" table = "Employee" >
+					<columns >
+						<columns id="" name = "DepID" />
+					</columns>
+				</source>
+				<target name="" id="" table="Employee">
+					<columns >
+						<columns id="" name = "DepName" />
+					</columns>
+				</target>
+			</constraints>
+		</constraints>
+	</schema>
+</database>

@@ -1,0 +1,71 @@
+<database name="" id="" source="">
+	<schema name="" id="">
+		<relationss>
+			<table table_id = "1" table_name = " R" condidion = "" view = "">
+				<columns column_var = "LHS" >
+				</columns>
+				<columns column_var = "RHS" >
+				</columns>
+				<columns column_var = "REST" >
+				</columns>
+			</table>
+		</relations>
+		<constraints>
+			<constraint constraint_name = "R.FUNCTIONAL1" constraint_id = "FUNCTIONAL1" constraint_type = "FUNCTIONAL" >
+				<source source_name ="" source_id ="" source_table = "R" >
+					<columns column_var = "LHS">
+					</columns>
+				</source>
+				<target target_name="" target_id="" target_table="R">
+					<columns column_var = "RHS">
+					</columns>
+				</target>
+			</constraint>
+			<constraint constraint_name = "R.CONS^k.1" constraint_id = "CONS1" constraint_type = "CONS" >
+				<source source_name ="" source_id ="" source_table = "R" >
+					<columns>
+						<columns name="LHS^k" id="" dbname="" nullable="false" dbtype=""/>
+						<columns name="RHS^k" id="" dbname="" nullable="false" dbtype=""/>
+						<columns name="REST^k" id="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</source>
+			</constraint>
+			<constraint constraint_name = "LHS.IS_NOT1" constraint_id = "IS_NOT1" constraint_type = "IS_NOT" >
+				<source source_name ="" source_id ="" >
+					<columns column_nullable = "false">
+					</columns>
+				</source>
+			</constraint>
+			<constraint constraint_name = "RHS.IS_NOT2" constraint_id = "IS_NOT2" constraint_type = "IS_NOT" >
+				<source source_name ="" source_id ="" >
+					<columns column_nullable = "false">
+					</columns>
+				</source>
+			</constraint>
+			<constraint constraint_name = "REST.IS_NOT3" constraint_id = "IS_NOT3" constraint_type = "IS_NOT" >
+				<source source_name ="" source_id ="" >
+					<columns column_nullable = "false">
+					</columns>
+				</source>
+			</constraint>
+			<constraint constraint_name = "LHS^k.SUBSET4" constraint_id = "SUBSET4" constraint_type = "SUBSET" >
+				<source source_name ="" source_id ="" >
+					<columns column_var = "LHS">
+					</columns>
+				</source>
+			</constraint>
+			<constraint constraint_name = "RHS^k.SUBSET5" constraint_id = "SUBSET5" constraint_type = "SUBSET" >
+				<source source_name ="" source_id ="" >
+					<columns column_var = "RHS">
+					</columns>
+				</source>
+			</constraint>
+			<constraint constraint_name = "REST^k.SUBSET6" constraint_id = "SUBSET6" constraint_type = "SUBSET" >
+				<source source_name ="" source_id ="" >
+					<columns column_var = "REST">
+					</columns>
+				</source>
+			</constraint>
+		</constraints>
+	</schema>
+</database>

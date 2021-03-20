@@ -10,11 +10,11 @@ class Column (): Labelled {
     @JacksonXmlProperty(isAttribute = true)
     var id: String = ""
     @JacksonXmlProperty(isAttribute = true)
-    var dbname: String = ""
+    var dbname: String? = null
     @JacksonXmlProperty(isAttribute = true)
     var nullable: Boolean = false
     @JacksonXmlProperty(isAttribute = true)
-    var dbtype: String = ""
+    var dbtype: String? = ""
     @JacksonXmlProperty(isAttribute = true)
     var type: String? = null
     @JacksonXmlProperty(isAttribute = true)
@@ -32,9 +32,16 @@ class Column (): Labelled {
 
     @JsonCreator
     constructor(
-        @JsonProperty("name")  name: String,
-        @JsonProperty("id") id: String,
-        @JsonProperty("dbname") dbname: String) : this() {
+            @JsonProperty("name")  name: String,
+            @JsonProperty("id") id: String) : this() {
+        this.name= name
+        this.id=id
+    }
+
+    constructor(
+            name: String,
+            id: String,
+            dbname: String) : this() {
         this.name= name
         this.id=id
         this.dbname=dbname
