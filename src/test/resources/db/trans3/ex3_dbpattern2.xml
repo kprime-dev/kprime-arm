@@ -1,0 +1,51 @@
+<database name="" id="" source="">
+	<schema name="" id="">
+		<tables>
+			<table id="1" name=" R1" condidion="" view="">
+			<columns>
+				<column var="ATT" id="" name="" />
+			</columns>
+			</table>
+			<table id="2" name=" R2" condidion="" view="">
+			<columns>
+				<column var="ATT" id="" name="" />
+			</columns>
+			</table>
+		</tables>
+		<constraints>
+			<constraint name="R2.GUARD1" id="GUARD1" type="GUARD" >
+				<source name ="" id ="" table="R2" condition="cond" is="R2" isnot=""/>
+			</constraint>
+			<constraint name="R1.GUARD2" id="GUARD2" type="GUARD" >
+				<source name ="" id ="" table="R1" condition="not cond" is="R1" isnot=""/>
+			</constraint>
+			<constraint name="R1.CONS.1" id="CONS1" type="CONS" >
+				<source name ="" id ="" table="R1" constraint="k">
+					<columns>
+						<columns var="ATT" id="" name="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</source>
+			</constraint>
+			<constraint name="R2.CONS.2" id="CONS2" type="CONS" >
+				<source name ="" id ="" table="R2" constraint="l">
+					<columns>
+						<columns var="ATT" id="" name="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</source>
+			</constraint>
+			<constraint name="ATT.SUBSET1" id="SUBSET1" type="SUBSET" >
+				<source id ="" name="">
+					<columns>
+						<column var="ATT^k"id="" name=""/>
+						<column var="ATT^l"id="" name=""/>
+					</column>
+				</source>
+				<target id="" name="">
+					<columns>
+						<column var="ATT" id="" name=""/>
+					</columns>
+				</target>
+			</constraint>
+		</constraints>
+	</schema>
+</database>

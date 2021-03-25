@@ -65,7 +65,7 @@ class ApplyChangeSetUseCaseTest {
                 <tables>
                   <tables name="person" id="" view="" condition="">
                     <columns>
-                      <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+                      <columns name="" id="" nullable="false" dbtype=""/>
                     </columns>
                   </tables>
                 </tables>
@@ -73,12 +73,12 @@ class ApplyChangeSetUseCaseTest {
                   <constraints name="person.primaryKey" id="" type="PRIMARY_KEY">
                     <source name="" id="" table="">
                       <columns>
-                        <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+                        <columns name="" id="" nullable="false" dbtype=""/>
                       </columns>
                     </source>
                     <target name="" id="" table="">
                       <columns>
-                        <columns name="" id="" dbname="" nullable="false" dbtype=""/>
+                        <columns name="" id="" nullable="false" dbtype=""/>
                       </columns>
                     </target>
                   </constraints>
@@ -106,15 +106,15 @@ class ApplyChangeSetUseCaseTest {
                 <tables>
                   <tables name="person1" id="" view="" condition="">
                     <columns>
-                      <columns name="K" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-                      <columns name="T" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-                      <columns name="S" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+                      <columns name="K" id="" nullable="false" dbtype="" dbtable=""/>
+                      <columns name="T" id="" nullable="false" dbtype="" dbtable=""/>
+                      <columns name="S" id="" nullable="false" dbtype="" dbtable=""/>
                     </columns>
                   </tables>
                   <tables name="person2" id="" view="" condition="">
                     <columns>
-                      <columns name="T" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-                      <columns name="S" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+                      <columns name="T" id="" nullable="false" dbtype="" dbtable=""/>
+                      <columns name="S" id="" nullable="false" dbtype="" dbtable=""/>
                     </columns>
                   </tables>
                 </tables>
@@ -200,14 +200,14 @@ class ApplyChangeSetUseCaseTest {
   <createConstraint name="pkey_person" id="" type="PRIMARY_KEY">
     <source name="" id="" table="person">
       <columns>
-        <columns name="surname" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-        <columns name="name" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+        <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
+        <columns name="name" id="" nullable="false" dbtype="" dbtable=""/>
       </columns>
     </source>
     <target name="" id="" table="person">
       <columns>
-        <columns name="surname" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-        <columns name="name" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+        <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
+        <columns name="name" id="" nullable="false" dbtype="" dbtable=""/>
       </columns>
     </target>
   </createConstraint>
@@ -225,9 +225,9 @@ class ApplyChangeSetUseCaseTest {
     <tables>
       <tables name="person" id="t1" view="" condition="">
         <columns>
-          <columns name="name" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-          <columns name="surname" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-          <columns name="address" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+          <columns name="name" id="" nullable="false" dbtype="" dbtable=""/>
+          <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
+          <columns name="address" id="" nullable="false" dbtype="" dbtable=""/>
         </columns>
       </tables>
     </tables>
@@ -235,14 +235,14 @@ class ApplyChangeSetUseCaseTest {
       <constraints name="pkey_person" id="" type="PRIMARY_KEY">
         <source name="" id="" table="person">
           <columns>
-            <columns name="surname" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-            <columns name="name" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+            <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
+            <columns name="name" id="" nullable="false" dbtype="" dbtable=""/>
           </columns>
         </source>
         <target name="" id="" table="person">
           <columns>
-            <columns name="surname" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-            <columns name="name" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+            <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
+            <columns name="name" id="" nullable="false" dbtype="" dbtable=""/>
           </columns>
         </target>
       </constraints>
@@ -281,14 +281,14 @@ class ApplyChangeSetUseCaseTest {
   <createConstraint name="person_employee.doubleInc1" id="cdi1" type="DOUBLE_INCLUSION">
     <source name="" id="" table="person">
       <columns>
-        <columns name="surname" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-        <columns name="name" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+        <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
+        <columns name="name" id="" nullable="false" dbtype="" dbtable=""/>
       </columns>
     </source>
     <target name="" id="" table="employee">
       <columns>
-        <columns name="surname" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-        <columns name="name" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+        <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
+        <columns name="name" id="" nullable="false" dbtype="" dbtable=""/>
       </columns>
     </target>
   </createConstraint>
@@ -304,16 +304,16 @@ class ApplyChangeSetUseCaseTest {
     <tables>
       <tables name="person" id="t1" view="" condition="">
         <columns>
-          <columns name="name" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-          <columns name="surname" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-          <columns name="address" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+          <columns name="name" id="" nullable="false" dbtype="" dbtable=""/>
+          <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
+          <columns name="address" id="" nullable="false" dbtype="" dbtable=""/>
         </columns>
       </tables>
       <tables name="employee" id="t2" view="" condition="">
         <columns>
-          <columns name="name" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-          <columns name="surname" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-          <columns name="salary" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+          <columns name="name" id="" nullable="false" dbtype="" dbtable=""/>
+          <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
+          <columns name="salary" id="" nullable="false" dbtype="" dbtable=""/>
         </columns>
       </tables>
     </tables>
@@ -321,14 +321,14 @@ class ApplyChangeSetUseCaseTest {
       <constraints name="person_employee.doubleInc1" id="cdi1" type="DOUBLE_INCLUSION">
         <source name="" id="" table="person">
           <columns>
-            <columns name="surname" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-            <columns name="name" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+            <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
+            <columns name="name" id="" nullable="false" dbtype="" dbtable=""/>
           </columns>
         </source>
         <target name="" id="" table="employee">
           <columns>
-            <columns name="surname" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
-            <columns name="name" id="" dbname="" nullable="false" dbtype="" dbtable=""/>
+            <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
+            <columns name="name" id="" nullable="false" dbtype="" dbtable=""/>
           </columns>
         </target>
       </constraints>

@@ -1,0 +1,46 @@
+<database name="" id="" source="">
+	<schema name="" id="">
+		<tables>
+			<table id="1" name="ITDepartment" condition="" view="">
+				<columns>
+					<columns id="rel1att0" name="DepartmentID"  nullable="false"/>
+					<columns id="rel1att1" name="Speciality"  nullable="false"/>
+				</columns>
+			</table>
+			<table id="2" name="Worker" condition="" view="">
+				<columns>
+					<columns id="rel2att0" name="DepartmentID"  nullable="false"/>
+					<columns id="rel2att1" name="WorkerID"  nullable="false"/>
+					<columns id="rel2att2" name="Address"  nullable="false"/>
+					<columns id="rel2att3" name="Name"  nullable="false"/>
+				</columns>
+			</table>
+		</tables>
+		<constraints>
+			<constraint name="Worker.FUNCTIONAL1" id="FUNCTIONAL1" type="FUNCTIONAL" >
+				<source id="" name="" table="Worker" >
+					<columns>
+						<columns id="" name="WorkerID" />
+					</columns>
+				</source>
+				<target name="" id="" table="Worker">
+					<columns>
+						<columns id="" name="Address" />
+					</columns>
+				</target>
+			</constraint>
+			<constraint name="ITDepartment-Worker.INCLUSION1" id="INCLUSION1" type="INCLUSION" >
+				<source name ="" id ="" table="ITDepartment" >
+					<columns>
+						<columns id="" name="DepartmentID" />
+					</columns>
+				</source>
+				<target name="" id="" table="Worker">
+					<columns>
+						<columns id="" name="DepartmentID" />
+					</columns>
+				</target>
+			</constraint>
+		</constraints>
+	</schema>
+</database>

@@ -1,0 +1,14 @@
+<database name="" id="" source="">
+	<schema name="" id="">
+		<tables>
+			<table id="1" name="Worker" condition="Salary>2000" view="">
+				<columns>
+					<column id="rel1att0" name="ID"  nullable="false"/>
+					<column id="rel1att1" name="Name"  nullable="false"/>
+					<column id="rel1att2" name="Address"  nullable="false"/>
+					<column id="rel1att3" name="Salary"  nullable="false"/>
+				</columns>
+			</table>
+		</tables>
+	</schema>
+</database>

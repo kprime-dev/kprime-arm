@@ -1,0 +1,196 @@
+<database name="" id="" source="">
+	<schema name="" id="">
+		<tables>
+			<table id="1" name=" R1" condidion="" view="">
+			<columns>
+				<column var="ATT" id="" name="" />
+				<column var="REST1" id="" name="" />
+			</columns>
+			</table>
+			<table id="2" name=" R2" condidion="" view="">
+			<columns>
+				<column var="ATT" id="" name="" />
+				<column var="LHS" id="" name="" />
+				<column var="REST2" id="" name="" />
+			</columns>
+			</table>
+			<table id="3" name=" R3" condidion="" view="">
+			<columns>
+				<column var="LHS" id="" name="" />
+				<column var="RHS" id="" name="" />
+			</columns>
+			</table>
+		</tables>
+		<constraints>
+			<constraint name="R3.FUNCTIONAL1" id="FUNCTIONAL1" type="FUNCTIONAL" >
+				<source name ="" id ="" table="R3" >
+					<columns>
+						<column var="LHS" id="" name="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</source>
+				<target name="" id="" table="R3">
+					<columns>
+						<columns var="RHS" id="" name="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</target>
+			</constraint>
+			<constraint name="R3.PRIMARY_KEY1" id="PRIMARY_KEY1" type="PRIMARY_KEY" >
+				<source name ="" id ="" table="R3" >
+					<columns>
+						<columns var="LHS" id="" name="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</source>
+			</constraint>
+			<constraint name="R1-R2.INCLUSION1" id="INCLUSION1" type="INCLUSION" >
+				<source name ="" id =""table="R1" >
+					<columns>
+						<column var="ATT" id="" name="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</source>
+				<target name="" id="" table="R2">
+					<columns>
+						<columns var="ATT" id="" name="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</target>
+			</constraint>
+			<constraint name="R2-R3.DOUBLE_INCLUSION2" id="DOUBLE_INCLUSION2" type="DOUBLE_INCLUSION" >
+				<source name ="" id =""table="R2" >
+					<columns>
+						<column var="LHS" id="" name="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</source>
+				<target name="" id="" table="R3">
+					<columns>
+						<columns var="LHS" id="" name="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</target>
+			</constraint>
+			<constraint name="R1.CONS.1" id="CONS1" type="CONS" >
+				<source name ="" id ="" table="R1" constraint="k">
+					<columns>
+						<columns var="ATT" id="" name="" dbname="" nullable="false" dbtype=""/>
+						<columns var="REST1" id="" name="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</source>
+			</constraint>
+			<constraint name="R2.CONS.2" id="CONS2" type="CONS" >
+				<source name ="" id ="" table="R2" constraint="l">
+					<columns>
+						<columns var="ATT" id="" name="" dbname="" nullable="false" dbtype=""/>
+						<columns var="LHS" id="" name="" dbname="" nullable="false" dbtype=""/>
+						<columns var="RHS" id="" name="" dbname="" nullable="false" dbtype=""/>
+						<columns var="REST2" id="" name="" dbname="" nullable="false" dbtype=""/>
+					</columns>
+				</source>
+			</constraint>
+			<constraint name="ATT.IS_NOT1" id="IS_NOT1" type="IS_NOT" >
+				<source name ="" id ="">
+					<columns>
+						<column var="ATT" id="" name="" nullable="false"/>
+					</colunms>
+				</source>
+			</constraint>
+			<constraint name="LHS.IS_NOT2" id="IS_NOT2" type="IS_NOT" >
+				<source name ="" id ="">
+					<columns>
+						<column var="LHS" id="" name="" nullable="false"/>
+					</colunms>
+				</source>
+			</constraint>
+			<constraint name="RHS.IS_NOT3" id="IS_NOT3" type="IS_NOT" >
+				<source name ="" id ="">
+					<columns>
+						<column var="RHS" id="" name="" nullable="false"/>
+					</colunms>
+				</source>
+			</constraint>
+			<constraint name="REST1.IS_NOT4" id="IS_NOT4" type="IS_NOT" >
+				<source name ="" id ="">
+					<columns>
+						<column var="REST1" id="" name="" nullable="false"/>
+					</colunms>
+				</source>
+			</constraint>
+			<constraint name="REST2.IS_NOT5" id="IS_NOT5" type="IS_NOT" >
+				<source name ="" id ="">
+					<columns>
+						<column var="REST2" id="" name="" nullable="false"/>
+					</colunms>
+				</source>
+			</constraint>
+			<constraint name="ATT^l.SUBSET6" id="SUBSET6" type="SUBSET" >
+				<source id ="" name="">
+					<columns>
+						<column var="ATT^k"id="" name=""/>
+					</column>
+				</source>
+				<target id="" name="">
+					<columns>
+						<column var="ATT^l" id="" name=""/>
+					</columns>
+				</target>
+			</constraint>
+			<constraint name="ATT.SUBSET7" id="SUBSET7" type="SUBSET" >
+				<source id ="" name="">
+					<columns>
+						<column var="ATT^k"id="" name=""/>
+						<column var="ATT^l"id="" name=""/>
+					</column>
+				</source>
+				<target id="" name="">
+					<columns>
+						<column var="ATT" id="" name=""/>
+					</columns>
+				</target>
+			</constraint>
+			<constraint name="LHS.SUBSET8" id="SUBSET8" type="SUBSET" >
+				<source id ="" name="">
+					<columns>
+						<column var="LHS^l"id="" name=""/>
+					</column>
+				</source>
+				<target id="" name="">
+					<columns>
+						<column var="LHS" id="" name=""/>
+					</columns>
+				</target>
+			</constraint>
+			<constraint name="RHS.SUBSET9" id="SUBSET9" type="SUBSET" >
+				<source id ="" name="">
+					<columns>
+						<column var="RHS^l"id="" name=""/>
+					</column>
+				</source>
+				<target id="" name="">
+					<columns>
+						<column var="RHS" id="" name=""/>
+					</columns>
+				</target>
+			</constraint>
+			<constraint name="REST1.SUBSET10" id="SUBSET10" type="SUBSET" >
+				<source id ="" name="">
+					<columns>
+						<column var="REST1^k"id="" name=""/>
+					</column>
+				</source>
+				<target id="" name="">
+					<columns>
+						<column var="REST1" id="" name=""/>
+					</columns>
+				</target>
+			</constraint>
+			<constraint name="REST2.SUBSET11" id="SUBSET11" type="SUBSET" >
+				<source id ="" name="">
+					<columns>
+						<column var="REST2^l"id="" name=""/>
+					</column>
+				</source>
+				<target id="" name="">
+					<columns>
+						<column var="REST2" id="" name=""/>
+					</columns>
+				</target>
+			</constraint>
+		</constraints>
+	</schema>
+</database>

@@ -9,6 +9,7 @@ import unibz.cs.semint.kprime.domain.ddl.Constraint
 import unibz.cs.semint.kprime.domain.ddl.Source
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import java.io.File
+import kotlin.test.assertEquals
 
 class XMLSerializerConstraintTest {
 
@@ -51,12 +52,12 @@ class XMLSerializerConstraintTest {
         val fileContent = File("target/test-classes/constraint_with_two_source_columns_three_target_columns.xml")
             .readLines().joinToString(System.lineSeparator())
 
+        //assertEquals("",serializedConstraint)
         val myDiff = DiffBuilder.compare(serializedConstraint)
             .ignoreWhitespace()
             .withTest(fileContent)
             .checkForSimilar().build()
         Assert.assertFalse(myDiff.toString(), myDiff.hasDifferences());
-        //assertEquals("",serializedConstraint)
     }
 
     @Test
