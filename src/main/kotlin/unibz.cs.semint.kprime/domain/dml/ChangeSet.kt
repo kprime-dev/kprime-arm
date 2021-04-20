@@ -63,6 +63,9 @@ class ChangeSet() {
     @JacksonXmlElementWrapper(useWrapping=false)
     var alterTable : MutableList<AlterTable>? = ArrayList()
 
+    @JacksonXmlElementWrapper(useWrapping=false)
+    var commands : MutableList<String>? = ArrayList()
+
     infix fun withId(id:String) = apply {
         this.id=id
     }
