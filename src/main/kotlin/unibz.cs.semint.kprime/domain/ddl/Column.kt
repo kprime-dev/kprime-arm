@@ -95,6 +95,13 @@ class Column (): Labelled {
         return addLabels(newLabels.joinToString(","))
     }
 
+    override fun remLabels(newLabels: List<Label>): String {
+        val labels2 = labels ?: return ""
+        return resetLabels(labels2.split(",")
+                .filter { !newLabels.contains(it) }
+                .joinToString(","))
+    }
+
     override fun hasLabel(label: String): Boolean {
         return labels?.contains(label)?:false
     }

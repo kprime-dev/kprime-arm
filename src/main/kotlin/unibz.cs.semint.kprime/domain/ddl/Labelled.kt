@@ -8,6 +8,8 @@ interface Labelled {
 
     fun addLabels(newLabels:List<Label>): String
 
+    fun remLabels(newLabels:List<Label>): String
+
     fun labelsAsString():String
 
     fun hasLabel(label:String) :Boolean

@@ -102,6 +102,13 @@ class Table (): Labelled {
         return labels?: ""
     }
 
+    override fun remLabels(newLabels: List<Label>): String {
+        val labels2 = labels ?: return ""
+        return resetLabels(labels2.split(",")
+                .filter { !newLabels.contains(it) }
+                .joinToString(","))
+    }
+
     fun addColomunsLabels(labelsAsString: String): String {
         for (column in columns) column.addLabels(labelsAsString)
         return ""

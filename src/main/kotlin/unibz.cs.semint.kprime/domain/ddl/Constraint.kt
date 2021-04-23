@@ -165,6 +165,13 @@ class Constraint : Labelled {
         return labels?: ""
     }
 
+    override fun remLabels(newLabels: List<Label>): String {
+        val labels2 = labels ?: return ""
+        return resetLabels(labels2.split(",")
+                .filter { !newLabels.contains(it) }
+                .joinToString(","))
+    }
+
     fun toStringWithName(): String {
         return "${this.name}:${toString()}"
     }
