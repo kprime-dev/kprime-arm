@@ -239,7 +239,7 @@ class SchemaTest {
         schema.addForeignKey("person:id-->employee:id")
         assertEquals(2,schema.constraints().size)
         // when
-        schema.dropConstraint("pkey_person")
+        schema.dropConstraint("pkey_person_id")
         schema.dropConstraint("person_employee.foreignKey1")
         // then
         assertEquals(0,schema.constraints().size)
@@ -463,5 +463,16 @@ class SchemaTest {
         val key = schema.keyCols("Person")
         assertEquals("surname",key.first().name)
         assertEquals(1,key.size)
+    }
+
+    @Test
+    fun test_is_binary_relation() {
+        // given
+        val schema = Schema()
+        schema.addTable("Person:name,surname")
+        schema.addForeignKey("X:a-->Person:name")
+        schema.addForeignKey("Y:b-->Person:surname")
+        // then
+        assertTrue(schema.isBinaryRelation("Person"))
     }
 }

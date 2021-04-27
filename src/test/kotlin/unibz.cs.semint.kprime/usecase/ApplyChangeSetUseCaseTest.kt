@@ -197,7 +197,7 @@ class ApplyChangeSetUseCaseTest {
         val cs_xml = serializer.prettyChangeSet(personCS)
         assertEquals("""
 <changeSet id="">
-  <createConstraint name="pkey_person" id="" type="PRIMARY_KEY">
+  <createConstraint name="pkey_person_surname_name" id="" type="PRIMARY_KEY">
     <source name="" id="" table="person">
       <columns>
         <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>
@@ -232,7 +232,7 @@ class ApplyChangeSetUseCaseTest {
       </tables>
     </tables>
     <constraints>
-      <constraints name="pkey_person" id="" type="PRIMARY_KEY">
+      <constraints name="pkey_person_surname_name" id="" type="PRIMARY_KEY">
         <source name="" id="" table="person">
           <columns>
             <columns name="surname" id="" nullable="false" dbtype="" dbtable=""/>

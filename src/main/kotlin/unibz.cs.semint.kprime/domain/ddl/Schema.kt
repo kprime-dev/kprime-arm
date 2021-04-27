@@ -122,9 +122,17 @@ class Schema () {
         }.firstOrNull()
     }
 
+    fun keyPrimary(tableName: String): Constraint? {
+        return constraints().filter { c ->
+            c.type == Constraint.TYPE.PRIMARY_KEY.name &&
+                    c.source.table == "${tableName}"
+        }.firstOrNull()
+    }
+
     fun keysAll(tableName: String): List<Constraint> {
         val first = constraints().filter { c ->
             (c.type == Constraint.TYPE.PRIMARY_KEY.name ||
+                    c.type == Constraint.TYPE.CANDIDATE_KEY.name||
                     c.type == Constraint.TYPE.SURROGATE_KEY.name) &&
                     c.source.table == "${tableName}"
         }.toList()
@@ -148,6 +156,7 @@ class Schema () {
     }
 
     fun addKey(tableName:String, k:Set<Column>): Constraint {
+        keyPrimary(tableName).apply { this?.type = Constraint.TYPE.CANDIDATE_KEY.name }
         val primaryConstraint = buildKey(tableName, k, Constraint.TYPE.PRIMARY_KEY.name)
         constraints().add(primaryConstraint)
         return primaryConstraint
@@ -156,7 +165,7 @@ class Schema () {
     fun addKey(commandArgs:String):Schema {
         val tableName:String = commandArgs.split(":")[0]
         val attributeNames = commandArgs.split(":")[1]
-        constraints().add(buildKey(tableName, Column.set(attributeNames), Constraint.TYPE.PRIMARY_KEY.name))
+        addKey(tableName,Column.set(attributeNames))
         return this
     }
 
@@ -169,7 +178,7 @@ class Schema () {
 
     fun buildKey(tableName: String, k: Set<Column>, keyType: String): Constraint {
         val keyConstraint = Constraint.addKey()
-        keyConstraint.name = "pkey_$tableName"
+        keyConstraint.name = "pkey_$tableName"+"_"+k.joinToString("_")
         keyConstraint.source.table = tableName
         keyConstraint.target.table = tableName
         keyConstraint.source.columns.addAll(k)
@@ -189,6 +198,7 @@ class Schema () {
     fun keysAll(): List<Constraint> {
         return constraints().filter {
             c -> c.type.equals(Constraint.TYPE.PRIMARY_KEY.name)
+                || c.type.equals(Constraint.TYPE.CANDIDATE_KEY.name)
                 || c.type.equals(Constraint.TYPE.SURROGATE_KEY.name) }
     }
 
@@ -526,4 +536,9 @@ class Schema () {
         return oid(this,tableName)
     }
 
+    fun isBinaryRelation(tableName:String):Boolean {
+        val table = table(tableName)?:return false
+        return table.columns.size==2
+                && foreignsWithTarget(tableName).size==2
+    }
 }
