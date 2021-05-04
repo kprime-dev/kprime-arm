@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import unibz.cs.semint.kprime.domain.Gid
 import unibz.cs.semint.kprime.domain.dql.Query
+import unibz.cs.semint.kprime.domain.nextGid
 import java.util.*
 import javax.xml.bind.annotation.XmlElements
 import kotlin.collections.ArrayList
@@ -13,10 +15,13 @@ import kotlin.collections.ArrayList
 open class Database () {
 
     @JacksonXmlProperty(isAttribute = true)
+    var gid: Gid? = null
+
+    @JacksonXmlProperty(isAttribute = true)
     var name: String =""
 
     @JacksonXmlProperty(isAttribute = true)
-    var id: String=""
+    var id: String = ""
 
     @JacksonXmlProperty(isAttribute = true)
     var author: String? = null

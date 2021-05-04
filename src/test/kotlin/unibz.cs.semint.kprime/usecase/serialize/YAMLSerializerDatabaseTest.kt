@@ -27,6 +27,7 @@ class YAMLSerializerDatabaseTest {
         objectMapper.writeValue(outWriter,database)
         assertEquals("""
             ---
+            gid: null
             name: "dbname"
             id: "iddb"
             author: null

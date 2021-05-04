@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import unibz.cs.semint.kprime.domain.Gid
 import unibz.cs.semint.kprime.domain.ddl.Database
+import unibz.cs.semint.kprime.domain.nextGid
 
 fun initChangeSet(alfa:ChangeSet.()->Unit):ChangeSet {
     val changeSet = ChangeSet()
@@ -14,6 +16,8 @@ fun initChangeSet(alfa:ChangeSet.()->Unit):ChangeSet {
 @JacksonXmlRootElement(localName = "changeSet")
 class ChangeSet() {
 
+    @JacksonXmlProperty(isAttribute = true)
+    var gid: Gid? = null
 
     @JacksonXmlProperty(isAttribute = true)
     var id: String = ""
@@ -66,7 +70,7 @@ class ChangeSet() {
     @JacksonXmlElementWrapper(useWrapping=false)
     var commands : MutableList<String>? = ArrayList()
 
-    infix fun withId(id:String) = apply {
+    infix fun withId(id:Gid) = apply {
         this.id=id
     }
 
