@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
 @JacksonXmlRootElement(localName = "table")
-class Table (): Labelled {
+class Table (): Labelled by Labeller(){
 
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""
@@ -24,9 +24,6 @@ class Table (): Labelled {
     var columns= ArrayList<Column>()
 
     @JacksonXmlProperty(isAttribute = true)
-    var labels: String? = null
-
-    @JacksonXmlProperty(isAttribute = true)
     var catalog: String? = null
 
     @JacksonXmlProperty(isAttribute = true)
@@ -35,6 +32,10 @@ class Table (): Labelled {
     @JacksonXmlProperty(isAttribute = true)
     var source: String? = null
 
+    @JacksonXmlProperty(isAttribute = true)
+    var labels: String? = null
+        get() = if (labelsAsString().isEmpty()) null else labelsAsString()
+        set(value) { field = resetLabels(value?:"") }
 
     fun hasColumn(nameToFind:String): Boolean {
         for (col in columns) {
@@ -79,43 +80,13 @@ class Table (): Labelled {
         this.columns.addAll(cols)
     }
 
-    override fun resetLabels(labelsAsString: String): String {
-        labels = labelsAsString
-        return labels!!
-    }
-
-    override fun addLabels(labelsAsString: String): String {
-        if (labels==null) labels = labelsAsString
-        else labels += labelsAsString
-        return labels!!
-    }
-
-    override fun addLabels(newLabels: List<Label>): String {
-        return addLabels(newLabels.joinToString(","))
-    }
-
-    override fun hasLabel(label: String): Boolean {
-        return labels?.contains(label)?:false
-    }
-
-    override fun labelsAsString(): String {
-        return labels?: ""
-    }
-
-    override fun remLabels(newLabels: List<Label>): String {
-        val labels2 = labels ?: return ""
-        return resetLabels(labels2.split(",")
-                .filter { !newLabels.contains(it) }
-                .joinToString(","))
-    }
-
     fun addColomunsLabels(labelsAsString: String): String {
         for (column in columns) column.addLabels(labelsAsString)
         return ""
     }
 
     override fun toString(): String {
-        return "Table(name='$name', id='$id', view='$view', condition='$condition', parent=$parent, columns=$columns, labels=$labels, catalog=$catalog, schema=$schema, source=$source)"
+        return "Table(name='$name', id='$id', view='$view', condition='$condition', parent=$parent, columns=$columns, catalog=$catalog, schema=$schema, source=$source)"
     }
 
 

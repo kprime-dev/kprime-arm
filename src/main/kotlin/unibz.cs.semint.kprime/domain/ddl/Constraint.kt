@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 
 @JacksonXmlRootElement(localName = "constraint")
-class Constraint : Labelled {
+class Constraint : Labelled by Labeller() {
     fun left(): Collection<Column> {
         return source.columns
     }
@@ -45,6 +45,8 @@ class Constraint : Labelled {
 
     @JacksonXmlProperty(isAttribute = true)
     var labels: String? = null
+        get() = if (labelsAsString().isEmpty()) null else labelsAsString()
+        set(value) { field = resetLabels(value?:"") }
 
     fun clone():Constraint {
         val objectMapper = ObjectMapper()
@@ -140,36 +142,6 @@ class Constraint : Labelled {
             }
             return result
         }
-    }
-
-    override fun resetLabels(labelsAsString: String): String {
-        labels = labelsAsString
-        return labels!!
-    }
-
-    override fun addLabels(labelsAsString: String): String {
-        if (labels==null) labels = labelsAsString
-        else labels += labelsAsString
-        return labels!!
-    }
-
-    override fun addLabels(newLabels: List<Label>): String {
-        return addLabels(newLabels.joinToString(","))
-    }
-
-    override fun hasLabel(label: String): Boolean {
-        return labels?.contains(label)?:false
-    }
-
-    override fun labelsAsString(): String {
-        return labels?: ""
-    }
-
-    override fun remLabels(newLabels: List<Label>): String {
-        val labels2 = labels ?: return ""
-        return resetLabels(labels2.split(",")
-                .filter { !newLabels.contains(it) }
-                .joinToString(","))
     }
 
     fun toStringWithName(): String {
