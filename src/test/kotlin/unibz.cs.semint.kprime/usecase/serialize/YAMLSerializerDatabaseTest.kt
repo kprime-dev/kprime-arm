@@ -47,6 +47,7 @@ class YAMLSerializerDatabaseTest {
                 schema: null
                 source: null
                 labels: null
+                var: null
               - name: ""
                 id: ""
                 view: ""
@@ -57,6 +58,7 @@ class YAMLSerializerDatabaseTest {
                 schema: null
                 source: null
                 labels: null
+                var: null
               constraints: []
             mappings: []
             source: ""

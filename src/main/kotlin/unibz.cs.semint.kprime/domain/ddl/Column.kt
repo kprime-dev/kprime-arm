@@ -32,6 +32,8 @@ class Column (): Labelled by Labeller() {
     var default: Any? = null
     @JacksonXmlProperty(isAttribute = true)
     var dbtable: String? = null
+    @JacksonXmlProperty(isAttribute = true)
+    var `var`: String? = null
 
     @JsonCreator
     constructor(

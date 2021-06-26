@@ -37,6 +37,9 @@ class Table (): Labelled by Labeller(){
         get() = if (labelsAsString().isEmpty()) null else labelsAsString()
         set(value) { field = resetLabels(value?:"") }
 
+    @JacksonXmlProperty(isAttribute = true)
+    var `var`: String? = null
+
     fun hasColumn(nameToFind:String): Boolean {
         for (col in columns) {
             if (col.name.equals(nameToFind)) return true

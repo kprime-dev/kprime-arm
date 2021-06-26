@@ -32,7 +32,7 @@ class ColumnTest {
         val colJson = jacksonObjectMapper().writeValueAsString(col)
         // then
         val result = """
-            {"name":"colA","id":"","dbname":null,"nullable":false,"dbtype":"","type":null,"unit":null,"cardinality":null,"role":null,"labels":null,"default":null,"dbtable":""}
+            {"name":"colA","id":"","dbname":null,"nullable":false,"dbtype":"","type":null,"unit":null,"cardinality":null,"role":null,"labels":null,"default":null,"dbtable":"","var":null}
         """.trimIndent()
         assertEquals(result,colJson)
     }
@@ -46,7 +46,7 @@ class ColumnTest {
         val colJson = jacksonObjectMapper().writeValueAsString(col)
         // then
         val result = """
-            {"name":"colA","id":"","dbname":null,"nullable":false,"dbtype":"","type":null,"unit":null,"cardinality":null,"role":null,"labels":"aaa","default":null,"dbtable":""}
+            {"name":"colA","id":"","dbname":null,"nullable":false,"dbtype":"","type":null,"unit":null,"cardinality":null,"role":null,"labels":"aaa","default":null,"dbtable":"","var":null}
         """.trimIndent()
         assertEquals(result,colJson)
     }
