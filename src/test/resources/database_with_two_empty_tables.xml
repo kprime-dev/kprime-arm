@@ -1,12 +1,12 @@
 <database name="dbname" id="iddb" source="">
     <schema name="" id="idschema">
         <tables>
-            <tables name="" id="" condition="" view="">
+            <table name="" id="" condition="" view="">
                 <columns/>
-            </tables>
-            <tables name="" id="" condition="" view="">
+            </table>
+            <table name="" id="" condition="" view="">
                 <columns/>
-            </tables>
+            </table>
         </tables>
         <constraints/>
     </schema>

@@ -1,15 +1,15 @@
 <constraint name="" id="idconst1" type="">
     <source name="" id="" table="">
         <columns>
-            <columns name="" id="" nullable="false" dbtype=""/>
-            <columns name="" id="" nullable="false" dbtype=""/>
+            <column name="" id="" nullable="false" dbtype=""/>
+            <column name="" id="" nullable="false" dbtype=""/>
         </columns>
     </source>
     <target name="" id="" table="">
         <columns>
-            <columns name="" id="" nullable="false" dbtype=""/>
-            <columns name="" id="" nullable="false" dbtype=""/>
-            <columns name="" id="" nullable="false" dbtype=""/>
+            <column name="" id="" nullable="false" dbtype=""/>
+            <column name="" id="" nullable="false" dbtype=""/>
+            <column name="" id="" nullable="false" dbtype=""/>
         </columns>
     </target>
 </constraint>

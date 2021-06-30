@@ -48,8 +48,8 @@ class QueryTest {
               <select>
                 <distinct>false</distinct>
                 <attributes>
-                  <attributes name="Name"/>
-                  <attributes name="Surname"/>
+                  <attribute name="Name"/>
+                  <attribute name="Surname"/>
                 </attributes>
                 <from tableName="Table1" alias=""/>
                 <where condition="Name='Gigi'"/>
@@ -177,8 +177,8 @@ class QueryTest {
               <select>
                 <distinct>false</distinct>
                 <attributes>
-                  <attributes name="Name"/>
-                  <attributes name="Surname"/>
+                  <attribute name="Name"/>
+                  <attribute name="Surname"/>
                 </attributes>
                 <from tableName="Table1" alias=""/>
                 <where condition="Name='Gigi'"/>
@@ -188,8 +188,8 @@ class QueryTest {
                   <selects>
                     <distinct>false</distinct>
                     <attributes>
-                      <attributes name="Name"/>
-                      <attributes name="Surname"/>
+                      <attribute name="Name"/>
+                      <attribute name="Surname"/>
                     </attributes>
                     <from tableName="Table2" alias=""/>
                     <where condition="Name='Gigi'"/>

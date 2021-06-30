@@ -65,9 +65,9 @@ class XMLSerializerDatabaseTest {
             <database name="dbname" id="iddb" source="">
               <schema name="" id="idschema">
                 <tables>
-                  <tables name="" id="" view="" condition="">
+                  <table name="" id="" view="" condition="">
                     <columns/>
-                  </tables>
+                  </table>
                 </tables>
                 <constraints/>
               </schema>
@@ -76,7 +76,7 @@ class XMLSerializerDatabaseTest {
                   <select>
                     <distinct>false</distinct>
                     <attributes>
-                      <attributes name="name"/>
+                      <attribute name="name"/>
                     </attributes>
                     <from tableName="people" alias=""/>
                     <where condition=""/>

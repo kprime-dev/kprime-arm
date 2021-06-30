@@ -1,5 +1,6 @@
 package unibz.cs.semint.kprime.domain.ddl
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.ddl.schemalgo.*
@@ -12,8 +13,12 @@ class Schema () {
     @JacksonXmlProperty(isAttribute = true)
     var id: String=""
 
+    @JacksonXmlElementWrapper(localName = "tables")
+    @JacksonXmlProperty(localName = "table")
     var tables: ArrayList<Table>? = ArrayList<Table>()
 
+    @JacksonXmlElementWrapper(localName = "constraints")
+    @JacksonXmlProperty(localName = "constraint")
     var constraints: MutableList<Constraint>? = ArrayList<Constraint>()
 
     fun table(name: String): Table? {

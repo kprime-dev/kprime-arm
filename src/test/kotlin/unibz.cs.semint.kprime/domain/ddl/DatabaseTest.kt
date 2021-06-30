@@ -59,11 +59,11 @@ class DatabaseTest {
             <database name="" id="" source="">
               <schema name="" id="">
                 <tables>
-                  <tables name="pure_person" id="" view="person" condition="person.T=null AND person.S=null">
+                  <table name="pure_person" id="" view="person" condition="person.T=null AND person.S=null">
                     <columns>
-                      <columns name="SSN" id="id.SSN" dbname="dbname.SSN" nullable="false" dbtype=""/>
+                      <column name="SSN" id="id.SSN" dbname="dbname.SSN" nullable="false" dbtype=""/>
                     </columns>
-                  </tables>
+                  </table>
                 </tables>
                 <constraints/>
               </schema>

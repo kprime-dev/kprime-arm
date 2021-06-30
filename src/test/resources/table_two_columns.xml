@@ -1,6 +1,6 @@
 <table name="Gigi" id="23" view="" condition="">
     <columns>
-        <columns name="col1" id="id1" dbname="dbname1" dbtype="" nullable="false"/>
-        <columns name="col2" id="id2" dbname="dbname2" dbtype="" nullable="false"/>
+        <column name="col1" id="id1" dbname="dbname1" dbtype="" nullable="false"/>
+        <column name="col2" id="id2" dbname="dbname2" dbtype="" nullable="false"/>
     </columns>
 </table>

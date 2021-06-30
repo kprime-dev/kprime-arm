@@ -40,7 +40,7 @@ class XMLSerializerTableTest {
 
         val result = serializer.serializeTable(table).ok
         // then
-        assertEquals("<table name=\"Gigi\" id=\"22\" view=\"\" condition=\"\"><columns><columns name=\"col1\" id=\"id1\" dbname=\"dbname1\" nullable=\"false\" dbtype=\"\"/><columns name=\"col2\" id=\"id2\" dbname=\"dbname2\" nullable=\"false\" dbtype=\"\"/></columns></table>",result)
+        assertEquals("<table name=\"Gigi\" id=\"22\" view=\"\" condition=\"\"><columns><column name=\"col1\" id=\"id1\" dbname=\"dbname1\" nullable=\"false\" dbtype=\"\"/><column name=\"col2\" id=\"id2\" dbname=\"dbname2\" nullable=\"false\" dbtype=\"\"/></columns></table>",result)
     }
 
     @Test

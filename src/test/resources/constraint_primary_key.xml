@@ -1,9 +1,9 @@
 <constraint name="" id="idconst1" type="PRIMARY_KEY">
     <source name="" id="" table="">
         <columns>
-            <columns name="" id="" dbtype="" nullable="false"/>
-            <columns name="" id="" dbtype="" nullable="false"/>
-            <columns name="" id="" dbtype="" nullable="false"/>
+            <column name="" id="" dbtype="" nullable="false"/>
+            <column name="" id="" dbtype="" nullable="false"/>
+            <column name="" id="" dbtype="" nullable="false"/>
         </columns>
     </source>
     <target name="" id="" table="">
