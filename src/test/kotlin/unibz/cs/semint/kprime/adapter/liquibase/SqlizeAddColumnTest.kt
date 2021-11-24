@@ -1,22 +1,19 @@
-package unibz.cs.semint.kprime.adapter
+package unibz.cs.semint.kprime.adapter.liquibase
 
 import org.junit.Test
-import unibz.cs.semint.kprime.adapter.service.LiquibaseSQLizeAdapter
+import unibz.cs.semint.kprime.adapter.service.liquibase.sqlizeAddColumn
 import unibz.cs.semint.kprime.domain.ddl.Column
 import unibz.cs.semint.kprime.domain.ddl.DataType
 import unibz.cs.semint.kprime.domain.ddl.DatabaseTrademark
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 import unibz.cs.semint.kprime.domain.dml.CreateColumn
-import unibz.cs.semint.kprime.domain.dml.CreateTable
 import kotlin.test.assertEquals
 
-class LiquibaseSQLizeAdapterTest {
+class SqlizeAddColumnTest {
 
     @Test
-    fun test_add_column_and_table_change_liquibase_sqlize() {
+    fun test_add_column_liquibase_sqlize() {
         // given
-        val change = ChangeSet()
-
         val createColumn = CreateColumn()
         createColumn.catalog = "cat1"
         createColumn.schema = "schema1"
@@ -25,27 +22,15 @@ class LiquibaseSQLizeAdapterTest {
         col1.dbtype = DataType.varchar.name
         col1.dbtable = "tableDbName"
         createColumn.columns.add(col1)
-        change.createColumn.add(createColumn)
 
-        val createTable = CreateTable()
-        createTable.catalog = "cat1"
-        createTable.schema = "schema1"
-        createTable.name = "tab1"
-        val col11 = Column("colName11","colId11")
-        col11.dbname = "colDbName11"
-        col11.dbtype = DataType.int.name
-        col11.dbtable = "tableDbName11"
-        createTable.columns.add(col11)
-        change.createTable.add(createTable)
 
         // when
-        val sqlize = LiquibaseSQLizeAdapter().sqlize(DatabaseTrademark.H2, change)
+        val sqlize = sqlizeAddColumn(DatabaseTrademark.H2, createColumn)
 
         // then
         val sqlizeresult = sqlize.joinToString(System.lineSeparator())
         assertEquals("""
             ALTER TABLE schema1.tableDbName ADD colDbName NVARCHAR NOT NULL
-            CREATE TABLE schema1.tab1 (colDbName11 INT)
         """.trimIndent(),sqlizeresult)
     }
 

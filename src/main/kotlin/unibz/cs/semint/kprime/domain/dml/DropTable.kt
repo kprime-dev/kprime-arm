@@ -8,9 +8,17 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText
 class DropTable() {
 
     @JacksonXmlProperty(isAttribute = true)
+    var cascadeConstraints: Boolean? = null
+
+    @JacksonXmlProperty(isAttribute = true)
+    var catalog: String? = null
+
+    @JacksonXmlProperty(isAttribute = true)
     var path: String = ""
+
     @JacksonXmlProperty(isAttribute = true)
     var schemaName: String = ""
+
     @JacksonXmlProperty(isAttribute = true)
     var tableName: String = ""
 
