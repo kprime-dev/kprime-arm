@@ -23,7 +23,7 @@ class OidsTest {
         val sqlCommands = oid(schema, originTableName).sqlCommands!!
         // then
         assertEquals(4,sqlCommands.size)
-        assertEquals("ALTER TABLE person ADD COLUMN sidperson int NOT NULL auto_increment UNIQUE",sqlCommands[0])
+        assertEquals("ALTER TABLE person ADD COLUMN sidperson int auto_increment DEFAULT ON NULL",sqlCommands[0])
         assertEquals("CREATE TABLE SKEYperson AS SELECT sidperson,surname,name FROM person",sqlCommands[1])
         // FIXME manca join name, ha preso solo surname
         assertEquals("CREATE TABLE teacher_1 AS SELECT SKEYperson.sidperson,teacher.course FROM SKEYperson JOIN teacher ON SKEYperson.surname = teacher.surname",sqlCommands[2])
@@ -121,12 +121,6 @@ table8: DepName , DepAddress
         assertTrue(constraints.toString().contains("PRIMARY_KEY SKEYPerson:code --> SKEYPerson:code ; "))
         assertTrue(constraints.toString().contains("SURROGATE_KEY SKEYPerson:sidPerson --> SKEYPerson:sidPerson ; "))
         assertTrue(constraints.toString().contains("DOUBLE_INCLUSION SKEYPerson:sidPerson --> Person:sidPerson ; "))
-    }
-
-    @Test
-    fun test_three_tables() {
-        // given
-        val schema = Schema()
     }
 
 }

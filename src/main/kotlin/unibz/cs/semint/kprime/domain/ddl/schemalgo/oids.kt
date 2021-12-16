@@ -19,7 +19,7 @@ fun oid(schema: Schema, originTableName: String): ChangeSet {
         val originTableName2 = originTableName
         // adds one column autoincrement to origin table
         val sid = "sid$originTableName"
-        sqlCommands.add("ALTER TABLE $originTableName ADD COLUMN $sid int NOT NULL auto_increment UNIQUE")
+        sqlCommands.add("ALTER TABLE $originTableName ADD COLUMN $sid int auto_increment DEFAULT ON NULL")
         schema.table(originTableName)!!.columns.add(Column.of(sid))
         // TODO NOTA BENE !!! non togliere lo spazio iniziale altrimenti originTableName assume il valore  di surrogateTableName.
         schema.addSurrogateKey(" "+originTableName+":"+sid)
