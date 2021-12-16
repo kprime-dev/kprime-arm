@@ -5,8 +5,8 @@ import unibz.cs.semint.kprime.domain.ddl.Schema
 import unibz.cs.semint.kprime.domain.ddl.Table
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 
-// FIXME in realtà non dovrebbe fermarsi al primo livello ma proseguire in modo ricorsivo e cominciare dalla coda.
-// FIXME in realtà dovrebbe rimuovere tutti i constraint prima di operare le sostituzioni di colonna chiave per poi rimetterli.
+// FIXME dovrebbe non fermarsi al primo livello e proseguire in modo ricorsivo a cominciare dalla coda.
+// FIXME dovrebbe rimuovere tutti i constraint prima di operare le sostituzioni di colonna chiave per poi rimetterli.
 // FIXME dovrebbe anche mantenere aggiorato lo schema logico.
 fun oid(schema: Schema, originTableName: String): ChangeSet {
         val changeSet = ChangeSet()
