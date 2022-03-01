@@ -4,10 +4,11 @@ import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
 import java.lang.IllegalArgumentException
-import java.sql.Connection
-import java.sql.DriverManager
-import java.sql.ResultSet
+import java.net.URL
+import java.net.URLClassLoader
+import java.sql.*
 import java.util.*
+import java.util.logging.Logger
 
 
 class JdbcAdapter {
@@ -63,14 +64,62 @@ class JdbcAdapter {
         conn.commit()
     }
 
+    internal class DriverShim(d: Driver) : Driver {
+        private val driver: Driver
+
+        init {
+            driver = d
+        }
+
+        @Throws(SQLException::class)
+        override fun acceptsURL(u: String?): Boolean {
+            return driver.acceptsURL(u)
+        }
+
+        @Throws(SQLException::class)
+        override fun connect(u: String?, p: Properties?): Connection {
+            return driver.connect(u, p)
+        }
+
+        @Throws(SQLException::class)
+        override fun getPropertyInfo(u: String?, p: Properties?): Array<DriverPropertyInfo> {
+            return driver.getPropertyInfo(u, p)
+        }
+
+        override fun getMajorVersion(): Int {
+            return driver.majorVersion
+        }
+
+        override fun getMinorVersion(): Int {
+            return driver.minorVersion
+        }
+
+        override fun jdbcCompliant(): Boolean {
+            return driver.jdbcCompliant()
+        }
+
+        override fun getParentLogger(): Logger {
+            return driver.parentLogger
+        }
+    }
+
+
     private fun openConnection(datasource: DataSource): Connection? {
         val source = datasource
         val user = source.user
         val pass = source.pass
         val path = source.path
 
-//        println("Looking for... driver [${source.driver}] for connection [$path] with user [$user].")
-        Class.forName(source.driver).newInstance()
+        println("Looking for... driver [${source.driver}][${source.driverUrl}] for connection [$path] with user [$user].")
+        if (source.driverUrl.isNotEmpty()) {
+            val u = URL("jar:file:${source.driverUrl}!/")// /home/nipe/Temp/postgresql-42.2.8.jar
+            val classname = source.driver
+            val ucl = URLClassLoader(arrayOf(u) )
+            val d = Class.forName(classname, true, ucl).newInstance() as Driver
+            DriverManager.registerDriver(DriverShim(d))
+        } else {
+            Class.forName(source.driver).newInstance()
+        }
 
         var conn: Connection?
 //        println("Connection preparing...")

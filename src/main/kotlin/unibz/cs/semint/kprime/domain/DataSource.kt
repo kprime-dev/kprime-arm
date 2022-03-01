@@ -8,7 +8,8 @@ class DataSource(
         var driver: String,
         var path: String,
         var user: String,
-        var pass: String) : Serializable {
+        var pass: String,
+        var driverUrl: String = "") : Serializable {
 
     var connection : DataSourceConnection? = null
     var currentResources: HashMap<String,Any>? = null
