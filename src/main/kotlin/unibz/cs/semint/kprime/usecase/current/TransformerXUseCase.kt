@@ -71,7 +71,7 @@ class TransformerXUseCase(
         var xPathProperties = File(decoXPathsFilePath).readLines()
 
         if (db.name.isEmpty()) return Applicability(false,"db name empty", transformerParams)
-        val dbFilePath = workingDir + db.name
+        val dbFilePath = workingDir + db.name + ".xml"
         if (!File(dbFilePath).isFile) return Applicability(false,"db name ${dbFilePath} not exists", transformerParams)
 
         val failuresOrXPathProperties = checkRequiredParams(xPathProperties, transformerParams)
@@ -124,7 +124,7 @@ class TransformerXUseCase(
         var xPathProperties = File(coXPathsFilePath).readLines()
 
         if (db.name.isEmpty()) return Applicability(false,"db name empty", transformerParams)
-        val dbFilePath = workingDir + db.name
+        val dbFilePath = workingDir + db.name + ".xml"
         if (!File(dbFilePath).isFile) return Applicability(false,"db name ${dbFilePath} not exists", transformerParams)
 
 
