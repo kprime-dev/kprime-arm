@@ -1,4 +1,4 @@
-<database name="dbname" id="iddb" source="">
+<database name="dbname" id="iddb" source="" vocabulary="">
     <schema name="" id="idschema">
         <tables>
             <table name="" id="" condition="" view="">

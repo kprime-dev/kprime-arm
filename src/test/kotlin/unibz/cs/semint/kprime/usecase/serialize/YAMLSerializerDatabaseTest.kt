@@ -27,12 +27,8 @@ class YAMLSerializerDatabaseTest {
         objectMapper.writeValue(outWriter,database)
         assertEquals("""
             ---
-            gid: null
             name: "dbname"
             id: "iddb"
-            author: null
-            time: null
-            parent: null
             schema:
               name: ""
               id: "idschema"
@@ -62,6 +58,7 @@ class YAMLSerializerDatabaseTest {
               constraints: []
             mappings: []
             source: ""
+            vocabulary: ""
 
         """.trimIndent(),outWriter.toString())
     }

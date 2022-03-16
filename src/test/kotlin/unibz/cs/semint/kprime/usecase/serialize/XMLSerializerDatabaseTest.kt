@@ -62,7 +62,7 @@ class XMLSerializerDatabaseTest {
         val serializedDatabase = serializer.prettyDatabase(database).ok
         // then
         assertEquals("""
-            <database name="dbname" id="iddb" source="">
+            <database name="dbname" id="iddb" source="" vocabulary="">
               <schema name="" id="idschema">
                 <tables>
                   <table name="" id="" view="" condition="">

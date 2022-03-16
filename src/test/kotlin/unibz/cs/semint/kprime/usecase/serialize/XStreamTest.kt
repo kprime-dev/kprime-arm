@@ -29,6 +29,7 @@ class XStreamTest {
               </schema>
               <mappings/>
               <source></source>
+              <vocabulary></vocabulary>
             </database>
         """.trimIndent(),dbxml)
     }

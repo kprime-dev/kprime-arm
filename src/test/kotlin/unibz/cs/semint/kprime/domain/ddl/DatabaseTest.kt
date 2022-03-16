@@ -56,7 +56,7 @@ class DatabaseTest {
         val dbXml = XMLSerializerJacksonAdapter().prettyDatabase(db)
         // then
         assertEquals("""
-            <database name="" id="" source="">
+            <database name="" id="" source="" vocabulary="">
               <schema name="" id="">
                 <tables>
                   <table name="pure_person" id="" view="person" condition="person.T=null AND person.S=null">

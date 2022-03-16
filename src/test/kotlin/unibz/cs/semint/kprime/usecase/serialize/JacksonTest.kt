@@ -37,7 +37,7 @@ class JacksonTest {
         val result = writer.writeValueAsString(db).trimEnd()
         // then
         assertEquals("""
-            <database name="" id="" source="">
+            <database name="" id="" source="" vocabulary="">
               <schema name="" id="">
                 <tables/>
                 <constraints/>
@@ -52,7 +52,7 @@ class JacksonTest {
     fun test_deserialize_db() {
         // given
         val dbxml = """
-            <database name="" id="" source="">
+            <database name="" id="" source="" vocabulary="">
               <schema name="" id="">
                 <tables/>
                 <constraints/>
@@ -73,7 +73,7 @@ class JacksonTest {
         // then
         assertEquals(0,newdb.schema.tables().size)
         assertEquals("""
-            <database name="" id="" source="">
+            <database name="" id="" source="" vocabulary="">
               <schema name="" id="">
                 <tables/>
                 <constraints/>

@@ -1,9 +1,11 @@
 package unibz.cs.semint.kprime.domain.ddl
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.Gid
 import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.domain.nextGid
@@ -12,6 +14,7 @@ import javax.xml.bind.annotation.XmlElements
 import kotlin.collections.ArrayList
 
 @JacksonXmlRootElement(localName = "database")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 open class Database () {
 
     @JacksonXmlProperty(isAttribute = true)
@@ -36,13 +39,24 @@ open class Database () {
 
     @JacksonXmlElementWrapper(localName = "mappings")
     @JacksonXmlProperty(localName = "query")
-    var mappings : MutableList<Query>? = ArrayList<Query>()
+    var mappings : MutableList<Query>? = ArrayList()
 
     @JacksonXmlProperty(isAttribute = true)
     var source: String = ""
 
+    @JacksonXmlElementWrapper(localName = "sources")
+    var sources : MutableList<DataSource>? = null
+
+    @JacksonXmlProperty(isAttribute = true)
+    var vocabulary: String? = ""
+
+    @JacksonXmlElementWrapper(localName = "vocabularies")
+    var vocabularies : MutableList<DataSource>? = null
+
     init {
         this.mappings = mutableListOf()
+//        this.sources = mutableListOf()
+//        this.vocabularies = mutableListOf()
     }
 
     fun lineage(tableName:String) : List<String> {
@@ -58,7 +72,7 @@ open class Database () {
 
     fun mappings():MutableList<Query> {
         if (mappings!=null) return mappings as MutableList<Query>
-        return ArrayList<Query>()
+        return ArrayList()
     }
 
     fun mapping(name:String): Query? {
