@@ -14,7 +14,7 @@ class Labeller(): Labelled {
 
     override fun addLabels(labelsAsString: String): String {
         if (labels==null) labels = labelsAsString
-        else labels += labelsAsString
+        else labels += ",$labelsAsString"
         return labels!!
     }
 
@@ -22,8 +22,20 @@ class Labeller(): Labelled {
         return addLabels(newLabels.joinToString(","))
     }
 
+    override fun remLabels(newLabels: String): String {
+        return remLabels(newLabels.split(","))
+    }
+
     override fun hasLabel(label: String): Boolean {
         return labels?.contains(label)?:false
+    }
+
+    override fun listLabels(): List<Label> {
+        return labels?.split(",")?: emptyList()
+    }
+
+    override fun prefixedLabels(prefix: String): List<Label> {
+        return listLabels().filter { it.startsWith(prefix) }
     }
 
     override fun labelsAsString(): String {
