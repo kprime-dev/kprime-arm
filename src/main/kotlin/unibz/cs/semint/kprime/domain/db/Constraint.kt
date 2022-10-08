@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import unibz.cs.semint.kprime.domain.label.Labelled
+import unibz.cs.semint.kprime.domain.label.Labeller
 
 @JacksonXmlRootElement(localName = "constraint")
 class Constraint : Labelled by Labeller() {

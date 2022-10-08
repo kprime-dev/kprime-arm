@@ -3,9 +3,11 @@ package unibz.cs.semint.kprime.domain.db
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import unibz.cs.semint.kprime.domain.label.Labelled
+import unibz.cs.semint.kprime.domain.label.Labeller
 
 @JacksonXmlRootElement(localName = "table")
-class Table (): Labelled by Labeller(){
+class Table (): Labelled by Labeller() {
 
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""

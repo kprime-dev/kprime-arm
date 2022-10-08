@@ -1,6 +1,7 @@
-package unibz.cs.semint.kprime.domain.db
+package unibz.cs.semint.kprime.domain.label
 
 import org.junit.Test
+import unibz.cs.semint.kprime.domain.label.Labeller
 import kotlin.test.assertEquals
 
 class LabellerTest {
