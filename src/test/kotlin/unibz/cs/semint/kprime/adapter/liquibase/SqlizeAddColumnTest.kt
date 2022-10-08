@@ -5,7 +5,7 @@ import unibz.cs.semint.kprime.adapter.service.liquibase.sqlizeAddColumn
 import unibz.cs.semint.kprime.domain.db.Column
 import unibz.cs.semint.kprime.domain.db.DataType
 import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
-import unibz.cs.semint.kprime.domain.dml.CreateColumn
+import unibz.cs.semint.kprime.domain.ddl.CreateColumn
 import kotlin.test.assertEquals
 
 class SqlizeAddColumnTest {

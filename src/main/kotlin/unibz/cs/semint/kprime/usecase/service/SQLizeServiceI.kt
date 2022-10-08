@@ -1,7 +1,7 @@
 package unibz.cs.semint.kprime.usecase.service
 
 import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
-import unibz.cs.semint.kprime.domain.dml.ChangeSet
+import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 
 
 interface SQLizeServiceI {

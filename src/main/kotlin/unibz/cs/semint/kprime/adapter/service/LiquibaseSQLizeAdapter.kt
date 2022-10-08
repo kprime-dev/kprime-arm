@@ -6,7 +6,7 @@ import liquibase.statement.SqlStatement
 import unibz.cs.semint.kprime.adapter.service.liquibase.sqlizeAddColumn
 import unibz.cs.semint.kprime.adapter.service.liquibase.sqlizeAddTable
 import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
-import unibz.cs.semint.kprime.domain.dml.ChangeSet
+import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 import unibz.cs.semint.kprime.usecase.service.SQLizeServiceI
 import java.util.*
 

@@ -6,7 +6,7 @@ import freemarker.template.Template
 import org.w3c.dom.NodeList
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.db.Database
-import unibz.cs.semint.kprime.domain.dml.ChangeSet
+import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 import unibz.cs.semint.kprime.usecase.service.FileIOServiceI
 import java.io.File
 import java.io.StringWriter

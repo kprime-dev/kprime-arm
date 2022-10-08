@@ -2,8 +2,8 @@ package unibz.cs.semint.kprime.usecase.current
 
 import unibz.cs.semint.kprime.domain.db.Constraint
 import unibz.cs.semint.kprime.domain.db.Database
-import unibz.cs.semint.kprime.domain.dml.ChangeSet
-import unibz.cs.semint.kprime.domain.dml.CreateView
+import unibz.cs.semint.kprime.domain.ddl.ChangeSet
+import unibz.cs.semint.kprime.domain.ddl.CreateView
 
 class VSplitUseCase {
 

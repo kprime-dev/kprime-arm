@@ -3,7 +3,7 @@ package unibz.cs.semint.kprime.domain.db.schemalgo
 import unibz.cs.semint.kprime.domain.db.Column
 import unibz.cs.semint.kprime.domain.db.Schema
 import unibz.cs.semint.kprime.domain.db.Table
-import unibz.cs.semint.kprime.domain.dml.ChangeSet
+import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 
 // FIXME dovrebbe non fermarsi al primo livello e proseguire in modo ricorsivo a cominciare dalla coda.
 // FIXME dovrebbe rimuovere tutti i constraint prima di operare le sostituzioni di colonna chiave per poi rimetterli.

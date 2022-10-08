@@ -2,8 +2,8 @@ package unibz.cs.semint.kprime.usecase
 
 import org.junit.Test
 import unibz.cs.semint.kprime.domain.db.Column
-import unibz.cs.semint.kprime.domain.dml.ChangeSet
-import unibz.cs.semint.kprime.domain.dml.CreateColumn
+import unibz.cs.semint.kprime.domain.ddl.ChangeSet
+import unibz.cs.semint.kprime.domain.ddl.CreateColumn
 import unibz.cs.semint.kprime.usecase.common.SQLizeCreateUseCase
 import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
 import java.util.*

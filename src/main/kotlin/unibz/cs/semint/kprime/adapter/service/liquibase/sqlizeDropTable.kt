@@ -4,7 +4,7 @@ import liquibase.sqlgenerator.core.DropTableGenerator
 import liquibase.statement.core.DropTableStatement
 import unibz.cs.semint.kprime.adapter.service.MockSqlGeneratorChain
 import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
-import unibz.cs.semint.kprime.domain.dml.DropTable
+import unibz.cs.semint.kprime.domain.ddl.DropTable
 
 fun sqlizeDropTable(dbTrademark: DatabaseTrademark, dropTables: List<DropTable>): List<String> {
     val dropStatements =  dropTables.map { DropTableStatement(

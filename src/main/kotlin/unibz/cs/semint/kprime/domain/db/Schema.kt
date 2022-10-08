@@ -4,7 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.db.schemalgo.*
-import unibz.cs.semint.kprime.domain.dml.ChangeSet
+import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 
 @JacksonXmlRootElement(localName = "schema")
 class Schema () {

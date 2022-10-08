@@ -4,7 +4,7 @@ import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.liquibase.sqlizeAddTable
 import unibz.cs.semint.kprime.domain.db.Column
 import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
-import unibz.cs.semint.kprime.domain.dml.CreateTable
+import unibz.cs.semint.kprime.domain.ddl.CreateTable
 import kotlin.test.assertEquals
 
 class SqlizeAddTableTest {

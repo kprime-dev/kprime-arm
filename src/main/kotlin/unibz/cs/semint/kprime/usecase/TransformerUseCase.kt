@@ -4,7 +4,7 @@ import unibz.cs.semint.kprime.domain.Applicability
 import unibz.cs.semint.kprime.domain.Transformation
 import unibz.cs.semint.kprime.domain.TransformationStrategy
 import unibz.cs.semint.kprime.domain.db.Database
-import unibz.cs.semint.kprime.domain.dml.ChangeSet
+import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 
 interface TransformerUseCase {
     fun decompose(db: Database, params:Map<String,Any>): Transformation

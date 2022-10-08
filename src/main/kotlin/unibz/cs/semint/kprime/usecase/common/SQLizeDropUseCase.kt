@@ -1,7 +1,7 @@
 package unibz.cs.semint.kprime.usecase.common
 
 import unibz.cs.semint.kprime.domain.db.Constraint
-import unibz.cs.semint.kprime.domain.dml.*
+import unibz.cs.semint.kprime.domain.ddl.*
 
 class SQLizeDropUseCase {
 

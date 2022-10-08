@@ -5,7 +5,7 @@ import liquibase.statement.core.CreateTableStatement
 import unibz.cs.semint.kprime.adapter.service.MockSqlGeneratorChain
 import unibz.cs.semint.kprime.domain.db.DataType
 import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
-import unibz.cs.semint.kprime.domain.dml.CreateTable
+import unibz.cs.semint.kprime.domain.ddl.CreateTable
 
 fun sqlizeAddTable(dbTrademark: DatabaseTrademark, createTable: CreateTable): List<String> {
     val createTableStatement = CreateTableStatement(createTable.catalog,createTable.schema,createTable.name)

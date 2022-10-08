@@ -5,9 +5,9 @@ import unibz.cs.semint.kprime.adapter.service.LiquibaseSQLizeAdapter
 import unibz.cs.semint.kprime.domain.db.Column
 import unibz.cs.semint.kprime.domain.db.DataType
 import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
-import unibz.cs.semint.kprime.domain.dml.ChangeSet
-import unibz.cs.semint.kprime.domain.dml.CreateColumn
-import unibz.cs.semint.kprime.domain.dml.CreateTable
+import unibz.cs.semint.kprime.domain.ddl.ChangeSet
+import unibz.cs.semint.kprime.domain.ddl.CreateColumn
+import unibz.cs.semint.kprime.domain.ddl.CreateTable
 import kotlin.test.assertEquals
 
 class LiquibaseSQLizeAdapterTest {

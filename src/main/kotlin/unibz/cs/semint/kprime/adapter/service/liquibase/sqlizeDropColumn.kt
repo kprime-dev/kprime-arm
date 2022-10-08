@@ -4,7 +4,7 @@ import liquibase.sqlgenerator.core.DropColumnGenerator
 import liquibase.statement.core.DropColumnStatement
 import unibz.cs.semint.kprime.adapter.service.MockSqlGeneratorChain
 import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
-import unibz.cs.semint.kprime.domain.dml.DropColumn
+import unibz.cs.semint.kprime.domain.ddl.DropColumn
 
 fun sqlizeDropColumn(dbTrademark: DatabaseTrademark, dropColumns: List<DropColumn>): List<String> {
     val statements = dropColumns.map { DropColumnStatement(

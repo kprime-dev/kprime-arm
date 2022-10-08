@@ -3,7 +3,7 @@ package unibz.cs.semint.kprime.scenario.person
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.db.Constraint
-import unibz.cs.semint.kprime.domain.dml.*
+import unibz.cs.semint.kprime.domain.ddl.*
 import kotlin.test.assertEquals
 
 class PersonVSplitChangesetTI {
