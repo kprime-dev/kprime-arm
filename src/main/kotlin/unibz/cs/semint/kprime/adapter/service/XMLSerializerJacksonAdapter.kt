@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import unibz.cs.semint.kprime.domain.*
 import unibz.cs.semint.kprime.domain.db.Constraint
 import unibz.cs.semint.kprime.domain.db.Database
 import unibz.cs.semint.kprime.domain.db.Table
 import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 import unibz.cs.semint.kprime.domain.dql.Query
+import unibz.cs.semint.kprime.domain.dtl.Transformer
 import unibz.cs.semint.kprime.usecase.service.SerializerServiceI
 
 class XMLSerializerJacksonAdapter : SerializerServiceI {
@@ -111,7 +111,7 @@ class XMLSerializerJacksonAdapter : SerializerServiceI {
 //        println(transformerXml)
         val mapper = XmlMapper()
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        return mapper.readValue(transformer,Transformer::class.java)
+        return mapper.readValue(transformer, Transformer::class.java)
     }
 
     // query

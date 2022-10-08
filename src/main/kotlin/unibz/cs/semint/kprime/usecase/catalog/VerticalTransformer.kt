@@ -1,8 +1,8 @@
 package unibz.cs.semint.kprime.usecase.catalog
 
-import unibz.cs.semint.kprime.domain.Applicability
-import unibz.cs.semint.kprime.domain.Transformation
-import unibz.cs.semint.kprime.domain.TransformationStrategy
+import unibz.cs.semint.kprime.domain.dtl.Applicability
+import unibz.cs.semint.kprime.domain.dtl.Transformation
+import unibz.cs.semint.kprime.domain.dtl.TransformationStrategy
 import unibz.cs.semint.kprime.domain.db.Database
 import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 import unibz.cs.semint.kprime.usecase.TransformerUseCase

@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.dtl
 
 import junit.framework.Assert.assertEquals
 import org.junit.Test

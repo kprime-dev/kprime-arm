@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.dtl
 
 import unibz.cs.semint.kprime.domain.db.Database
 import unibz.cs.semint.kprime.domain.ddl.ChangeSet

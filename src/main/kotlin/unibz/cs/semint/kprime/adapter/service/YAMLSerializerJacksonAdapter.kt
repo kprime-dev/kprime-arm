@@ -2,7 +2,7 @@ package unibz.cs.semint.kprime.adapter.service
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
-import unibz.cs.semint.kprime.domain.Transformer
+import unibz.cs.semint.kprime.domain.dtl.Transformer
 import unibz.cs.semint.kprime.domain.db.Constraint
 import unibz.cs.semint.kprime.domain.db.Database
 import unibz.cs.semint.kprime.domain.db.Table

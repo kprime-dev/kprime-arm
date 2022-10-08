@@ -1,13 +1,11 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.dtl
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
+import java.util.*
 
-@JacksonXmlRootElement(localName = "transformer")
-class Transformer {
+@JacksonXmlRootElement(localName = "template")
+class Template {
     @JacksonXmlProperty(isAttribute = true)
-    var name: String =""
-
-    var composer = Composer()
-    var splitter = Splitter()
+    var filename=""
 }

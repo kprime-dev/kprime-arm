@@ -1,6 +1,6 @@
 package unibz.cs.semint.kprime.usecase.current
 
-import unibz.cs.semint.kprime.domain.Transformation
+import unibz.cs.semint.kprime.domain.dtl.Transformation
 import unibz.cs.semint.kprime.domain.db.Database
 import unibz.cs.semint.kprime.usecase.common.ApplyChangeSetUseCase
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase

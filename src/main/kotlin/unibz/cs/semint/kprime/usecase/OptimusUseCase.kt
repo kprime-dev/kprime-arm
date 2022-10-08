@@ -1,7 +1,7 @@
 package unibz.cs.semint.kprime.usecase
 
-import unibz.cs.semint.kprime.domain.Transformation
-import unibz.cs.semint.kprime.domain.TransformationStrategy
+import unibz.cs.semint.kprime.domain.dtl.Transformation
+import unibz.cs.semint.kprime.domain.dtl.TransformationStrategy
 import unibz.cs.semint.kprime.domain.db.Database
 import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 import kotlin.collections.ArrayList

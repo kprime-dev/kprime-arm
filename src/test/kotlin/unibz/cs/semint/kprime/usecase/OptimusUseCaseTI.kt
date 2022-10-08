@@ -7,7 +7,7 @@ import unibz.cs.semint.kprime.adapter.file.FileIOAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.adapter.strategy.TransformationStrategyYesAdapter
 import unibz.cs.semint.kprime.domain.DataSource
-import unibz.cs.semint.kprime.domain.Transformation
+import unibz.cs.semint.kprime.domain.dtl.Transformation
 import unibz.cs.semint.kprime.scenario.sakila.readMeta
 import unibz.cs.semint.kprime.scenario.sakila.sakilaDataSource
 import unibz.cs.semint.kprime.usecase.current.TransformerHUseCase

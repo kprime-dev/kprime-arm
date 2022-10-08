@@ -2,10 +2,9 @@ package unibz.cs.semint.kprime.scenario.person
 
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.Xrule
+import unibz.cs.semint.kprime.domain.dtl.Xrule
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase
-import java.util.*
 import kotlin.test.assertEquals
 
 class PersonTransfomerScenarioTI {

@@ -5,7 +5,7 @@ import unibz.cs.semint.kprime.adapter.repository.JdbcAdapter
 import unibz.cs.semint.kprime.adapter.repository.JdbcPrinter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.DataSource
-import unibz.cs.semint.kprime.domain.Xrule
+import unibz.cs.semint.kprime.domain.dtl.Xrule
 import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.common.SQLizeCreateUseCase
 import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase

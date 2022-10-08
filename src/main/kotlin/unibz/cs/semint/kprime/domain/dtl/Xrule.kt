@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.dtl
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
