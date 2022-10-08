@@ -8,9 +8,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.Gid
 import unibz.cs.semint.kprime.domain.dql.Query
-import unibz.cs.semint.kprime.domain.nextGid
-import java.util.*
-import javax.xml.bind.annotation.XmlElements
 import kotlin.collections.ArrayList
 
 @JacksonXmlRootElement(localName = "database")

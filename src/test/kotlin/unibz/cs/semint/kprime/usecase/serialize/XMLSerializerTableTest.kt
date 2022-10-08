@@ -4,8 +4,8 @@ import org.junit.Assert.assertFalse
 import org.junit.Test
 import org.xmlunit.builder.DiffBuilder
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.ddl.Column
-import unibz.cs.semint.kprime.domain.ddl.Table
+import unibz.cs.semint.kprime.domain.db.Column
+import unibz.cs.semint.kprime.domain.db.Table
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import java.io.File
 import kotlin.test.assertEquals

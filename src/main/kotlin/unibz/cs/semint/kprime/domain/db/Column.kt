@@ -3,7 +3,6 @@ package unibz.cs.semint.kprime.domain.db
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
-import unibz.cs.semint.kprime.domain.db.schemalgo.equivalent
 
 class Column (): Labelled by Labeller() {
     @JacksonXmlProperty(isAttribute = true)

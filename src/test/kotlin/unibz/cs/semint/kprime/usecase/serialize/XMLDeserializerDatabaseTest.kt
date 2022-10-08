@@ -2,8 +2,7 @@ package unibz.cs.semint.kprime.usecase.serialize
 
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
+import unibz.cs.semint.kprime.domain.db.Database
 import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import java.io.File

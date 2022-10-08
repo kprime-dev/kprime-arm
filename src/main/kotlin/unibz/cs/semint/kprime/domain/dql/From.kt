@@ -1,7 +1,6 @@
 package unibz.cs.semint.kprime.domain.dql
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
-import unibz.cs.semint.kprime.domain.ddl.Column
 
 class From() {
 

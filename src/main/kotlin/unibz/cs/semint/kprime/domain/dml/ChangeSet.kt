@@ -5,8 +5,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.Gid
-import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.domain.nextGid
+import unibz.cs.semint.kprime.domain.db.Database
 
 fun initChangeSet(alfa:ChangeSet.()->Unit):ChangeSet {
     val changeSet = ChangeSet()

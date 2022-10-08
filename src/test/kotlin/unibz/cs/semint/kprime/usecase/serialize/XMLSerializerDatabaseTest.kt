@@ -5,9 +5,9 @@ import org.junit.Assert
 import org.junit.Test
 import org.xmlunit.builder.DiffBuilder
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.domain.ddl.Schema
-import unibz.cs.semint.kprime.domain.ddl.Table
+import unibz.cs.semint.kprime.domain.db.Database
+import unibz.cs.semint.kprime.domain.db.Schema
+import unibz.cs.semint.kprime.domain.db.Table
 import unibz.cs.semint.kprime.domain.dql.Attribute
 import unibz.cs.semint.kprime.domain.dql.From
 import unibz.cs.semint.kprime.domain.dql.Query

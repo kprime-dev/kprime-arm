@@ -1,9 +1,8 @@
 package unibz.cs.semint.kprime.domain.schemalgo
 
 import org.junit.Test
-import unibz.cs.semint.kprime.domain.ddl.Constraint
-import unibz.cs.semint.kprime.domain.ddl.Schema
-import unibz.cs.semint.kprime.domain.ddl.schemalgo.oid
+import unibz.cs.semint.kprime.domain.db.Schema
+import unibz.cs.semint.kprime.domain.db.schemalgo.oid
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue

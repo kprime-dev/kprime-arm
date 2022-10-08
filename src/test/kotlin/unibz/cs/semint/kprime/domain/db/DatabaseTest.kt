@@ -2,7 +2,6 @@ package unibz.cs.semint.kprime.domain.db
 
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.scenario.person.PersonTransfomerScenarioTI
 import kotlin.test.assertEquals
 
 class DatabaseTest {

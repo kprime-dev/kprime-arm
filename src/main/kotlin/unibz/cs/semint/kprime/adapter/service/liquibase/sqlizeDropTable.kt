@@ -3,7 +3,7 @@ package unibz.cs.semint.kprime.adapter.service.liquibase
 import liquibase.sqlgenerator.core.DropTableGenerator
 import liquibase.statement.core.DropTableStatement
 import unibz.cs.semint.kprime.adapter.service.MockSqlGeneratorChain
-import unibz.cs.semint.kprime.domain.ddl.DatabaseTrademark
+import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
 import unibz.cs.semint.kprime.domain.dml.DropTable
 
 fun sqlizeDropTable(dbTrademark: DatabaseTrademark, dropTables: List<DropTable>): List<String> {

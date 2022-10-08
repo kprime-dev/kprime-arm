@@ -1,7 +1,7 @@
 package unibz.cs.semint.kprime.domain.schemalgo
 
 import org.junit.Test
-import unibz.cs.semint.kprime.domain.ddl.schemalgo.carm
+import unibz.cs.semint.kprime.domain.db.schemalgo.carm
 
 class CarmTest {
 

@@ -1,9 +1,8 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.db
 
 import junit.framework.TestCase.*
 import org.junit.Test
-import unibz.cs.semint.kprime.domain.ddl.*
-import unibz.cs.semint.kprime.domain.ddl.schemalgo.*
+import unibz.cs.semint.kprime.domain.db.schemalgo.*
 
 class SchemaTest {
 

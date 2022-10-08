@@ -3,7 +3,7 @@ package unibz.cs.semint.kprime.usecase.serialize
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.QueryTest
+import unibz.cs.semint.kprime.domain.dql.QueryTest
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 import unibz.cs.semint.kprime.domain.dml.CreateView
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase

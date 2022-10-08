@@ -7,8 +7,8 @@ import liquibase.sqlgenerator.core.AddColumnGenerator
 import liquibase.statement.NotNullConstraint
 import liquibase.statement.SqlStatement
 import liquibase.statement.core.AddColumnStatement
-import unibz.cs.semint.kprime.domain.ddl.Constraint
-import unibz.cs.semint.kprime.domain.ddl.Database
+import unibz.cs.semint.kprime.domain.db.Constraint
+import unibz.cs.semint.kprime.domain.db.Database
 import unibz.cs.semint.kprime.domain.dml.*
 import unibz.cs.semint.kprime.domain.dql.*
 import java.util.*

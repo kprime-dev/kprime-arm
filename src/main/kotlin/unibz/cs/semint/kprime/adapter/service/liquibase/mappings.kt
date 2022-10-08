@@ -6,8 +6,8 @@ import liquibase.database.core.PostgresDatabase
 import liquibase.database.core.UnsupportedDatabase
 import liquibase.datatype.LiquibaseDataType
 import liquibase.datatype.core.*
-import unibz.cs.semint.kprime.domain.ddl.DataType
-import unibz.cs.semint.kprime.domain.ddl.DatabaseTrademark
+import unibz.cs.semint.kprime.domain.db.DataType
+import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
 
 fun liquibaseDataType(dbDataType: DataType): LiquibaseDataType? {
     return when(dbDataType) {

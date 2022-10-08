@@ -2,9 +2,9 @@ package unibz.cs.semint.kprime.scenario.person
 
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.ddl.Column
-import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.domain.ddl.Table
+import unibz.cs.semint.kprime.domain.db.Column
+import unibz.cs.semint.kprime.domain.db.Database
+import unibz.cs.semint.kprime.domain.db.Table
 import unibz.cs.semint.kprime.usecase.current.VSplitUseCase
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 

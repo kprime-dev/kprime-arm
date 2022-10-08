@@ -2,9 +2,9 @@ package unibz.cs.semint.kprime.adapter
 
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.LiquibaseSQLizeAdapter
-import unibz.cs.semint.kprime.domain.ddl.Column
-import unibz.cs.semint.kprime.domain.ddl.DataType
-import unibz.cs.semint.kprime.domain.ddl.DatabaseTrademark
+import unibz.cs.semint.kprime.domain.db.Column
+import unibz.cs.semint.kprime.domain.db.DataType
+import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 import unibz.cs.semint.kprime.domain.dml.CreateColumn
 import unibz.cs.semint.kprime.domain.dml.CreateTable

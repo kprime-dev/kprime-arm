@@ -1,9 +1,9 @@
 package unibz.cs.semint.kprime.usecase.current
 
-import unibz.cs.semint.kprime.domain.ddl.Column
-import unibz.cs.semint.kprime.domain.ddl.Constraint
-import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.domain.ddl.Table
+import unibz.cs.semint.kprime.domain.db.Column
+import unibz.cs.semint.kprime.domain.db.Constraint
+import unibz.cs.semint.kprime.domain.db.Database
+import unibz.cs.semint.kprime.domain.db.Table
 import unibz.cs.semint.kprime.usecase.UseCaseResult
 
 class HSplitUseCase {

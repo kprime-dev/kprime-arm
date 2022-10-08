@@ -3,9 +3,9 @@ package unibz.cs.semint.kprime.adapter.service
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import unibz.cs.semint.kprime.domain.Transformer
-import unibz.cs.semint.kprime.domain.ddl.Constraint
-import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.domain.ddl.Table
+import unibz.cs.semint.kprime.domain.db.Constraint
+import unibz.cs.semint.kprime.domain.db.Database
+import unibz.cs.semint.kprime.domain.db.Table
 import unibz.cs.semint.kprime.domain.dml.ChangeSet
 import unibz.cs.semint.kprime.usecase.service.SerializerServiceI
 import java.io.StringWriter

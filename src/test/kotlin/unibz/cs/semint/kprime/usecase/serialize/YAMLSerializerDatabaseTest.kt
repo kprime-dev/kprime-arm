@@ -3,9 +3,9 @@ package unibz.cs.semint.kprime.usecase.serialize
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import org.junit.Test
-import unibz.cs.semint.kprime.domain.ddl.Database
-import unibz.cs.semint.kprime.domain.ddl.Schema
-import unibz.cs.semint.kprime.domain.ddl.Table
+import unibz.cs.semint.kprime.domain.db.Database
+import unibz.cs.semint.kprime.domain.db.Schema
+import unibz.cs.semint.kprime.domain.db.Table
 import java.io.StringWriter
 import kotlin.test.assertEquals
 

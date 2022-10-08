@@ -1,8 +1,8 @@
 package unibz.cs.semint.kprime.adapter.repository
 
 import unibz.cs.semint.kprime.domain.*
-import unibz.cs.semint.kprime.domain.ddl.*
-import unibz.cs.semint.kprime.domain.ddl.Target
+import unibz.cs.semint.kprime.domain.db.*
+import unibz.cs.semint.kprime.domain.db.Target
 import unibz.cs.semint.kprime.usecase.repository.IMetaSchemaRepository
 import java.sql.DatabaseMetaData
 import java.sql.DriverManager

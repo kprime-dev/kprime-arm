@@ -4,8 +4,8 @@ import liquibase.sqlgenerator.core.AddColumnGenerator
 import liquibase.statement.NotNullConstraint
 import liquibase.statement.core.AddColumnStatement
 import unibz.cs.semint.kprime.adapter.service.MockSqlGeneratorChain
-import unibz.cs.semint.kprime.domain.ddl.DataType
-import unibz.cs.semint.kprime.domain.ddl.DatabaseTrademark
+import unibz.cs.semint.kprime.domain.db.DataType
+import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
 import unibz.cs.semint.kprime.domain.dml.CreateColumn
 
 fun sqlizeAddColumn(dbTrademark: DatabaseTrademark, createColumns: CreateColumn): List<String> {

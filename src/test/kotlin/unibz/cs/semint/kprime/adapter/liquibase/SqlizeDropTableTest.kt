@@ -1,10 +1,8 @@
 package unibz.cs.semint.kprime.adapter.liquibase
 
 import org.junit.Test
-import unibz.cs.semint.kprime.adapter.service.liquibase.sqlizeDropColumn
 import unibz.cs.semint.kprime.adapter.service.liquibase.sqlizeDropTable
-import unibz.cs.semint.kprime.domain.ddl.DatabaseTrademark
-import unibz.cs.semint.kprime.domain.dml.DropColumn
+import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
 import unibz.cs.semint.kprime.domain.dml.DropTable
 import kotlin.test.assertEquals
 

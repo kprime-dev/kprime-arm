@@ -3,7 +3,6 @@ package unibz.cs.semint.kprime.domain.db
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
-import unibz.cs.semint.kprime.domain.db.Column
 
 @JacksonXmlRootElement(localName = "target")
 class Target () {

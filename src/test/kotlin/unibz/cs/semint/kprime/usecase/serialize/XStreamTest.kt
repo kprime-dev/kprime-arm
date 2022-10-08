@@ -3,7 +3,7 @@ package unibz.cs.semint.kprime.usecase.serialize
 import com.thoughtworks.xstream.XStream
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.ddl.Database
+import unibz.cs.semint.kprime.domain.db.Database
 import kotlin.test.assertEquals
 
 class XStreamTest {

@@ -1,7 +1,7 @@
 package unibz.cs.semint.kprime.usecase.common
 
 import unibz.cs.semint.kprime.domain.*
-import unibz.cs.semint.kprime.domain.ddl.Database
+import unibz.cs.semint.kprime.domain.db.Database
 import unibz.cs.semint.kprime.usecase.UseCaseResult
 import unibz.cs.semint.kprime.usecase.repository.IMetaSchemaRepository
 import unibz.cs.semint.kprime.usecase.service.SerializerServiceI

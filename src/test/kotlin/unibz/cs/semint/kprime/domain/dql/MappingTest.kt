@@ -1,10 +1,6 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.dql
 
 import org.junit.Test
-import unibz.cs.semint.kprime.domain.dql.Attribute
-import unibz.cs.semint.kprime.domain.dql.From
-import unibz.cs.semint.kprime.domain.dql.Join
-import unibz.cs.semint.kprime.domain.dql.Mapping
 import unibz.cs.semint.kprime.usecase.common.SQLizeCreateUseCase
 import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
 import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase

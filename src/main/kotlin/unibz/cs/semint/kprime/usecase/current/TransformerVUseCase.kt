@@ -3,7 +3,7 @@ package unibz.cs.semint.kprime.usecase.current
 import unibz.cs.semint.kprime.domain.Applicability
 import unibz.cs.semint.kprime.domain.Transformation
 import unibz.cs.semint.kprime.domain.TransformationStrategy
-import unibz.cs.semint.kprime.domain.ddl.Database
+import unibz.cs.semint.kprime.domain.db.Database
 import unibz.cs.semint.kprime.usecase.common.ApplyChangeSetUseCase
 import unibz.cs.semint.kprime.usecase.TransformerUseCase
 import unibz.cs.semint.kprime.usecase.common.XPathTransformUseCase

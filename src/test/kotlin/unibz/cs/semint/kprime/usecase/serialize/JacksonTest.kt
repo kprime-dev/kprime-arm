@@ -5,7 +5,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 
-import unibz.cs.semint.kprime.domain.ddl.Database
+import unibz.cs.semint.kprime.domain.db.Database
 
 class JacksonTest {
 

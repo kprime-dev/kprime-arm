@@ -6,8 +6,7 @@ import unibz.cs.semint.kprime.adapter.repository.JdbcAdapter
 import unibz.cs.semint.kprime.adapter.repository.JdbcPrinter
 import unibz.cs.semint.kprime.domain.DataSource
 import unibz.cs.semint.kprime.domain.DataSourceConnection
-import unibz.cs.semint.kprime.domain.ddl.Database
-import kotlin.test.assertEquals
+import unibz.cs.semint.kprime.domain.db.Database
 
 class EmployeeCaseTest {
 

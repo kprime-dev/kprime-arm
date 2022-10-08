@@ -1,9 +1,9 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.db
 
 import junit.framework.Assert.assertEquals
 import org.junit.Test
-import unibz.cs.semint.kprime.domain.ddl.Column
-import unibz.cs.semint.kprime.domain.ddl.Constraint
+import unibz.cs.semint.kprime.domain.db.Column
+import unibz.cs.semint.kprime.domain.db.Constraint
 
 class ConstraintTest {
 

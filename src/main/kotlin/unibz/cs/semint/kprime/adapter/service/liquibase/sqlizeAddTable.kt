@@ -3,8 +3,8 @@ package unibz.cs.semint.kprime.adapter.service.liquibase
 import liquibase.sqlgenerator.core.CreateTableGenerator
 import liquibase.statement.core.CreateTableStatement
 import unibz.cs.semint.kprime.adapter.service.MockSqlGeneratorChain
-import unibz.cs.semint.kprime.domain.ddl.DataType
-import unibz.cs.semint.kprime.domain.ddl.DatabaseTrademark
+import unibz.cs.semint.kprime.domain.db.DataType
+import unibz.cs.semint.kprime.domain.db.DatabaseTrademark
 import unibz.cs.semint.kprime.domain.dml.CreateTable
 
 fun sqlizeAddTable(dbTrademark: DatabaseTrademark, createTable: CreateTable): List<String> {

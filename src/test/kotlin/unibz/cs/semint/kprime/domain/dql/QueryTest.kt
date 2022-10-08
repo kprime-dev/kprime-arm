@@ -1,9 +1,8 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.dql
 
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.dql.*
 import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
 import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
 import kotlin.test.assertEquals as assertEquals1
