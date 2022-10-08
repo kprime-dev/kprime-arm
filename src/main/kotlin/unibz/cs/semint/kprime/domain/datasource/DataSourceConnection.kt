@@ -1,4 +1,4 @@
-package unibz.cs.semint.kprime.domain
+package unibz.cs.semint.kprime.domain.datasource
 
 class DataSourceConnection(
         val id: String,

@@ -2,7 +2,7 @@ package unibz.cs.semint.kprime.scenario.sakila
 
 import unibz.cs.semint.kprime.adapter.repository.MetaSchemaJdbcAdapter
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
-import unibz.cs.semint.kprime.domain.DataSource
+import unibz.cs.semint.kprime.domain.datasource.DataSource
 import unibz.cs.semint.kprime.domain.db.Database
 import unibz.cs.semint.kprime.usecase.common.MetaSchemaReadUseCase
 

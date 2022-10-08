@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import org.junit.Test
-import unibz.cs.semint.kprime.domain.DataSource
+import unibz.cs.semint.kprime.domain.datasource.DataSource
 import kotlin.test.assertEquals
 
 class JacksonOptionalFields {

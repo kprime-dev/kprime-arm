@@ -3,8 +3,8 @@ package unibz.cs.semint.kprime.scenario.h2
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.repository.JdbcAdapter
 import unibz.cs.semint.kprime.adapter.repository.JdbcPrinter
-import unibz.cs.semint.kprime.domain.DataSource
-import unibz.cs.semint.kprime.domain.DataSourceConnection
+import unibz.cs.semint.kprime.domain.datasource.DataSource
+import unibz.cs.semint.kprime.domain.datasource.DataSourceConnection
 
 class H2DataSourceConnectionTest {
 

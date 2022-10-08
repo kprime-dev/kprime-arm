@@ -1,6 +1,6 @@
 package unibz.cs.semint.kprime.adapter.repository
 
-import unibz.cs.semint.kprime.domain.*
+import unibz.cs.semint.kprime.domain.datasource.DataSource
 import unibz.cs.semint.kprime.domain.db.*
 import unibz.cs.semint.kprime.domain.db.Target
 import unibz.cs.semint.kprime.usecase.repository.IMetaSchemaRepository
