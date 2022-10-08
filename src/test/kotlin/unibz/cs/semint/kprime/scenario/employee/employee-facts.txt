@@ -1,0 +1,35 @@
+cardinality appended:
+
+Department(depname):address
+... has address 1_1:1_1
+Person(ssn):name,phone
+... has name 1_N:1_1
+... has phone 1_M:1_N
+Employee is a Person
+... works-in Department 1_N:1_1
+
+
+----
+cardinality inlined:
+
+Department(depname):address 1_1:1_1
+Person(ssn):name N:1,phone M:N
+Employee is a Person
+... works-in Department 1_1:1_N
+
+-----
+cardinalities
+mandatory_unique
+
+1_1:1_1 = 1:1 :exactly one : default
+1_N:1_N = N:N :at least_one
+0_N:0:N = 0_N:0_N :maybe_some
+M_N : some
+0:1 : maybe
+
+Department has exactly-one Address
+Address has exactly-one Department
+
+Person has exactly-one Name
+Name has at-least-one Person
+
