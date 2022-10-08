@@ -45,6 +45,12 @@ class Table (): Labelled by Labeller() {
     @JacksonXmlProperty(isAttribute = true)
     var `var`: String? = null
 
+    @JacksonXmlProperty(isAttribute = true)
+    var primaryKey: String? = null
+
+    @JacksonXmlProperty(isAttribute = true)
+    var naturalKey: String? = null
+
     fun hasColumn(nameToFind:String): Boolean {
         for (col in columns) {
             if (col.name.equals(nameToFind)) return true

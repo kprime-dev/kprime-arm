@@ -3,12 +3,24 @@ package unibz.cs.semint.kprime.domain.db
 object SchemaCmdParser {
 
     // table:a,b,c
+    // table(pk/nk):a,b,c
     fun parseTable(commandArgs: String): Table {
-        val tableName: String = commandArgs.split(":")[0]
+        val table = parseTableName(commandArgs.split(":")[0])
         val attributes = commandArgs.split(":")[1].split(",")
-        val table = Table()
-        table.name = tableName
         for (att in attributes) table withColumn att
+        return table
+    }
+
+    internal fun parseTableName(arg0: String): Table {
+        val table = Table()
+        if (!arg0.contains("(")) {
+            table.name = arg0
+        } else {
+            table.name = arg0.substringBefore("(")
+            val key = arg0.substringAfter("(").substringBefore(")")
+            table.primaryKey = key.substringBefore("/")
+            table.naturalKey = key.substringAfter("/")
+        }
         return table
     }
 
