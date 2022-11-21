@@ -211,6 +211,14 @@ class Schema () {
         return constraints().filter { c -> c.type.equals(Constraint.TYPE.FOREIGN_KEY.name) }
     }
 
+    fun notNull(tableName:String): List<Constraint> {
+        return constraints().filter { c -> c.type.equals(Constraint.TYPE.NOTNULL.name) && c.source.table==tableName }
+    }
+
+    fun unique(tableName:String): List<Constraint> {
+        return constraints().filter { c -> c.type.equals(Constraint.TYPE.UNIQUE.name) && c.source.table==tableName }
+    }
+
     fun inclusions(): List<Constraint> {
         return constraints().filter { c -> c.type.equals(Constraint.TYPE.INCLUSION.name) }
     }
@@ -472,6 +480,21 @@ class Schema () {
         return this
     }
 
+    fun addNotNull(commandArgs: String):Schema {
+        val sourceTableName:String = commandArgs.split(":")[0]
+        val sourceAttributeNames = commandArgs.split(":")[1]
+        constraints().add(buildNotNull(sourceTableName, sourceAttributeNames))
+        return this
+    }
+
+
+    fun addUnique(commandArgs: String):Schema {
+        val sourceTableName:String = commandArgs.split(":")[0]
+        val sourceAttributeNames = commandArgs.split(":")[1]
+        constraints().add(buildUnique(sourceTableName, sourceAttributeNames))
+        return this
+    }
+
     internal fun buildInclusion(sourceTableName: String, targetTableName: String, sourceAttributeNames: String, targetAttributeNames: String): Constraint {
         val constraintPos = constraintsByType(Constraint.TYPE.INCLUSION).size + 1
         val constraint = Constraint.inclusion()
@@ -481,6 +504,32 @@ class Schema () {
         constraint.target.table = targetTableName
         constraint.source.columns.addAll(Column.set(sourceAttributeNames))
         constraint.target.columns.addAll(Column.set(targetAttributeNames))
+        return constraint
+    }
+
+    internal fun buildNotNull(sourceTableName: String, sourceAttributeNames: String): Constraint {
+        val constraintPos = constraintsByType(Constraint.TYPE.NOTNULL).size + 1
+        val constraint = Constraint()
+        constraint.type = Constraint.TYPE.NOTNULL.name
+        constraint.id = "ci$constraintPos"
+        constraint.name = "${sourceTableName}.notnull$constraintPos"
+        constraint.source.table = sourceTableName
+        constraint.target.table = ""
+        constraint.source.columns.addAll(Column.set(sourceAttributeNames))
+        constraint.target.columns.addAll(emptySet())
+        return constraint
+    }
+
+    internal fun buildUnique(sourceTableName: String, sourceAttributeNames: String): Constraint {
+        val constraintPos = constraintsByType(Constraint.TYPE.UNIQUE).size + 1
+        val constraint = Constraint()
+        constraint.type = Constraint.TYPE.UNIQUE.name
+        constraint.id = "ci$constraintPos"
+        constraint.name = "${sourceTableName}.notnull$constraintPos"
+        constraint.source.table = sourceTableName
+        constraint.target.table = ""
+        constraint.source.columns.addAll(Column.set(sourceAttributeNames))
+        constraint.target.columns.addAll(emptySet())
         return constraint
     }
 

@@ -31,7 +31,9 @@ class Constraint : Labelled by Labeller() {
         INCLUSION,
         PARTITION,
         DISJUNCTION,
-        COVER
+        COVER,
+        NOTNULL,
+        UNIQUE
     }
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""
@@ -152,7 +154,7 @@ class Constraint : Labelled by Labeller() {
 
     override fun toString(): String {
         if (source.columns.isEmpty()) return "no source columns"
-        if (right().isEmpty()) return "no target columns"
+        if (right()==null) return "no target columns"
         var result = type +" " +source.table+":"+source.columns[0].toString()
         for(col in source.columns.drop(1))
             result += ",$col"

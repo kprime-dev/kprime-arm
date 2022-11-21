@@ -218,6 +218,36 @@ class SchemaTest {
     }
 
     @Test
+    fun test_addNotNull() {
+        // given
+        var schema = Schema()
+        assertEquals(0,schema.notNull("department").size)
+        // when
+        schema.addNotNull("department:dep_name,dep_address")
+        val notnulls = schema.notNull("department")
+        // then
+        assertEquals(1,notnulls.size)
+        assertEquals(2,notnulls[0].source.columns.size)
+        assertEquals("dep_address",notnulls[0].source.columns[0].name)
+        assertEquals("dep_name",notnulls[0].source.columns[1].name)
+    }
+
+    @Test
+    fun test_addUnique() {
+        // given
+        var schema = Schema()
+        assertEquals(0,schema.unique("department").size)
+        // when
+        schema.addUnique("department:dep_name,dep_address")
+        val uniques = schema.unique("department")
+        // then
+        assertEquals(1,uniques.size)
+        assertEquals(2,uniques[0].source.columns.size)
+        assertEquals("dep_address",uniques[0].source.columns[0].name)
+        assertEquals("dep_name",uniques[0].source.columns[1].name)
+    }
+
+    @Test
     fun test_dropTable() {
         // given
         var schema = Schema()
