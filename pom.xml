@@ -25,7 +25,7 @@
         <slf4j.version>1.7.32</slf4j.version>
         <log4j.version>2.16.0</log4j.version>
         <woodstox.version>5.1.0</woodstox.version>
-        <xstream.version>1.4.11.1</xstream.version>
+        <xstream.version>1.4.19</xstream.version>
         <postgresql.version>42.2.8</postgresql.version>
         <h2.version>2.0.202</h2.version>
         <freemarker.version>2.3.29</freemarker.version>
