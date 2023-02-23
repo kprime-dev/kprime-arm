@@ -28,6 +28,7 @@
         <xstream.version>1.4.19</xstream.version>
         <postgresql.version>42.2.8</postgresql.version>
         <h2.version>2.0.202</h2.version>
+        <mysql.version>8.0.32</mysql.version>
         <freemarker.version>2.3.29</freemarker.version>
         <liquibase.version>4.1.1</liquibase.version>
         <jsqlparser.version>3.2</jsqlparser.version>
@@ -103,6 +104,11 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
         </dependency>
         <dependency>
             <groupId>org.freemarker</groupId>

@@ -21,7 +21,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             val connectionProps = Properties()
             connectionProps["user"] = user
             connectionProps["password"] = pass
-//            println("Looking for driver [${source.driver}] for connection [$path] with user [$user].")
+            println("Looking for driver [${datasource.driver}] for connection [$path] with user [$user].")
             Class.forName(datasource.driver).newInstance()
 //            println("--------------------------")
 //            DriverManager.getDrivers().toList().forEach{ println(it.toString()) }
