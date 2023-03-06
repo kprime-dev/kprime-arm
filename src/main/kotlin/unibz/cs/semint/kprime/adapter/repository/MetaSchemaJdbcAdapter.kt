@@ -12,7 +12,7 @@ import java.util.*
 
 class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
 
-    override fun metaDatabase(datasource: DataSource) : Database {
+    override fun metaDatabase(datasource: DataSource,db : Database) : Database {
             val user = datasource.user
             val pass = datasource.pass
             val path = datasource.path
@@ -31,11 +31,11 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
                      path, connectionProps)
             val metaData = conn.metaData
 
-            val db = Database()
-            db.name="sourceName"
-            db.id=UUID.randomUUID().toString()
-            db.schema.name="sourceName"
-            db.schema.id=UUID.randomUUID().toString()
+
+            if(db.name.isNullOrEmpty()) db.name="sourceName"
+            if(db.id.isNullOrEmpty()) db.id=UUID.randomUUID().toString()
+            if(db.schema.name.isNullOrEmpty()) db.schema.name="sourceName"
+            if(db.schema.id.isNullOrEmpty()) db.schema.id=UUID.randomUUID().toString()
             var tableNames  =  mutableListOf<String>()
             if (table.isNotEmpty()) {
                 tableNames= mutableListOf(table)
@@ -50,7 +50,7 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
         return db
     }
 
-    private fun readTables(metaData: DatabaseMetaData, db: Database):List<String> {
+    internal fun readTables(metaData: DatabaseMetaData, db: Database):List<String> {
         val tables = metaData.getTables(null, null, null, arrayOf("TABLE"))
         val tableNames = mutableListOf<String>()
         while (tables.next()) {

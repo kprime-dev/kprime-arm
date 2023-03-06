@@ -4,6 +4,7 @@ import org.junit.Ignore
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.repository.MetaSchemaJdbcAdapter
 import unibz.cs.semint.kprime.domain.datasource.DataSource
+import unibz.cs.semint.kprime.domain.db.Database
 import kotlin.test.assertNotNull
 
 class MetaSchemaJdbcAdapterTest {
@@ -20,7 +21,7 @@ class MetaSchemaJdbcAdapterTest {
             "sammy","pass",
             "")
         // when
-        val metaDatabase = adapter.metaDatabase(datasource)
+        val metaDatabase = adapter.metaDatabase(datasource,Database())
         // then
         assertNotNull(metaDatabase)
         println(metaDatabase)
@@ -35,11 +36,11 @@ class MetaSchemaJdbcAdapterTest {
         val datasource = DataSource(
             "jdbc","mysql",
             "com.mysql.cj.jdbc.Driver",
-            "jdbc:mysql://localhost:3306/mysql_db",
+            "jdbc:mysql://localhost:3306/db_monitoring",
             "user","password",
             "")
         // when
-        val metaDatabase = adapter.metaDatabase(datasource)
+        val metaDatabase = adapter.metaDatabase(datasource, Database())
         // then
         assertNotNull(metaDatabase)
         println(metaDatabase)

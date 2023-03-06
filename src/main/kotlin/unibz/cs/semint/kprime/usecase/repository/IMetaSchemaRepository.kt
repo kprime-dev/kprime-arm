@@ -4,5 +4,5 @@ import unibz.cs.semint.kprime.domain.datasource.DataSource
 import unibz.cs.semint.kprime.domain.db.Database
 
 interface IMetaSchemaRepository {
-    fun metaDatabase(datasource: DataSource) : Database
+    fun metaDatabase(datasource: DataSource, db:Database) : Database
 }
