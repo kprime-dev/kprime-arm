@@ -49,8 +49,8 @@ class SQLizeSelectUseCase {
         if (!select.where.condition.isEmpty()) {
             sql += "WHERE ${select.where.condition}"  //+ System.lineSeparator()
         }
-        sql += if (select.limit!=null) " LIMIT "+select.limit else  " LIMIT 10" //+ System.lineSeparator()
-        return sql
+        sql += if (select.limit!=null) " LIMIT "+select.limit else  "" //+ System.lineSeparator()
+        return sql.trim()
     }
 
     private fun mapAttribute(attribute:Attribute) :String {

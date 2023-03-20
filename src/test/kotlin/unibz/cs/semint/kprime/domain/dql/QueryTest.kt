@@ -71,7 +71,7 @@ class QueryTest {
         assertEquals1("""
             SELECT Name,Surname
             FROM   Table1
-            WHERE Name='Gigi' LIMIT 10
+            WHERE Name='Gigi'
             """.trimIndent(),querySql)
     }
 
@@ -92,7 +92,7 @@ class QueryTest {
         assertEquals1("""
             SELECT ww
             FROM   tab
-            WHERE a = b LIMIT 10
+            WHERE a = b
         """.trimIndent(),selectSql)
     }
 
@@ -122,7 +122,7 @@ class QueryTest {
             FROM   Orders
             INNER JOIN Customer
             ON Orders.customerId = Customer.customerId
-            WHERE a = b LIMIT 10
+            WHERE a = b
         """.trimIndent(),selectSql)
     }
 
@@ -161,7 +161,7 @@ class QueryTest {
             ON Orders.customerId = Customer.customerId
             LEFT JOIN Sales
             ON Customer.orderId = Sales.orderId
-            WHERE a = b LIMIT 10
+            WHERE a = b
         """.trimIndent(),selectSql)
     }
 
@@ -213,11 +213,11 @@ class QueryTest {
         assertEquals1("""
             SELECT Name,Surname
             FROM   Table1
-            WHERE Name='Gigi' LIMIT 10
+            WHERE Name='Gigi'
             UNION
             SELECT Name,Surname
             FROM   Table2
-            WHERE Name='Gigi' LIMIT 10
+            WHERE Name='Gigi'
             """.trimIndent(),querySql)
 
     }
@@ -320,15 +320,15 @@ class QueryTest {
         assertEquals("""
             SELECT alfa,beta
             FROM   tab1
-            WHERE a = b LIMIT 10
+            WHERE a = b
             UNION
             SELECT gamma,theta
             FROM   tab2
-            WHERE c = d LIMIT 10
+            WHERE c = d
             UNION
             SELECT delta,zeta
             FROM   tab3
-            WHERE e = f LIMIT 10
+            WHERE e = f
         """.trimIndent(),sqlize)
     }
 

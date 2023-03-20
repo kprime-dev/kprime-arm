@@ -52,7 +52,6 @@ class SQLizeCreateUseCaseTest {
 CREATE TABLE public.myquery AS
 SELECT DISTINCT *
 FROM   Person
- LIMIT 10
         """.trimIndent(),createTableMappings[0])
     }
 

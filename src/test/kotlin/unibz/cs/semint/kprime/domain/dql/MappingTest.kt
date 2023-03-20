@@ -116,7 +116,6 @@ SELECT t1.ssn AS poid,t2.ssn AS ssn
 FROM   T AS t1
  JOIN T AS t2
 ON t1.ssn = t2.ssn2
- LIMIT 10
           """.trimIndent(),actualSql)
     }
 
@@ -137,7 +136,7 @@ ON t1.ssn = t2.ssn2
 CREATE OR REPLACE VIEW public.query1 AS
 SELECT SSN,DepName,DepAddress
 FROM   table0
-WHERE DepName is not null and DepAddress is not null LIMIT 10
+WHERE DepName is not null and DepAddress is not null
         """.trimIndent(),actualSQL)
     }
 
@@ -154,7 +153,7 @@ WHERE DepName is not null and DepAddress is not null LIMIT 10
 CREATE OR REPLACE VIEW public.query1 AS
 SELECT SSN,DepName,DepAddress
 FROM   table0
-WHERE DepName is not null and DepAddress is not null LIMIT 10
+WHERE DepName is not null and DepAddress is not null
         """.trimIndent(),actualSQL)
     }
 
@@ -199,7 +198,6 @@ FROM   student
 ON student.id = student_course.student_id
  JOIN course
 ON course.id = student_course.course_id
- LIMIT 10
           """.trimIndent(), actualSQL)
 
     }
@@ -229,7 +227,6 @@ SELECT t1.ssn AS poids,t2.ssn AS ssn
 FROM   T AS t1
  JOIN T AS t2
 ON t1.ssn = t2.ssn2
- LIMIT 10
           """.trimIndent(), actualSQL)
     }
 }
