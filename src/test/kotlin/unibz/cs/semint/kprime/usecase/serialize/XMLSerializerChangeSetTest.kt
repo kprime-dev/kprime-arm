@@ -83,6 +83,7 @@ class XMLSerializerChangeSetTest  {
                 </select>
                 <union/>
                 <minus/>
+                <options/>
               </createMapping>
             </changeSet>
         """.trimIndent(),changeSetXml.ok)

@@ -83,6 +83,7 @@ class XMLSerializerDatabaseTest {
                   </select>
                   <union/>
                   <minus/>
+                  <options/>
                 </query>
               </mappings>
             </database>

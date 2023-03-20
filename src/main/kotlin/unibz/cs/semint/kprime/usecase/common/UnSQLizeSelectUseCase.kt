@@ -26,12 +26,13 @@ class UnSQLizeSelectUseCase {
         val lines = splitSqlToLines(sqlquery).map { line -> uppercaseSqlKeyWords(line) }
         for (line in lines){
             val select = query.select
-            parseSelect(select,line)
-            parseFrom(select,line)
-            parseJoin(select,line)
-            parseJoinOn(select,line)
-            parseWhere(select,line)
-            parseUnionMinus(query,line)
+            val lineStrippedOption = stripOptions(query,line)
+            parseSelect(select,lineStrippedOption)
+            parseFrom(select,lineStrippedOption)
+            parseJoin(select,lineStrippedOption)
+            parseJoinOn(select,lineStrippedOption)
+            parseWhere(select,lineStrippedOption)
+            parseUnionMinus(query,lineStrippedOption)
         }
         if (query.safeUnion().selects().size>0) {
             val tmp = query.select
@@ -44,6 +45,21 @@ class UnSQLizeSelectUseCase {
             query.safeMinus().selects().add(tmp)
         }
         return query
+    }
+
+    internal fun stripOptions(query: Query, line: String): String {
+        val tokens = line.split(" ")
+        var lineStrippedOption = ""
+        val options = mutableListOf<String>()
+        for (token in tokens) {
+            if (token.startsWith("-") && token.length>1) {
+                options.add(token)
+            } else {
+                lineStrippedOption += " $token"
+            }
+        }
+        query.options = options
+        return lineStrippedOption.trim()
     }
 
     private fun uppercaseSqlKeyWords(sqlquery: String): String {

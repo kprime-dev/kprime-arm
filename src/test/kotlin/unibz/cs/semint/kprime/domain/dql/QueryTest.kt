@@ -55,6 +55,7 @@ class QueryTest {
               </select>
               <union/>
               <minus/>
+              <options/>
             </query>
         """.trimIndent(),queryXml)
 
@@ -196,6 +197,7 @@ class QueryTest {
                 </selects>
               </union>
               <minus/>
+              <options/>
             </query>
         """.trimIndent(),queryXml)
 

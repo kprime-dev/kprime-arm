@@ -4,6 +4,7 @@ import org.junit.Test
 import unibz.cs.semint.kprime.domain.db.Column
 import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 import unibz.cs.semint.kprime.domain.ddl.CreateColumn
+import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.common.SQLizeCreateUseCase
 import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
 import java.util.*
@@ -53,5 +54,19 @@ SELECT DISTINCT *
 FROM   Person
  LIMIT 10
         """.trimIndent(),createTableMappings[0])
+    }
+
+    @Test
+    fun test_stripOptions() {
+        // given
+        val query = Query()
+        val sql = "SELECT -target=confu DISTINCT * FROM Person; -source=confu  -sink=confu"
+        // when
+        val lineStrippedOptions = UnSQLizeSelectUseCase().stripOptions(query, sql)
+        // then
+        assertEquals("-target=confu", query.options?.get(0))
+        assertEquals("-source=confu", query.options?.get(1))
+        assertEquals("-sink=confu", query.options?.get(2))
+        assertEquals("SELECT DISTINCT * FROM Person;", lineStrippedOptions)
     }
 }

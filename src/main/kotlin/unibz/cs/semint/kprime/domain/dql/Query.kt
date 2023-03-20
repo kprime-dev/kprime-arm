@@ -16,6 +16,8 @@ class Query {
     var union : Union? = null
     @JacksonXmlElementWrapper(useWrapping=false)
     var minus : Minus? = null
+    @JacksonXmlElementWrapper(useWrapping=false)
+    var options : List<String>? = null
 
     fun safeMinus():Minus {
         if (minus==null) {
