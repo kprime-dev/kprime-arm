@@ -36,33 +36,5 @@ object JdbcPrinter {
         return result
     }
 
-    fun printJsonLDResultSet(resultSet: ResultSet):String {
-        val list = mutableListOf<Map<String, String>>()
-        val metaData = resultSet.metaData
-        val columnCount = metaData.columnCount
-
-        val contextObj = LinkedHashMap<String, String>()
-        contextObj.put("ex","http://example.org/vocab#")
-
-        while( resultSet.next()) {
-            val obj = LinkedHashMap<String, String>()
-            obj.put("@id", "tableurl")
-            obj.put("@type", "tablename")
-            for (i in 1..columnCount) {
-                obj.put("ex:"+metaData.getColumnName(i), resultSet.getString(i))
-            }
-            list.add(obj)
-        }
-
-        val graphObj = LinkedHashMap<String, Any>()
-        graphObj.put("@context", contextObj)
-        graphObj.put("@graph", list)
-
-        val mapper = ObjectMapper()
-        val result = mapper.writeValueAsString(graphObj)
-        println(result)
-        return result
-    }
-
 
 }
