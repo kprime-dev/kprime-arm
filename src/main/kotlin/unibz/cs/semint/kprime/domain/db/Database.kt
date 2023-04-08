@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.datasource.DataSource
 import unibz.cs.semint.kprime.domain.Gid
 import unibz.cs.semint.kprime.domain.dql.Query
+import java.util.UUID
 import kotlin.collections.ArrayList
 
 @JacksonXmlRootElement(localName = "database")
@@ -101,5 +102,14 @@ open class Database () {
         result += schema.constraints?.joinToString(System.lineSeparator())
         result += mappings().joinToString(System.lineSeparator())
         return result
+    }
+
+    fun withGid():Database {
+        this.gid = UUID.randomUUID().toString()
+        return this
+    }
+
+    fun tableGid(tableName:String):String {
+        return this.gid+schema.table(tableName)?.id
     }
 }
