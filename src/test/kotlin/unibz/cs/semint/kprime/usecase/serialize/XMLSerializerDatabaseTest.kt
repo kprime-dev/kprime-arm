@@ -10,6 +10,7 @@ import unibz.cs.semint.kprime.domain.db.Schema
 import unibz.cs.semint.kprime.domain.db.Table
 import unibz.cs.semint.kprime.domain.dql.Attribute
 import unibz.cs.semint.kprime.domain.dql.From
+import unibz.cs.semint.kprime.domain.dql.Mapping
 import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import java.io.File
@@ -57,7 +58,8 @@ class XMLSerializerDatabaseTest {
         query.select.attributes.add(attr)
         query.select.from = From("people")
         query.name = "query1"
-        database.mappings!!.add(query)
+        database.mappings!!.add(
+            Mapping.fromQuery(query))
         // when
         val serializedDatabase = serializer.prettyDatabase(database).ok
         // then

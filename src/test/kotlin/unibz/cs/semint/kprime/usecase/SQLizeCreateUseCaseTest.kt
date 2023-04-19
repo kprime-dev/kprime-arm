@@ -4,6 +4,7 @@ import org.junit.Test
 import unibz.cs.semint.kprime.domain.db.Column
 import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 import unibz.cs.semint.kprime.domain.ddl.CreateColumn
+import unibz.cs.semint.kprime.domain.dql.Mapping
 import unibz.cs.semint.kprime.domain.dql.Query
 import unibz.cs.semint.kprime.usecase.common.SQLizeCreateUseCase
 import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
@@ -46,7 +47,7 @@ class SQLizeCreateUseCaseTest {
         val changeset = ChangeSet()
         var mapping = unsqlize.fromsql("myquery","SELECT DISTINCT * FROM Person")
         assertTrue(mapping.select.distinct)
-        changeset.createMapping.add(mapping)
+        changeset.createMapping.add(Mapping.fromQuery(mapping))
         val createTableMappings = sqlize.createTableMappings(changeset)
         assertEquals("""
 CREATE TABLE public.myquery AS

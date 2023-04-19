@@ -6,7 +6,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.db.Database
 
 @JacksonXmlRootElement(localName = "query")
-class Query {
+open class Query {
     @JacksonXmlProperty(isAttribute = true)
     var id = ""
     @JacksonXmlProperty(isAttribute = true)

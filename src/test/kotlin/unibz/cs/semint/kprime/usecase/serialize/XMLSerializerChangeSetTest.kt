@@ -6,6 +6,7 @@ import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.dql.QueryTest
 import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 import unibz.cs.semint.kprime.domain.ddl.CreateView
+import unibz.cs.semint.kprime.domain.dql.Mapping
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 
 class XMLSerializerChangeSetTest  {
@@ -62,7 +63,7 @@ class XMLSerializerChangeSetTest  {
         val view = CreateView()
         view.text="select * from table"
         changeSet.createView.add(view)
-        val mapping = QueryTest().simpleQueryFixture("film")
+        val mapping = Mapping.fromQuery(QueryTest().simpleQueryFixture("film"))
         mapping.name="film1"
         changeSet.createMapping.add(mapping)
         // when

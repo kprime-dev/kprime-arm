@@ -2,6 +2,7 @@ package unibz.cs.semint.kprime.domain.db
 
 import org.junit.Ignore
 import org.junit.Test
+import unibz.cs.semint.kprime.domain.dql.Mapping
 import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
 import kotlin.test.assertEquals
 
@@ -43,11 +44,12 @@ class DatabaseToStringTest {
         val db = Database()
         db.schema.addTable("person:name,surname")
         db.mappings = mutableListOf()
-        db.mappings.apply {  this?.add(
+        db.mappings.apply {  this?.add( Mapping.fromQuery(
             UnSQLizeSelectUseCase().fromsql("query2","""
             SELECT *  
             FROM alias 
         """.trimIndent()))
+        )
         }
         // when
         val result = db.toString()

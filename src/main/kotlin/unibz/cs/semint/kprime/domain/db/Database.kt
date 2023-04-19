@@ -7,6 +7,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.datasource.DataSource
 import unibz.cs.semint.kprime.domain.Gid
+import unibz.cs.semint.kprime.domain.dql.Mapping
 import unibz.cs.semint.kprime.domain.dql.Query
 import java.util.UUID
 import kotlin.collections.ArrayList
@@ -37,7 +38,7 @@ open class Database () {
 
     @JacksonXmlElementWrapper(localName = "mappings")
     @JacksonXmlProperty(localName = "query")
-    var mappings : MutableList<Query>? = ArrayList()
+    var mappings : MutableList<Mapping>? = ArrayList()
 
     @JacksonXmlProperty(isAttribute = true)
     var source: String = ""
