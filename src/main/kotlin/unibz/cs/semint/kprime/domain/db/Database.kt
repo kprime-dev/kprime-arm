@@ -61,7 +61,7 @@ open class Database () {
     fun lineage(tableName:String) : List<String> {
         val result = mutableListOf<String>()
         var viewTable = tableName
-        while (!viewTable.isEmpty()) {
+        while (viewTable.isNotEmpty()) {
             result.add(viewTable)
             if (schema.table(viewTable)==null) viewTable = ""
             else viewTable = (schema.table(viewTable) as Table).view
@@ -69,18 +69,17 @@ open class Database () {
         return result
     }
 
-    fun mappings():MutableList<Query> {
-        if (mappings!=null) return mappings as MutableList<Query>
+    fun mappings():MutableList<Mapping> {
+        if (mappings!=null) return mappings as MutableList<Mapping>
         return ArrayList()
     }
 
-    fun mapping(name:String): Query? {
-        return mappings().filter { m -> m.name.equals(name) }.firstOrNull()
+    fun mapping(name:String): Mapping? {
+        return mappings().firstOrNull { m -> m.name == name }
     }
 
     fun mappingAsTable(name:String): Table? {
-        val mapping = mapping(name)
-        if (mapping==null) return null
+        val mapping = mapping(name) ?: return null
         val table = Table()
         table.name = mapping.name
         for(attribute in mapping.select.attributes.toSet()) {

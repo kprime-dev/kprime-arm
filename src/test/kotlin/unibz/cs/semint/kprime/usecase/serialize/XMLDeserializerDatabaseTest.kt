@@ -3,6 +3,7 @@ package unibz.cs.semint.kprime.usecase.serialize
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
 import unibz.cs.semint.kprime.domain.db.Database
+import unibz.cs.semint.kprime.domain.dql.Mapping
 import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
 import unibz.cs.semint.kprime.usecase.common.XMLSerializeUseCase
 import java.io.File
@@ -92,10 +93,11 @@ class XMLDeserializerDatabaseTest {
 
         val db = deserialized.ok!!
 
-        db.mappings().add(UnSQLizeSelectUseCase().fromsql("query2","""
+        db.mappings().add(
+            Mapping.fromQuery(UnSQLizeSelectUseCase().fromsql("query2","""
             SELECT *  
             FROM alias 
-        """.trimIndent()))
+        """.trimIndent())))
 
         assertEquals(3, db.mappings().size)
         assertNotNull(database.mapping("query2"))
