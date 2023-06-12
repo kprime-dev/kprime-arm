@@ -433,6 +433,8 @@ class Schema () {
         constraint.name = "${sourceTableName}_${targetTableName}.foreignKey$constraintPos"
         constraint.source.table=sourceTableName
         constraint.target.table=targetTableName
+        constraint.source.name=sourceTableName
+        constraint.target.name=targetTableName
         constraint.source.columns.addAll(Column.set(sourceAttributeNames))
         constraint.target.columns.addAll(Column.set(targetAttributeNames))
         constraints().add(constraint)

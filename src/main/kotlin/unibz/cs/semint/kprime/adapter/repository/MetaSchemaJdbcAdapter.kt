@@ -131,11 +131,13 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
                 constr.name=fkeys.getString("PKTABLE_NAME") + "." + fkeys.getString("PKCOLUMN_NAME")
                 constr.source= Source()
                 constr.source.name=tableName
+                constr.source.table=tableName
                 val colSource = Column()
                 colSource.name=fkeys.getString("FKCOLUMN_NAME")
                 constr.source.columns.add(colSource)
                 constr.target= Target()
                 constr.target.name=fkeys.getString("PKTABLE_NAME")
+                constr.target.table=fkeys.getString("PKTABLE_NAME")
                 val colTarget = Column()
                 colTarget.name=fkeys.getString("PKCOLUMN_NAME")
                 constr.target.columns.add(colTarget)
