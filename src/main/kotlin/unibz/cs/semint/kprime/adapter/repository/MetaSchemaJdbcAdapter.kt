@@ -12,13 +12,12 @@ import java.util.*
 
 class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
 
-    override fun metaDatabase(datasource: DataSource,db : Database) : Database {
+    override fun metaDatabase(datasource: DataSource,db : Database, tableName: String) : Database {
             val user = datasource.user
             val pass = datasource.pass
             val path = datasource.path
-            val table = "" // TODO accept a single table name as parameter
 
-            val connectionProps = Properties()
+        val connectionProps = Properties()
             connectionProps["user"] = user
             connectionProps["password"] = pass
             println("Looking for driver [${datasource.driver}] for connection [$path] with user [$user].")
@@ -32,21 +31,22 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             val metaData = conn.metaData
 
 
-            if(db.name.isNullOrEmpty()) db.name="sourceName"
-            if(db.id.isNullOrEmpty()) db.id=UUID.randomUUID().toString()
-            if(db.schema.name.isNullOrEmpty()) db.schema.name="sourceName"
-            if(db.schema.id.isNullOrEmpty()) db.schema.id=UUID.randomUUID().toString()
+            if(db.name.isEmpty()) db.name="sourceName"
+            if(db.id.isEmpty()) db.id=UUID.randomUUID().toString()
+            if(db.schema.name.isEmpty()) db.schema.name="sourceName"
+            if(db.schema.id.isEmpty()) db.schema.id=UUID.randomUUID().toString()
             var tableNames  =  mutableListOf<String>()
-            if (table.isNotEmpty()) {
-                tableNames= mutableListOf(table)
-            } else {
-                tableNames.addAll(readTables(metaData,db))
-            }
-            tableNames.addAll(readViews(metaData,db))
-            readColumns(metaData, tableNames,db)
-            readPrimaryKeys(metaData, tableNames,db)
-            readForeignKeys(metaData, tableNames,db)
-            conn.close()
+        if (tableName.isNotEmpty()) {
+            tableNames = mutableListOf(tableName)
+            readTable(metaData, db, tableName)
+        } else {
+            tableNames.addAll(readTables(metaData, db))
+            tableNames.addAll(readViews(metaData, db))
+        }
+        readColumns(metaData, tableNames, db)
+        readPrimaryKeys(metaData, tableNames, db)
+        readForeignKeys(metaData, tableNames, db)
+        conn.close()
         return db
     }
 
@@ -61,6 +61,18 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             db.schema.tables().add(table)
         }
         return tableNames
+    }
+
+    private fun readTable(metaData: DatabaseMetaData, db: Database, tableName:String) {
+        val tables = metaData.getTables(null, null, null, arrayOf("TABLE"))
+        while (tables.next()) {
+            val currentTableName = tables.getString("TABLE_NAME")
+            if (currentTableName == tableName) {
+                val table = Table()
+                table.name = currentTableName
+                db.schema.tables().add(table)
+            }
+        }
     }
 
     private fun readViews(metaData: DatabaseMetaData, db: Database):List<String> {
