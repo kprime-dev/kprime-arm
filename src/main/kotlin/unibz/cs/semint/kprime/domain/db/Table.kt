@@ -85,8 +85,10 @@ class Table (): Labelled by Labeller() {
     }
 
     infix fun withColumn(name: String ) = apply {
-        val col = Column.of(name)
-        //col.name = name
+        val attName = name.substringAfterLast(":")
+        val type = name.substringBeforeLast(":")
+        val col = Column.of(attName)
+        col.type = type
         this.columns.add(col)
     }
 

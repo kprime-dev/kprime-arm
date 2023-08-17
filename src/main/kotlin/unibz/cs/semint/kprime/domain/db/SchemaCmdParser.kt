@@ -5,8 +5,8 @@ object SchemaCmdParser {
     // table:a,b,c
     // table(pk/nk):a,b,c
     fun parseTable(commandArgs: String): Table {
-        val table = parseTableName(commandArgs.split(":")[0])
-        val attributes = commandArgs.split(":")[1].split(",")
+        val table = parseTableName(commandArgs.substringBefore(":"))
+        val attributes = commandArgs.substringAfter(":").split(",")
         for (att in attributes) table withColumn att
         return table
     }
