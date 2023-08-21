@@ -106,15 +106,15 @@ class ApplyChangeSetUseCaseTest {
                 <tables>
                   <table name="person1" id="" view="" condition="">
                     <columns>
-                      <column name="K" id="" nullable="false" dbtype="" dbtable=""/>
-                      <column name="T" id="" nullable="false" dbtype="" dbtable=""/>
-                      <column name="S" id="" nullable="false" dbtype="" dbtable=""/>
+                      <column name="K" id="" nullable="false" dbtype="" type="K" dbtable=""/>
+                      <column name="T" id="" nullable="false" dbtype="" type="T" dbtable=""/>
+                      <column name="S" id="" nullable="false" dbtype="" type="S" dbtable=""/>
                     </columns>
                   </table>
                   <table name="person2" id="" view="" condition="">
                     <columns>
-                      <column name="T" id="" nullable="false" dbtype="" dbtable=""/>
-                      <column name="S" id="" nullable="false" dbtype="" dbtable=""/>
+                      <column name="T" id="" nullable="false" dbtype="" type="T" dbtable=""/>
+                      <column name="S" id="" nullable="false" dbtype="" type="S" dbtable=""/>
                     </columns>
                   </table>
                 </tables>
@@ -225,9 +225,9 @@ class ApplyChangeSetUseCaseTest {
     <tables>
       <table name="person" id="t1" view="" condition="">
         <columns>
-          <column name="name" id="" nullable="false" dbtype="" dbtable=""/>
-          <column name="surname" id="" nullable="false" dbtype="" dbtable=""/>
-          <column name="address" id="" nullable="false" dbtype="" dbtable=""/>
+          <column name="name" id="" nullable="false" dbtype="" type="name" dbtable=""/>
+          <column name="surname" id="" nullable="false" dbtype="" type="surname" dbtable=""/>
+          <column name="address" id="" nullable="false" dbtype="" type="address" dbtable=""/>
         </columns>
       </table>
     </tables>
@@ -304,16 +304,16 @@ class ApplyChangeSetUseCaseTest {
     <tables>
       <table name="person" id="t1" view="" condition="">
         <columns>
-          <column name="name" id="" nullable="false" dbtype="" dbtable=""/>
-          <column name="surname" id="" nullable="false" dbtype="" dbtable=""/>
-          <column name="address" id="" nullable="false" dbtype="" dbtable=""/>
+          <column name="name" id="" nullable="false" dbtype="" type="name" dbtable=""/>
+          <column name="surname" id="" nullable="false" dbtype="" type="surname" dbtable=""/>
+          <column name="address" id="" nullable="false" dbtype="" type="address" dbtable=""/>
         </columns>
       </table>
       <table name="employee" id="t2" view="" condition="">
         <columns>
-          <column name="name" id="" nullable="false" dbtype="" dbtable=""/>
-          <column name="surname" id="" nullable="false" dbtype="" dbtable=""/>
-          <column name="salary" id="" nullable="false" dbtype="" dbtable=""/>
+          <column name="name" id="" nullable="false" dbtype="" type="name" dbtable=""/>
+          <column name="surname" id="" nullable="false" dbtype="" type="surname" dbtable=""/>
+          <column name="salary" id="" nullable="false" dbtype="" type="salary" dbtable=""/>
         </columns>
       </table>
     </tables>

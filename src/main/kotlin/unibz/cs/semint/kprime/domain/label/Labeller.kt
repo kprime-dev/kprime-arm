@@ -13,7 +13,7 @@ class Labeller(): Labelled {
     }
 
     override fun addLabels(labelsAsString: String): String {
-        if (labels==null) labels = labelsAsString
+        if (labels.isNullOrEmpty()) labels = labelsAsString
         else labels += ",$labelsAsString"
         return labels!!
     }
