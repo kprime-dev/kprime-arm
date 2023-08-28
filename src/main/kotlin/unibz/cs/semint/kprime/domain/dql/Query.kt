@@ -4,6 +4,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.db.Database
+import unibz.cs.semint.kprime.domain.db.Table
 
 @JacksonXmlRootElement(localName = "query")
 open class Query {
@@ -56,6 +57,16 @@ open class Query {
             fromT1.tableName = tableName
             select.from = fromT1
             select.where.condition = condition
+            return query
+        }
+
+        fun buildFromTable(table: Table): Query {
+            val query = Query()
+            var select = query.select
+            select.attributes.addAll(table.columns.map { Attribute(it.name) })
+            val fromT1 = From()
+            fromT1.tableName = table.name
+            select.from = fromT1
             return query
         }
 

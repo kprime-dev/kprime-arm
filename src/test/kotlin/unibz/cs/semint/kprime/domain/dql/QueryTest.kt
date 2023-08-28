@@ -3,6 +3,8 @@ package unibz.cs.semint.kprime.domain.dql
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 import unibz.cs.semint.kprime.adapter.service.XMLSerializerJacksonAdapter
+import unibz.cs.semint.kprime.domain.db.Database
+import unibz.cs.semint.kprime.domain.db.SchemaCmdParser
 import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
 import unibz.cs.semint.kprime.usecase.common.UnSQLizeSelectUseCase
 import kotlin.test.assertEquals as assertEquals1
@@ -332,5 +334,18 @@ class QueryTest {
         """.trimIndent(),sqlize)
     }
 
+    @Test
+    fun test_query_from_table() {
+        // given
+        val table = SchemaCmdParser.parseTable("person:name,surname")
+        // when
+        val query = Query.buildFromTable(table)
+        // then
+        val sql = SQLizeSelectUseCase().sqlize(query)
+        assertEquals("""
+            SELECT name,surname
+            FROM   person
+        """.trimIndent(),sql)
+    }
 
 }
