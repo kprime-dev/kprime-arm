@@ -119,7 +119,7 @@ class Constraint : Labelled by Labeller() {
             return of(split[0],split[1])
         }
 
-        fun of(left:String, right:String):Constraint {
+        fun of(left:String, right:String,type:String=""):Constraint {
             val left1 = left.replace("\\s+","")
             val right1 = right.replace("\\s+","")
             val lefts = left1.split(",")
@@ -127,13 +127,15 @@ class Constraint : Labelled by Labeller() {
             val c = Constraint()
             c.source.columns = cols(lefts)
             c.target.columns = cols(rights)
+            c.type = type
             return c
         }
 
-        fun of(left:Collection<Column>, right:Collection<Column>):Constraint {
+        fun of(left:Collection<Column>, right:Collection<Column>,type:String=""):Constraint {
             val c = Constraint()
             c.source.columns.addAll(left)
             c.target.columns.addAll(right)
+            c.type = type
             return c
         }
 
