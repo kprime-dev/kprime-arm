@@ -23,7 +23,11 @@ class Schema () {
 
     fun table(name: String): Table? {
         if (tables().isEmpty()) return null
-        return tables().filter { t -> t.name==name }.firstOrNull()
+        return tables().filter { t -> t.name==name || t.view==name }.firstOrNull()
+    }
+
+    fun relation(relName:String):Table? {
+        return tables().firstOrNull { it.name.contains("_${relName}_") || it.view == relName }
     }
 
     fun constraints(): MutableList<Constraint> {
