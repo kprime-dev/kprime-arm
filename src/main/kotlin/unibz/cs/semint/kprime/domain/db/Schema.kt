@@ -161,7 +161,6 @@ class Schema () {
     }
 
     fun addKey(tableName:String, k:Set<Column>): Constraint {
-        table(tableName)?.columns?.addAll(k)
         keyPrimary(tableName).apply { this?.type = Constraint.TYPE.CANDIDATE_KEY.name }
         val primaryConstraint = buildKey(tableName, k, Constraint.TYPE.PRIMARY_KEY.name)
         constraints().add(primaryConstraint)
