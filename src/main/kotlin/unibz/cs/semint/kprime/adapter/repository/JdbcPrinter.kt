@@ -19,7 +19,7 @@ object JdbcPrinter {
         return result
     }
 
-    fun printJsonResultSet(resultSet: ResultSet):String {
+    fun printJsonResultList(resultSet: ResultSet):String {
         val list = mutableListOf<Map<String, String>>()
         val metaData = resultSet.metaData
         val columnCount = metaData.columnCount
@@ -36,5 +36,28 @@ object JdbcPrinter {
         return result
     }
 
+    fun printJsonResultList(header: Map<String,Any?>, result: ResultList, referencedSets: Map<String,Any?>):String {
+        val a =  try {
+            val list = mutableListOf<Map<String, Any?>>()
+            if (result.isEmpty()) return ""
+            for (row in result) {
+                val obj = LinkedHashMap<String, Any?>()
+                for (col in row) {
+                    obj[col.key] = col.value
+                    obj.putAll(referencedSets)
+                }
+                list.add(obj)
+            }
+            val mapHeader = mapOf(
+                "header" to header,
+                "data" to list
+            )
+            val mapper = ObjectMapper()
+            mapper.writeValueAsString(mapHeader)
+        } catch(e : Exception) {
+            e.printStackTrace()
+        }
+        return a.toString()
+    }
 
 }

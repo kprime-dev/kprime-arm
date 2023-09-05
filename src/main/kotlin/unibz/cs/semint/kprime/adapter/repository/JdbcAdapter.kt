@@ -10,8 +10,10 @@ import java.sql.*
 import java.util.*
 import java.util.logging.Logger
 
+typealias ResultList = List<Map<String, Any?>>
 
 class JdbcAdapter {
+
 
 
     private var formatted=false
@@ -33,6 +35,41 @@ class JdbcAdapter {
         val result =printer(resultSet)
         resultSet.close()
         closeConnection(datasource, conn)
+        return result
+    }
+
+    fun query(datasource: DataSource, sqlquery: String):ResultList {
+        val conn: Connection = openConnection(datasource) ?: throw IllegalArgumentException("No connection")
+        val sqlnative = conn.nativeSQL(sqlquery)
+        val prepareStatement = conn.prepareStatement(sqlnative)
+        val resultSet = prepareStatement.executeQuery()
+        val resultList = copyResultSet(resultSet)
+        resultSet.close()
+        closeConnection(datasource, conn)
+        return resultList
+    }
+
+    fun copyResultSet(resultSet: ResultSet): ResultList {
+        // Crea una lista vuota
+        val result = mutableListOf<Map<String, Any>>()
+
+        // Itera sulle righe del `ResultSet` originale e copiale nella lista
+        while (resultSet.next()) {
+            // Crea un nuovo oggetto di tipo `T`
+            val row = mutableMapOf<String, Any>()
+
+            // Copia i valori della riga nel nuovo oggetto
+            for (i in 0 until resultSet.metaData.columnCount) {
+                val column = resultSet.metaData.getColumnLabel(i + 1)
+                val value = resultSet.getObject(i + 1)
+
+                row.set(column, value)
+            }
+
+            // Aggiungi il nuovo oggetto alla lista
+            result.add(row)
+        }
+
         return result
     }
 

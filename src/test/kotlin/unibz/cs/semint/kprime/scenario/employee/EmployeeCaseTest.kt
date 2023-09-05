@@ -47,10 +47,10 @@ class EmployeeCaseTest {
 
 
         // then
-        sqlAdapter.query (dataSource, "SELECT * FROM V3_SSN_Other_WITH_NULL", JdbcPrinter::printJsonResultSet)
-        sqlAdapter.query (dataSource, "SELECT * FROM V3_SSN_Other_NO_NULL", JdbcPrinter::printJsonResultSet)
+        sqlAdapter.query (dataSource, "SELECT * FROM V3_SSN_Other_WITH_NULL", JdbcPrinter::printJsonResultList)
+        sqlAdapter.query (dataSource, "SELECT * FROM V3_SSN_Other_NO_NULL", JdbcPrinter::printJsonResultList)
         dataSourceConnection.closed = true
-        sqlAdapter.query (dataSource, "SELECT * FROM Employee2", JdbcPrinter::printJsonResultSet)
+        sqlAdapter.query (dataSource, "SELECT * FROM Employee2", JdbcPrinter::printJsonResultList)
 
         sqlAdapter
 

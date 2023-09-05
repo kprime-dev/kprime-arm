@@ -20,7 +20,7 @@ class H2DataSourceConnectionTest {
         sqlAdapter.create(dataSource, "INSERT INTO Person VALUES('Gino','Rossi')")
         sqlAdapter.create(dataSource, "INSERT INTO Person VALUES('Gino','Rossi')")
         dataSourceConnection.closed = true
-        sqlAdapter.query (dataSource, "SELECT * FROM Person", JdbcPrinter::printJsonResultSet)
+        sqlAdapter.query (dataSource, "SELECT * FROM Person", JdbcPrinter::printJsonResultList)
         // then
     }
 }
