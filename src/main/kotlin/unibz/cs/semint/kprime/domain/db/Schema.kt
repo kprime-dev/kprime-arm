@@ -116,7 +116,7 @@ class Schema () {
         this.constraints?.removeAll(constrToRemove)
     }
 
-    fun keys(tableName: String): List<Constraint> {
+    fun keysPrimary(tableName: String): List<Constraint> {
         val first = constraints().filter { c ->
             c.type == Constraint.TYPE.PRIMARY_KEY.name &&
                     c.source.table == "${tableName}"
@@ -138,6 +138,13 @@ class Schema () {
         }.firstOrNull()
     }
 
+    fun keyCandidate(tableName: String): List<Constraint> {
+        return constraints().filter { c ->
+            c.type == Constraint.TYPE.CANDIDATE_KEY.name &&
+                    c.source.table == "${tableName}"
+        }
+    }
+
     fun keysAll(tableName: String): List<Constraint> {
         val first = constraints().filter { c ->
             (c.type == Constraint.TYPE.PRIMARY_KEY.name ||
@@ -148,10 +155,9 @@ class Schema () {
         return first
     }
 
-
     fun keyCols(tableName: String): Set<Column> {
         var resultCols = mutableSetOf<Column>()
-        val keys = keys(tableName)
+        val keys = keysPrimary(tableName)
         if (keys.isEmpty()) return mutableSetOf()
         return keys[0].source.columns.toSet()
     }
@@ -178,6 +184,19 @@ class Schema () {
         return this
     }
 
+    fun addId(tableName:String, idColumns:Set<Column>): Constraint {
+        val idConstraint = buildKey(tableName, idColumns, Constraint.TYPE.ID_KEY.name)
+        constraints().add(idConstraint)
+        return idConstraint
+    }
+
+    fun addId(commandArgs:String):Schema {
+        val tableName:String = commandArgs.split(":")[0]
+        val attributeNames = commandArgs.split(":")[1]
+        addId(tableName,Column.set(attributeNames))
+        return this
+    }
+
     fun addSurrogateKey(commandArgs:String):Schema {
         val tableName:String = commandArgs.split(":")[0]
         val attributeNames = commandArgs.split(":")[1]
@@ -186,6 +205,13 @@ class Schema () {
     }
 
     fun buildKey(tableName: String, k: Set<Column>, keyType: String): Constraint {
+        // check
+        val table = table(tableName.trim())?: throw IllegalArgumentException("Table $tableName not found")
+        for (col in k) {
+            if (!table.hasColumn(col.name))
+                throw IllegalArgumentException("Column ${col.name} not found in table $tableName.")
+        }
+        // add
         val keyConstraint = Constraint.addKey()
         keyConstraint.name = "pkey_$tableName"+"_"+k.joinToString("_")
         keyConstraint.source.table = tableName
@@ -486,21 +512,6 @@ class Schema () {
         return this
     }
 
-    fun addNotNull(commandArgs: String):Schema {
-        val sourceTableName:String = commandArgs.split(":")[0]
-        val sourceAttributeNames = commandArgs.split(":")[1]
-        constraints().add(buildNotNull(sourceTableName, sourceAttributeNames))
-        return this
-    }
-
-
-    fun addUnique(commandArgs: String):Schema {
-        val sourceTableName:String = commandArgs.split(":")[0]
-        val sourceAttributeNames = commandArgs.split(":")[1]
-        constraints().add(buildUnique(sourceTableName, sourceAttributeNames))
-        return this
-    }
-
     internal fun buildInclusion(sourceTableName: String, targetTableName: String, sourceAttributeNames: String, targetAttributeNames: String): Constraint {
         val constraintPos = constraintsByType(Constraint.TYPE.INCLUSION).size + 1
         val constraint = Constraint.inclusion()
@@ -511,6 +522,14 @@ class Schema () {
         constraint.source.columns.addAll(Column.set(sourceAttributeNames))
         constraint.target.columns.addAll(Column.set(targetAttributeNames))
         return constraint
+    }
+
+    /** <table-name>:<col1>, .. ,<colN> with column name with joint not null constraint **/
+    fun addNotNull(commandArgs: String):Schema {
+        val sourceTableName:String = commandArgs.split(":")[0]
+        val sourceAttributeNames = commandArgs.split(":")[1]
+        constraints().add(buildNotNull(sourceTableName, sourceAttributeNames))
+        return this
     }
 
     internal fun buildNotNull(sourceTableName: String, sourceAttributeNames: String): Constraint {
@@ -526,10 +545,38 @@ class Schema () {
         return constraint
     }
 
+    /** <table-name>:<col1>, .. ,<colN> with column name with joint unique constraint **/
+    fun addUnique(commandArgs: String):Schema {
+        val sourceTableName:String = commandArgs.split(":")[0]
+        val sourceAttributeNames = commandArgs.split(":")[1]
+        constraints().add(buildUnique(sourceTableName, sourceAttributeNames))
+        return this
+    }
+
     internal fun buildUnique(sourceTableName: String, sourceAttributeNames: String): Constraint {
-        val constraintPos = constraintsByType(Constraint.TYPE.UNIQUE).size + 1
+            val constraint = Constraint()
+            val constraintPos = constraintsByType(Constraint.TYPE.UNIQUE).size + 1
+            constraint.type = Constraint.TYPE.UNIQUE.name
+            constraint.id = "ci$constraintPos"
+            constraint.name = "${sourceTableName}.notnull$constraintPos"
+            constraint.source.table = sourceTableName
+            constraint.target.table = ""
+            constraint.source.columns.addAll(Column.set(sourceAttributeNames))
+            constraint.target.columns.addAll(emptySet())
+            return constraint
+    }
+
+    fun addOrAtLeastOne(commandArgs: String):Schema {
+        val sourceTableName:String = commandArgs.split(":")[0]
+        val sourceAttributeNames = commandArgs.split(":")[1]
+        constraints().add(buildOrAtLeastOne(sourceTableName, sourceAttributeNames))
+        return this
+    }
+
+    internal fun buildOrAtLeastOne(sourceTableName: String, sourceAttributeNames: String): Constraint {
         val constraint = Constraint()
-        constraint.type = Constraint.TYPE.UNIQUE.name
+        val constraintPos = constraintsByType(Constraint.TYPE.UNIQUE).size + 1
+        constraint.type = Constraint.TYPE.OR_AT_LEAST_ONE.name
         constraint.id = "ci$constraintPos"
         constraint.name = "${sourceTableName}.notnull$constraintPos"
         constraint.source.table = sourceTableName
@@ -538,6 +585,7 @@ class Schema () {
         constraint.target.columns.addAll(emptySet())
         return constraint
     }
+
 
     fun decomposeBCNF(): Set<Relation> {
         var allDecomposed = mutableSetOf<Relation>()

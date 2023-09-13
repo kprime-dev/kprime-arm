@@ -23,6 +23,7 @@ class Constraint : Labelled by Labeller() {
     enum class TYPE {
         FOREIGN_KEY,
         PRIMARY_KEY,
+        ID_KEY,
         CANDIDATE_KEY,
         SURROGATE_KEY,
         FUNCTIONAL,
@@ -33,7 +34,8 @@ class Constraint : Labelled by Labeller() {
         DISJUNCTION,
         COVER,
         NOTNULL,
-        UNIQUE
+        UNIQUE,
+        OR_AT_LEAST_ONE
     }
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""

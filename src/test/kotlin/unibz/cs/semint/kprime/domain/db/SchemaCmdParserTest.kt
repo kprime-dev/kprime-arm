@@ -6,14 +6,36 @@ import kotlin.test.assertEquals
 class SchemaCmdParserTest {
 
     @Test
-    fun test_parse_table_with_pk() {
+    fun test_parse_table_with_pk_nk() {
         // given
         // when
-        val table = SchemaCmdParser.parseTable("person(id/name):name,age")
+        val table = SchemaCmdParser.parseTable("person(id/name,surname):name,age")
         // then
         assertEquals("person",table.name)
         assertEquals("id",table.primaryKey)
-        assertEquals("name",table.naturalKey)
+        assertEquals("name,surname",table.naturalKey)
+    }
+
+    @Test
+    fun test_parse_table_with_pk() {
+        // given
+        // when
+        val table = SchemaCmdParser.parseTable("person(id):name,age")
+        // then
+        assertEquals("person",table.name)
+        assertEquals("id",table.primaryKey)
+        assertEquals("id",table.naturalKey)
+    }
+
+    @Test
+    fun test_parse_table_with_nk() {
+        // given
+        // when
+        val table = SchemaCmdParser.parseTable("person(/name,surname):name,age")
+        // then
+        assertEquals("person",table.name)
+        assertEquals("",table.primaryKey)
+        assertEquals("name,surname",table.naturalKey)
     }
 
     @Test

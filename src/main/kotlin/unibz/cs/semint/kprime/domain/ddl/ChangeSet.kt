@@ -34,6 +34,10 @@ class ChangeSet() {
     var sqlCommands: MutableList<String>? = null
 
     @JacksonXmlElementWrapper(useWrapping=false)
+    var commands : MutableList<String>? = ArrayList()
+
+
+    @JacksonXmlElementWrapper(useWrapping=false)
     var createView= ArrayList<CreateView>()
 
     @JacksonXmlElementWrapper(useWrapping=false)
@@ -47,6 +51,7 @@ class ChangeSet() {
 
     @JacksonXmlElementWrapper(useWrapping=false)
     var createMapping= ArrayList<CreateMapping>()
+
 
     @JacksonXmlElementWrapper(useWrapping=false)
     var dropView= ArrayList<DropView>()
@@ -63,11 +68,12 @@ class ChangeSet() {
     @JacksonXmlElementWrapper(useWrapping=false)
     var dropMapping= ArrayList<DropMapping>()
 
+
     @JacksonXmlElementWrapper(useWrapping=false)
     var alterTable : MutableList<AlterTable>? = ArrayList()
 
-    @JacksonXmlElementWrapper(useWrapping=false)
-    var commands : MutableList<String>? = ArrayList()
+
+
 
     infix fun withId(id:Gid) = apply {
         this.id=id

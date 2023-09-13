@@ -189,6 +189,7 @@ class SchemaTest {
         // given
         var schema = Schema()
         assertEquals(0,schema.keys().size)
+        schema.addTable("person:name,surname")
         // when
         schema.addKey("person:name,surname")
         // then
@@ -264,6 +265,7 @@ class SchemaTest {
     fun test_dropConstraint() {
         // given
         var schema = Schema()
+        schema.addTable("person:id")
         schema.addKey("person:id")
         schema.addForeignKey("person:id-->employee:id")
         assertEquals(2,schema.constraints().size)
