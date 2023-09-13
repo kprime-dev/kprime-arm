@@ -270,7 +270,7 @@ class SchemaTest {
         schema.addForeignKey("person:id-->employee:id")
         assertEquals(2,schema.constraints().size)
         // when
-        schema.dropConstraint("pkey_person_id")
+        schema.dropConstraint("KEY_person_id")
         schema.dropConstraint("person_employee.foreignKey1")
         // then
         assertEquals(0,schema.constraints().size)

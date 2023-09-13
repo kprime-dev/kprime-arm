@@ -170,9 +170,10 @@ class Schema () {
         return cols
     }
 
-    fun addKey(tableName:String, k:Set<Column>): Constraint {
+    fun addKey(tableName:String, keyCols:Set<Column>): Constraint {
+        checkExistence(tableName, keyCols)
         keyPrimary(tableName).apply { this?.type = Constraint.TYPE.CANDIDATE_KEY.name }
-        val primaryConstraint = buildKey(tableName, k, Constraint.TYPE.PRIMARY_KEY.name)
+        val primaryConstraint = buildKey(tableName, keyCols, Constraint.TYPE.PRIMARY_KEY.name)
         constraints().add(primaryConstraint)
         return primaryConstraint
     }
@@ -185,6 +186,7 @@ class Schema () {
     }
 
     fun addId(tableName:String, idColumns:Set<Column>): Constraint {
+        checkExistence(tableName, idColumns)
         val idConstraint = buildKey(tableName, idColumns, Constraint.TYPE.ID_KEY.name)
         constraints().add(idConstraint)
         return idConstraint
@@ -200,24 +202,59 @@ class Schema () {
     fun addSurrogateKey(commandArgs:String):Schema {
         val tableName:String = commandArgs.split(":")[0]
         val attributeNames = commandArgs.split(":")[1]
-        constraints().add(buildKey(tableName, Column.set(attributeNames), Constraint.TYPE.SURROGATE_KEY.name))
+        val keyCols = Column.set(attributeNames)
+        checkExistence(tableName, keyCols)
+        constraints().add(buildKey(tableName, keyCols, Constraint.TYPE.SURROGATE_KEY.name))
         return this
     }
 
-    fun buildKey(tableName: String, k: Set<Column>, keyType: String): Constraint {
-        // check
-        val table = table(tableName.trim())?: throw IllegalArgumentException("Table $tableName not found")
-        for (col in k) {
+    fun addForeignKey(commandArgs:String):Schema {
+        val source:String = commandArgs.split("-->")[0]
+        val target:String = commandArgs.split("-->")[1]
+
+        val sourceTableName:String = source.split(":")[0]
+        val sourceAttributeNames = source.split(":")[1]
+
+        val targetTableName:String = target.split(":")[0]
+        val targetAttributeNames = target.split(":")[1]
+
+        val constraintPos = constraintsByType(Constraint.TYPE.FOREIGN_KEY).size+1
+        val constraint = Constraint.foreignkey()
+
+        val sourceCols = Column.set(sourceAttributeNames)
+        val targetCols = Column.set(targetAttributeNames)
+
+        constraint.id="cfk$constraintPos"
+        constraint.name = "${sourceTableName}_${targetTableName}.foreignKey$constraintPos"
+        constraint.source.table=sourceTableName
+        constraint.target.table=targetTableName
+        constraint.source.name=sourceTableName
+        constraint.target.name=targetTableName
+        constraint.source.columns.addAll(sourceCols)
+        constraint.target.columns.addAll(targetCols)
+        constraints().add(constraint)
+
+        return this
+    }
+
+    private fun checkExistence(
+        tableName: String,
+        keyCols: Set<Column>
+    ) {
+        val table = table(tableName.trim()) ?: throw IllegalArgumentException("Table $tableName not found")
+        for (col in keyCols) {
             if (!table.hasColumn(col.name))
                 throw IllegalArgumentException("Column ${col.name} not found in table $tableName.")
         }
-        // add
-        val keyConstraint = Constraint.addKey()
-        keyConstraint.name = "pkey_$tableName"+"_"+k.joinToString("_")
+    }
+
+    fun buildKey(tableName: String, keyCols: Set<Column>, keyType: String): Constraint {
+        val keyConstraint = Constraint()
+        keyConstraint.name = "KEY_${tableName}_"+keyCols.map { it.name }.joinToString("_")
         keyConstraint.source.table = tableName
         keyConstraint.target.table = tableName
-        keyConstraint.source.columns.addAll(k)
-        keyConstraint.target.columns.addAll(k)
+        keyConstraint.source.columns.addAll(keyCols)
+        keyConstraint.target.columns.addAll(keyCols)
         keyConstraint.type = keyType
         return keyConstraint
     }
@@ -443,30 +480,6 @@ class Schema () {
             constraint.target.table=tableName
         }
         constraints().addAll(constraintsToAdd)
-        return this
-    }
-
-    fun addForeignKey(commandArgs:String):Schema {
-        val source:String = commandArgs.split("-->")[0]
-        val target:String = commandArgs.split("-->")[1]
-
-        val sourceTableName:String = source.split(":")[0]
-        val sourceAttributeNames = source.split(":")[1]
-
-        val targetTableName:String = target.split(":")[0]
-        val targetAttributeNames = target.split(":")[1]
-
-        val constraintPos = constraintsByType(Constraint.TYPE.FOREIGN_KEY).size+1
-        val constraint = Constraint.foreignkey()
-        constraint.id="cfk$constraintPos"
-        constraint.name = "${sourceTableName}_${targetTableName}.foreignKey$constraintPos"
-        constraint.source.table=sourceTableName
-        constraint.target.table=targetTableName
-        constraint.source.name=sourceTableName
-        constraint.target.name=targetTableName
-        constraint.source.columns.addAll(Column.set(sourceAttributeNames))
-        constraint.target.columns.addAll(Column.set(targetAttributeNames))
-        constraints().add(constraint)
         return this
     }
 

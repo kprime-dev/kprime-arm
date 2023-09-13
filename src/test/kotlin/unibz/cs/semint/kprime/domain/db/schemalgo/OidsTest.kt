@@ -87,7 +87,7 @@ table8: DepName , DepAddress
         assertEquals(3, constraintsSsnPhone1.size)
 //        assertEquals("ssn_phone_ssn_name.doubleInc1:DOUBLE_INCLUSION ssn_phone_1:sidssn_name --> ssn_name:sidssn_name ; ",constraintsSsnPhone1[0].toStringWithName())
         assertEquals("ssn_depname_ssn_phone.inclusion2:INCLUSION ssn_depname_1_1:sidssn_name --> ssn_phone_1:sidssn_name ; ",constraintsSsnPhone1[0].toStringWithName())
-        assertEquals("pkey_ssn_phone_1_sidssn_name:SURROGATE_KEY ssn_phone_1:sidssn_name --> ssn_phone_1:sidssn_name ; ",constraintsSsnPhone1[1].toStringWithName())
+        assertEquals("KEY_ssn_phone_1_sidssn_name:SURROGATE_KEY ssn_phone_1:sidssn_name --> ssn_phone_1:sidssn_name ; ",constraintsSsnPhone1[1].toStringWithName())
         assertEquals("ssn_phone_ssn_name.doubleInc1_1:DOUBLE_INCLUSION ssn_phone_1:sidssn_name --> SKEYssn_name:sidssn_name ; ",constraintsSsnPhone1[2].toStringWithName()) //TO FIX
 
         val constraintsSsnDepname11 = schema.constraintsByTable("ssn_depname_1_1")
@@ -99,7 +99,7 @@ table8: DepName , DepAddress
 
         assertEquals("ssn_depname_ssn_name.inclusion1_1:INCLUSION ssn_depname_1_1:ssn --> SKEYssn_name:ssn ; ",constraintsSsnDepname11[2].toStringWithName())//TO FIX
 
-        assertEquals("pkey_ssn_depname_1_1_sidssn_depaddress:SURROGATE_KEY ssn_depname_1_1:sidssn_depaddress --> ssn_depname_1_1:sidssn_depaddress ; ",constraintsSsnDepname11[3].toStringWithName())
+        assertEquals("KEY_ssn_depname_1_1_sidssn_depaddress:SURROGATE_KEY ssn_depname_1_1:sidssn_depaddress --> ssn_depname_1_1:sidssn_depaddress ; ",constraintsSsnDepname11[3].toStringWithName())
 
         assertEquals("ssn_depaddress_ssn_depname.doubleInc2_1:DOUBLE_INCLUSION SKEYssn_depaddress:depname --> ssn_depname_1_1:depname ; ",constraintsSsnDepname11[4].toStringWithName())//TO FIX
     }
