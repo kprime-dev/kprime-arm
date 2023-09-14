@@ -11,6 +11,7 @@ class AggregatesTest {
     fun test_aggregate_with_one_fd() {
         // given
         val db = Database()
+        db.schema.addTable("Person:name,surname")
         db.schema.addFunctional("Person:name-->surname")
         // when
         val aggregates = aggregates(db.schema)
@@ -27,6 +28,7 @@ class AggregatesTest {
         // TODO Expected :2  //Actual   :1
         // given
         val db = Database()
+        db.schema.addTable("Person:name,surname,depname,depaddress")
         db.schema.addFunctional("Person:name-->surname")
         db.schema.addFunctional("Person:depname-->depaddress")
         // when
@@ -45,6 +47,7 @@ class AggregatesTest {
     fun test_aggregate_with_two_fd_chained() {
         // given
         val db = Database()
+        db.schema.addTable("Person:name,surname,depname,depaddress")
         db.schema.addFunctional("Person:name-->surname,depname")
         db.schema.addFunctional("Person:depname-->depaddress")
         // when

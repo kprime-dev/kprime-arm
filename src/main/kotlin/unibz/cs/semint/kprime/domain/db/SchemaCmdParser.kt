@@ -81,6 +81,24 @@ object SchemaCmdParser {
         return buildConstraint(tableSource, tableTarget, type, index)
     }
 
+    data class ConstraintTokens(val sourceName:String,
+                                val sourceAttrs:String,
+                                val targetName:String,
+                                val targetAttrs:String
+        )
+
+    fun parseExternalConstraintArgs(commandArgs:String):ConstraintTokens {
+        val source:String = commandArgs.split("-->")[0]
+        val target:String = commandArgs.split("-->")[1]
+
+        val sourceTableName:String = source.split(":")[0]
+        val sourceAttributeNames = source.split(":")[1]
+
+        val targetTableName:String = target.split(":")[0]
+        val targetAttributeNames = target.split(":")[1]
+        return ConstraintTokens(sourceTableName,sourceAttributeNames,targetTableName,targetAttributeNames)
+    }
+
     private fun buildConstraint(tableSource: Table, tableTarget: Table, type: String, index: Int): Constraint {
         var constraint = Constraint()
         constraint.name = "${tableSource.name}_${tableTarget.name}.$type$index"

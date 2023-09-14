@@ -29,7 +29,6 @@ class SchemaTest {
                 "D-->B"
         )
 
-        val expr = "A, B --> C; C, D --> E; C --> A; C --> D; D-->B"
         val fds = Constraint.set(exprs)
         val attrs = Column.set("A, B, C, D, E")
         val keys = superkeys(attrs,fds)
@@ -88,11 +87,11 @@ class SchemaTest {
         // then
         val map = HashMap<Set<Column>,Set<Column>>()
         for (sa in powerSet) {
-            map.put(sa,closure(sa,fds))
+            map[sa] = closure(sa,fds)
         }
         var result = ""
         for (k in map.keys) {
-            var v = map.get(k)
+            var v = map[k]
             if (v!=null) {
                 v = v.minus(notin)
                 result+="$k = $v "+System.lineSeparator()
@@ -165,8 +164,9 @@ class SchemaTest {
     @Test
     fun test_addFunctional() {
         // given
-        var schema = Schema()
+        val schema = Schema()
         assertEquals(0,schema.functionals().size)
+        schema.addTable("person:name,dep_name,dep_address")
         // when
         schema.addFunctional("person:dep_name-->dep_address")
         // then
@@ -176,7 +176,7 @@ class SchemaTest {
     @Test
     fun test_addTable() {
         // given
-        var schema = Schema()
+        val schema = Schema()
         assertEquals(0,schema.tables().size)
         // when
         schema.addTable("person:name,dep_name,dep_address")
@@ -187,7 +187,7 @@ class SchemaTest {
     @Test
     fun test_addKey() {
         // given
-        var schema = Schema()
+        val schema = Schema()
         assertEquals(0,schema.keys().size)
         schema.addTable("person:name,surname")
         // when
@@ -199,7 +199,7 @@ class SchemaTest {
     @Test
     fun test_addForeignKey() {
         // given
-        var schema = Schema()
+        val schema = Schema()
         assertEquals(0,schema.foreignKeys().size)
         // when
         schema.addForeignKey("person:dep_id-->department:dep_id")
@@ -210,8 +210,9 @@ class SchemaTest {
     @Test
     fun test_addDoubleInc() {
         // given
-        var schema = Schema()
+        val schema = Schema()
         assertEquals(0,schema.doubleIncs().size)
+        schema.addTable("table4:DepName,DepAddress")
         // when
         schema.addDoubleInc("table4:DepName<->table4:DepAddress")
         // then
@@ -221,8 +222,9 @@ class SchemaTest {
     @Test
     fun test_addNotNull() {
         // given
-        var schema = Schema()
+        val schema = Schema()
         assertEquals(0,schema.notNull("department").size)
+        schema.addTable("department:dep_name,dep_address")
         // when
         schema.addNotNull("department:dep_name,dep_address")
         val notnulls = schema.notNull("department")
@@ -236,8 +238,9 @@ class SchemaTest {
     @Test
     fun test_addUnique() {
         // given
-        var schema = Schema()
+        val schema = Schema()
         assertEquals(0,schema.unique("department").size)
+        schema.addTable("department:dep_name,dep_address")
         // when
         schema.addUnique("department:dep_name,dep_address")
         val uniques = schema.unique("department")
@@ -251,7 +254,7 @@ class SchemaTest {
     @Test
     fun test_dropTable() {
         // given
-        var schema = Schema()
+        val schema = Schema()
         schema.addTable("person:name,surname")
         assertEquals(1,schema.tables().size)
         // when
@@ -264,7 +267,7 @@ class SchemaTest {
     @Test
     fun test_dropConstraint() {
         // given
-        var schema = Schema()
+        val schema = Schema()
         schema.addTable("person:id")
         schema.addKey("person:id")
         schema.addForeignKey("person:id-->employee:id")
@@ -368,7 +371,7 @@ class SchemaTest {
     private fun checkContains(resultTables: HashSet<List<Column>>, element: Set<Column>): Boolean {
         var found = false
         for (tab in resultTables) {
-            if (tab.toSet().equals(element)) {
+            if (tab.toSet() == element) {
                 found = true
                 break
             }
@@ -384,8 +387,8 @@ class SchemaTest {
         // when
         val result = decomposeToBCNF(attrs, fds)
         // then
-        var resultTables = HashSet<List<Column>>()
-        var resultConstraints = HashSet<Set<Constraint>>()
+        val resultTables = HashSet<List<Column>>()
+        val resultConstraints = HashSet<Set<Constraint>>()
         for (relation in result) {
 //            println("columns")
 //            println(relation.table.columns)
@@ -413,14 +416,13 @@ class SchemaTest {
         val attrs = Column.set("A, B, C")
         val fds = Constraint.set("A,B-->C; C-->B")
         val result = decomposeToBCNF(attrs,fds)
-        //
         val violations = checkBCNF(attrs, fds)
         assertFalse(violations.isEmpty())
         for (constraint in violations) {
-//            println(constraint.toString())
+            println(constraint.toString())
         }
 
-        var resultConstraints = HashSet<Set<Constraint>>()
+        val resultConstraints = HashSet<Set<Constraint>>()
         for (relation in result) {
 //            println("columns")
 //            println(relation.table.columns)
@@ -448,7 +450,7 @@ class SchemaTest {
         val lostBCNFConstraints = lostBCNFConstraints(attrs, fds)
         // then
         assertEquals(1,lostBCNFConstraints.size)
-        assertTrue(lostBCNFConstraints.equals(Constraint.set("A,B --> C")))
+        assertTrue(lostBCNFConstraints == Constraint.set("A,B --> C"))
     }
 
     @Test

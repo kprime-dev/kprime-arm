@@ -21,6 +21,10 @@ class Schema () {
     @JacksonXmlProperty(localName = "constraint")
     var constraints: MutableList<Constraint>? = ArrayList<Constraint>()
 
+    /*
+     *  Reading methods
+     */
+
     fun table(name: String): Table? {
         if (tables().isEmpty()) return null
         return tables().filter { t -> t.name==name || t.view==name }.firstOrNull()
@@ -31,8 +35,7 @@ class Schema () {
     }
 
     fun constraints(): MutableList<Constraint> {
-        if (constraints==null) constraints = ArrayList()
-        return constraints as MutableList<Constraint>
+        return constraints?: mutableListOf()
     }
 
     fun constraintsByType(type :Constraint.TYPE): List<Constraint> {
@@ -170,6 +173,10 @@ class Schema () {
         return cols
     }
 
+    /*
+     *  Writing methods
+     */
+
     fun addKey(tableName:String, keyCols:Set<Column>): Constraint {
         checkExistence(tableName, keyCols)
         keyPrimary(tableName).apply { this?.type = Constraint.TYPE.CANDIDATE_KEY.name }
@@ -185,6 +192,7 @@ class Schema () {
         return this
     }
 
+    // TO FIX:
     fun addId(tableName:String, idColumns:Set<Column>): Constraint {
         checkExistence(tableName, idColumns)
         val idConstraint = buildKey(tableName, idColumns, Constraint.TYPE.ID_KEY.name)
@@ -209,43 +217,19 @@ class Schema () {
     }
 
     fun addForeignKey(commandArgs:String):Schema {
-        val source:String = commandArgs.split("-->")[0]
-        val target:String = commandArgs.split("-->")[1]
-
-        val sourceTableName:String = source.split(":")[0]
-        val sourceAttributeNames = source.split(":")[1]
-
-        val targetTableName:String = target.split(":")[0]
-        val targetAttributeNames = target.split(":")[1]
-
+        val constraintTokens = SchemaCmdParser.parseExternalConstraintArgs(commandArgs)
         val constraintPos = constraintsByType(Constraint.TYPE.FOREIGN_KEY).size+1
         val constraint = Constraint.foreignkey()
-
-        val sourceCols = Column.set(sourceAttributeNames)
-        val targetCols = Column.set(targetAttributeNames)
-
         constraint.id="cfk$constraintPos"
-        constraint.name = "${sourceTableName}_${targetTableName}.foreignKey$constraintPos"
-        constraint.source.table=sourceTableName
-        constraint.target.table=targetTableName
-        constraint.source.name=sourceTableName
-        constraint.target.name=targetTableName
-        constraint.source.columns.addAll(sourceCols)
-        constraint.target.columns.addAll(targetCols)
+        constraint.name = "${constraintTokens.sourceName}_${constraintTokens.targetName}.foreignKey$constraintPos"
+        constraint.source.table=constraintTokens.sourceName
+        constraint.target.table=constraintTokens.targetName
+        constraint.source.name=constraintTokens.sourceName
+        constraint.target.name=constraintTokens.targetName
+        constraint.source.columns.addAll(Column.set(constraintTokens.sourceAttrs))
+        constraint.target.columns.addAll(Column.set(constraintTokens.targetAttrs))
         constraints().add(constraint)
-
         return this
-    }
-
-    private fun checkExistence(
-        tableName: String,
-        keyCols: Set<Column>
-    ) {
-        val table = table(tableName.trim()) ?: throw IllegalArgumentException("Table $tableName not found")
-        for (col in keyCols) {
-            if (!table.hasColumn(col.name))
-                throw IllegalArgumentException("Column ${col.name} not found in table $tableName.")
-        }
     }
 
     fun buildKey(tableName: String, keyCols: Set<Column>, keyType: String): Constraint {
@@ -402,18 +386,6 @@ class Schema () {
         return first[0].target.columns.toSet()
     }
 
-    fun addFunctional(commandArgs:String): Schema {
-        val tableName:String = commandArgs.split(":")[0]
-        val setExpression: String= commandArgs.split(":")[1]
-        return addFunctional(tableName,setExpression)
-    }
-
-    fun addMultivalued(commandArgs:String): Schema {
-        val tableName:String = commandArgs.split(":")[0]
-        val setExpression: String= commandArgs.split(":")[1]
-        return addMultivalued(tableName,setExpression)
-    }
-
     fun addTable(commandArgs:String) : Schema {
         val table = SchemaCmdParser.parseTable(commandArgs)
         val tablePos=tables().size+1
@@ -448,10 +420,17 @@ class Schema () {
         return this
     }
 
+    fun addFunctional(commandArgs:String): Schema {
+        val tableName:String = commandArgs.split(":")[0]
+        val setExpression: String= commandArgs.split(":")[1]
+        return addFunctional(tableName,setExpression)
+    }
+
     fun addFunctional(tableName:String, setExpression: String): Schema {
         val constraints = constraints()
-        constraints.addAll(SchemaCmdParser
-                .parseFunctionals(constraints.size, tableName, setExpression))
+        val newConstraints = SchemaCmdParser.parseFunctionals(constraints.size, tableName, setExpression)
+        checkExistence(newConstraints)
+        constraints.addAll(newConstraints)
         return this
     }
 
@@ -469,6 +448,12 @@ class Schema () {
 
     }
 
+    fun addMultivalued(commandArgs:String): Schema {
+        val tableName:String = commandArgs.split(":")[0]
+        val setExpression: String= commandArgs.split(":")[1]
+        return addMultivalued(tableName,setExpression)
+    }
+
     fun addMultivalued(tableName:String, setExpression: String): Schema {
         val constraintPos = constraintsByType(Constraint.TYPE.MULTIVALUED).size+1
         val constraintsToAdd = Constraint.set(setExpression)
@@ -479,6 +464,7 @@ class Schema () {
             constraint.source.table=tableName
             constraint.target.table=tableName
         }
+        checkExistence(constraintsToAdd)
         constraints().addAll(constraintsToAdd)
         return this
     }
@@ -494,6 +480,7 @@ class Schema () {
         val targetAttributeNames = target.split(":")[1]
 
         val constraint = buildDoubleInc(sourceTableName, targetTableName, sourceAttributeNames, targetAttributeNames)
+        checkExistence(constraint)
         constraints().add(constraint)
         return this
     }
@@ -521,6 +508,7 @@ class Schema () {
         val targetAttributeNames = target.split(":")[1]
 
         val constraint = buildInclusion(sourceTableName, targetTableName, sourceAttributeNames, targetAttributeNames)
+        checkExistence(constraint)
         constraints().add(constraint)
         return this
     }
@@ -541,7 +529,9 @@ class Schema () {
     fun addNotNull(commandArgs: String):Schema {
         val sourceTableName:String = commandArgs.split(":")[0]
         val sourceAttributeNames = commandArgs.split(":")[1]
-        constraints().add(buildNotNull(sourceTableName, sourceAttributeNames))
+        val constraint = buildNotNull(sourceTableName, sourceAttributeNames)
+        checkExistence(constraint)
+        constraints().add(constraint)
         return this
     }
 
@@ -562,7 +552,9 @@ class Schema () {
     fun addUnique(commandArgs: String):Schema {
         val sourceTableName:String = commandArgs.split(":")[0]
         val sourceAttributeNames = commandArgs.split(":")[1]
-        constraints().add(buildUnique(sourceTableName, sourceAttributeNames))
+        val constraint = buildUnique(sourceTableName, sourceAttributeNames)
+        checkExistence(constraint)
+        constraints().add(constraint)
         return this
     }
 
@@ -580,25 +572,29 @@ class Schema () {
     }
 
     fun addOrAtLeastOne(commandArgs: String):Schema {
-        val sourceTableName:String = commandArgs.split(":")[0]
-        val sourceAttributeNames = commandArgs.split(":")[1]
-        constraints().add(buildOrAtLeastOne(sourceTableName, sourceAttributeNames))
+        val constraint = buildOrAtLeastOne(SchemaCmdParser.parseExternalConstraintArgs(commandArgs))
+        checkExistence(constraint)
+        constraints().add(constraint)
         return this
     }
 
-    internal fun buildOrAtLeastOne(sourceTableName: String, sourceAttributeNames: String): Constraint {
+    private fun buildOrAtLeastOne(
+        constraintTokens: SchemaCmdParser.ConstraintTokens ): Constraint {
         val constraint = Constraint()
         val constraintPos = constraintsByType(Constraint.TYPE.UNIQUE).size + 1
         constraint.type = Constraint.TYPE.OR_AT_LEAST_ONE.name
-        constraint.id = "ci$constraintPos"
-        constraint.name = "${sourceTableName}.notnull$constraintPos"
-        constraint.source.table = sourceTableName
-        constraint.target.table = ""
-        constraint.source.columns.addAll(Column.set(sourceAttributeNames))
-        constraint.target.columns.addAll(emptySet())
+        constraint.id = "${constraint.type}_$constraintPos"
+        constraint.name = "${constraintTokens.sourceName}.notnull$constraintPos"
+        constraint.source.table = constraintTokens.sourceName
+        constraint.target.table = constraintTokens.targetName
+        constraint.source.columns.addAll(Column.set(constraintTokens.sourceAttrs))
+        constraint.target.columns.addAll(Column.set(constraintTokens.targetAttrs))
         return constraint
     }
 
+    /*
+     *  Validation methods
+     */
 
     fun decomposeBCNF(): Set<Relation> {
         var allDecomposed = mutableSetOf<Relation>()
@@ -661,5 +657,43 @@ class Schema () {
         val table = table(tableName)?:return false
         return table.columns.size==2
                 && foreignsWithTarget(tableName).size==2
+    }
+
+    private fun checkExistence(
+        tableName: String,
+        keyCols: Set<Column>
+    ) {
+        val table = table(tableName.trim()) ?: throw IllegalArgumentException("Table $tableName not found")
+        for (col in keyCols) {
+            if (!table.hasColumn(col.name))
+                throw IllegalArgumentException("Column ${col.name} not found in table $tableName.")
+        }
+    }
+
+
+    private fun checkExistence(
+        newConstraints: Set<Constraint>
+    ) {
+        for (constr in newConstraints) {
+            checkExistence(constr)
+        }
+    }
+
+    private fun checkExistence(constraint: Constraint) {
+        println("CHECK $constraint")
+        val sourceTable = table(constraint.source.table)
+            ?: relation(constraint.source.table)
+            ?: throw IllegalArgumentException("Source table ${constraint.source.table} not found to add functional.")
+        for (left in constraint.left()) {
+            if (!sourceTable.hasColumn(left.name))
+                throw IllegalArgumentException("Left column ${left.name} of table ${constraint.source.table} not found to add functional.")
+        }
+        val tableTarget = table(constraint.target.table)
+            ?: relation(constraint.source.table)
+            ?: throw IllegalArgumentException("Target table ${constraint.target.table}.na not found to add functional.")
+        for (right in constraint.right()) {
+            if (!tableTarget.hasColumn(right.name))
+                throw IllegalArgumentException("Right column ${right.name} of table ${constraint.target.table} not found to add functional.")
+        }
     }
 }
