@@ -30,6 +30,11 @@ class Schema () {
         return tables().filter { t -> t.name==name || t.view==name }.firstOrNull()
     }
 
+    fun tableId(id: String): Table? {
+        if (tables().isEmpty()) return null
+        return tables().filter { t -> t.id==id }.firstOrNull()
+    }
+
     fun relation(relName:String):Table? {
         return tables().firstOrNull { it.name.contains("_${relName}_") || it.view == relName }
     }
