@@ -6,6 +6,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.db.schemalgo.*
 import unibz.cs.semint.kprime.domain.ddl.ChangeSet
 
+enum class SchemaIsA  {EXCLUSIVE,PARTITION,COVER,GENERIC}
+
 @JacksonXmlRootElement(localName = "schema")
 class Schema () {
     @JacksonXmlProperty(isAttribute = true)
@@ -595,6 +597,14 @@ class Schema () {
         constraint.source.columns.addAll(Column.set(constraintTokens.sourceAttrs))
         constraint.target.columns.addAll(Column.set(constraintTokens.targetAttrs))
         return constraint
+    }
+
+    fun addIsA(generic:String,specifics:List<String>,condition:String) {
+        for (specific in specifics) {
+            val specificTable = table(specific)?:continue
+            specificTable.parent = generic
+            specificTable.condition = condition
+        }
     }
 
     /*
