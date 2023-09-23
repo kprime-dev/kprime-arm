@@ -21,7 +21,7 @@ class MetaSchemaJdbcAdapterTest {
             "sammy","pass",
             "")
         // when
-        val metaDatabase = adapter.metaDatabase(datasource,Database())
+        val metaDatabase = adapter.metaDatabase(datasource,Database(),"",null,null)
         // then
         assertNotNull(metaDatabase)
         println(metaDatabase)
@@ -40,7 +40,7 @@ class MetaSchemaJdbcAdapterTest {
             "user","password",
             "")
         // when
-        val metaDatabase = adapter.metaDatabase(datasource, Database())
+        val metaDatabase = adapter.metaDatabase(datasource, Database(),"",null,null)
         // then
         assertNotNull(metaDatabase)
         println(metaDatabase)

@@ -9,6 +9,7 @@ import java.net.URLClassLoader
 import java.sql.*
 import java.util.*
 import java.util.logging.Logger
+import kotlin.collections.HashMap
 
 typealias ResultList = List<Map<String, Any?>>
 
@@ -51,18 +52,17 @@ class JdbcAdapter {
 
     fun copyResultSet(resultSet: ResultSet): ResultList {
         // Crea una lista vuota
-        val result = mutableListOf<Map<String, Any>>()
+        val result = mutableListOf<Map<String, Any?>>()
 
         // Itera sulle righe del `ResultSet` originale e copiale nella lista
         while (resultSet.next()) {
             // Crea un nuovo oggetto di tipo `T`
-            val row = mutableMapOf<String, Any>()
+            val row = HashMap<String, Any?>()
 
             // Copia i valori della riga nel nuovo oggetto
             for (i in 0 until resultSet.metaData.columnCount) {
                 val column = resultSet.metaData.getColumnLabel(i + 1)
                 val value = resultSet.getObject(i + 1)
-
                 row.set(column, value)
             }
 

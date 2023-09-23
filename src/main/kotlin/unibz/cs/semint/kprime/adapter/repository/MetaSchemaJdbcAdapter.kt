@@ -12,7 +12,7 @@ import java.util.*
 
 class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
 
-    override fun metaDatabase(datasource: DataSource,db : Database, tableName: String) : Database {
+    override fun metaDatabase(datasource: DataSource,db : Database, tableName: String, catalog: String?, schema:String?) : Database {
             val user = datasource.user
             val pass = datasource.pass
             val path = datasource.path
@@ -38,20 +38,20 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
             var tableNames  =  mutableListOf<String>()
         if (tableName.isNotEmpty()) {
             tableNames = mutableListOf(tableName)
-            readTable(metaData, db, tableName)
+            readTable(metaData, db, tableName, catalog, schema)
         } else {
-            tableNames.addAll(readTables(metaData, db))
-            tableNames.addAll(readViews(metaData, db))
+            tableNames.addAll(readTables(metaData, db, catalog, schema))
+            tableNames.addAll(readViews(metaData, db, catalog, schema))
         }
-        readColumns(metaData, tableNames, db)
-        readPrimaryKeys(metaData, tableNames, db)
-        readForeignKeys(metaData, tableNames, db)
+        readColumns(metaData, tableNames, db, catalog, schema)
+        readPrimaryKeys(metaData, tableNames, db, catalog, schema)
+        readForeignKeys(metaData, tableNames, db, catalog, schema)
         conn.close()
         return db
     }
 
-    internal fun readTables(metaData: DatabaseMetaData, db: Database):List<String> {
-        val tables = metaData.getTables(null, null, null, arrayOf("TABLE"))
+    internal fun readTables(metaData: DatabaseMetaData, db: Database, catalog: String?, schema: String?):List<String> {
+        val tables = metaData.getTables(catalog, schema, null, arrayOf("TABLE"))
         val tableNames = mutableListOf<String>()
         while (tables.next()) {
             val tableName = tables.getString("TABLE_NAME")
@@ -63,8 +63,8 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
         return tableNames
     }
 
-    private fun readTable(metaData: DatabaseMetaData, db: Database, tableName:String) {
-        val tables = metaData.getTables(null, null, null, arrayOf("TABLE"))
+    private fun readTable(metaData: DatabaseMetaData, db: Database, tableName:String, catalog: String?, schema: String?) {
+        val tables = metaData.getTables(catalog, schema, null, arrayOf("TABLE"))
         while (tables.next()) {
             val currentTableName = tables.getString("TABLE_NAME")
             if (currentTableName == tableName) {
@@ -75,8 +75,8 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
         }
     }
 
-    private fun readViews(metaData: DatabaseMetaData, db: Database):List<String> {
-        val views = metaData.getTables(null, null, null, arrayOf("VIEW"))
+    private fun readViews(metaData: DatabaseMetaData, db: Database, catalog: String?, schema: String?):List<String> {
+        val views = metaData.getTables(catalog, schema, null, arrayOf("VIEW"))
         val viewNames = mutableListOf<String>()
         //println("++++++++++++++++++++++++++++++++++++++++++++++++")
         //QueryJdbcAdapter().printResultSet(views)
@@ -92,9 +92,9 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
         return viewNames
     }
 
-    private fun readColumns(metaData: DatabaseMetaData, tableNames: List<String>, db: Database) {
+    private fun readColumns(metaData: DatabaseMetaData, tableNames: List<String>, db: Database, catalog: String?, schema: String?) {
         for (tableName in tableNames) {
-            val columns = metaData.getColumns(null, null, tableName, null)
+            val columns = metaData.getColumns(catalog, schema, tableName, null)
             val colNames = mutableListOf<String>()
             while (columns.next()) {
                 val colName = columns.getString("COLUMN_NAME")
@@ -110,10 +110,10 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
         }
     }
 
-    private fun readPrimaryKeys(metaData: DatabaseMetaData, tableNames: List<String>, db: Database) {
+    private fun readPrimaryKeys(metaData: DatabaseMetaData, tableNames: List<String>, db: Database, catalog: String?, schema: String?) {
         //println("-----------readPrimaryKeys")
         for (tableName in tableNames) {
-            val primaryKeys = metaData.getPrimaryKeys(null, null, tableName)
+            val primaryKeys = metaData.getPrimaryKeys(catalog, schema, tableName)
             //println("PRIMARY:")
             while (primaryKeys.next()) {
                 //println("   " + primaryKeys.getString("COLUMN_NAME") + " === " + primaryKeys.getString("PK_NAME"))
@@ -133,9 +133,9 @@ class MetaSchemaJdbcAdapter : IMetaSchemaRepository {
         }
     }
 
-    private fun readForeignKeys(metaData: DatabaseMetaData, tableNames: List<String>, db: Database) {
+    private fun readForeignKeys(metaData: DatabaseMetaData, tableNames: List<String>, db: Database, catalog: String?, schema: String?) {
         for (tableName in tableNames) {
-            val fkeys = metaData.getImportedKeys(null, null, tableName)
+            val fkeys = metaData.getImportedKeys(catalog, schema, tableName)
             while (fkeys.next()) {
                 //println("   " + fkeys.getString("PKTABLE_NAME") + " --- " + fkeys.getString("PKCOLUMN_NAME") + " === " + fkeys.getString("FKCOLUMN_NAME"))
                 val constr = Constraint()

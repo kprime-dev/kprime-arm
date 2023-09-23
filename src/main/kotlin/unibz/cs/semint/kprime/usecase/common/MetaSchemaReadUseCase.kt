@@ -43,7 +43,7 @@ class MetaSchemaReadUseCase() {
             var table = ""
             if (tokens.size==3)
                 table = tokens[2]
-            db = metaSchemaRepository.metaDatabase(datasource, Database())
+            db = metaSchemaRepository.metaDatabase(datasource, Database(),"",null,null)
             db.source = datasource.name
             //print(xmlSerializer.prettyDatabase(db))
         }

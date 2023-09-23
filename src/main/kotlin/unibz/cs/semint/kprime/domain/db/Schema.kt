@@ -303,8 +303,11 @@ class Schema () {
 
     fun referencedTablesOf(tableName: String): Set<Table> {
         var rTables = foreignTablesOf(tableName)
+        println("rTables:[$rTables]")
         val diTables = doubleIncTablesOf(tableName)
+        println("diTables:[$diTables]")
         val iTables = inclusionTablesOf(tableName)
+        println("iTables:[$iTables]")
         rTables.addAll(diTables)
         rTables.addAll(iTables)
         return rTables.toSet()
