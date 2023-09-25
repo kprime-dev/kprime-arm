@@ -157,7 +157,7 @@ class UnSQLizeSelectUseCase {
             val split = sqlline.drop(5).split("AS")
             val join = Join()
             join.joinLeftTableAlias = select.from.tableName
-            if (select.from.alias?.isNotEmpty())
+            if (select.from.alias?.isNotEmpty()?:false)
                 join.joinLeftTableAlias = select.from.alias
             join.joinRightTable = split[0].trim()
             if (split.size>1)

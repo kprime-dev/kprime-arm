@@ -1,3 +1,5 @@
+package unibz.cs.semint.kprime.usecase.serialize
+
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
