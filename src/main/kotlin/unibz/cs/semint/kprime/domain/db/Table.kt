@@ -96,6 +96,13 @@ class Table (): Labelled by Labeller() {
         this.columns.addAll(cols)
     }
 
+    infix fun addNotExistentCols(cols: Set<Column>) = apply {
+        for (col in cols) {
+            if (!this.columns.contains(col))
+                this.columns.add(col)
+        }
+    }
+
     fun addColomunsLabels(labelsAsString: String): String {
         for (column in columns) column.addLabels(labelsAsString)
         return ""
