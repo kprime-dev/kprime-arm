@@ -192,6 +192,19 @@ class Schema () {
         return primaryConstraint
     }
 
+    fun addSubset(tableName:String, targetName:String, keyCols:Set<Column>): Constraint {
+        checkExistence(tableName, keyCols)
+        val subsetConstraint = Constraint()
+        subsetConstraint.name = "SUBSET_${tableName}_${targetName}"
+        subsetConstraint.source.table = tableName
+        subsetConstraint.target.table = targetName
+        subsetConstraint.source.columns.addAll(keyCols)
+        subsetConstraint.target.columns.addAll(keyCols)
+        subsetConstraint.type = Constraint.TYPE.SUBSET.name
+        constraints().add(subsetConstraint)
+        return subsetConstraint
+    }
+
     fun addKey(commandArgs:String):Schema {
         val tableName:String = commandArgs.split(":")[0]
         val attributeNames = commandArgs.split(":")[1]

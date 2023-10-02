@@ -35,7 +35,8 @@ class Constraint : Labelled by Labeller() {
         COVER,
         NOTNULL,
         UNIQUE,
-        OR_AT_LEAST_ONE
+        OR_AT_LEAST_ONE,
+        SUBSET
     }
     @JacksonXmlProperty(isAttribute = true)
     var name: String =""
