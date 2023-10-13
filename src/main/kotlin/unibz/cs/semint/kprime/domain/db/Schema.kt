@@ -205,6 +205,32 @@ class Schema () {
         return subsetConstraint
     }
 
+    fun addEquals(tableName:String, targetName:String, keyCols:Set<Column>): Constraint {
+        checkExistence(tableName, keyCols)
+        val subsetConstraint = Constraint()
+        subsetConstraint.name = "EQUALS_${tableName}_${targetName}"
+        subsetConstraint.source.table = tableName
+        subsetConstraint.target.table = targetName
+        subsetConstraint.source.columns.addAll(keyCols)
+        subsetConstraint.target.columns.addAll(keyCols)
+        subsetConstraint.type = Constraint.TYPE.EQUALITY.name
+        constraints().add(subsetConstraint)
+        return subsetConstraint
+    }
+
+    fun addDisjoint(tableName:String, targetName:String, keyCols:Set<Column>): Constraint {
+        checkExistence(tableName, keyCols)
+        val subsetConstraint = Constraint()
+        subsetConstraint.name = "SUBSET_${tableName}_${targetName}"
+        subsetConstraint.source.table = tableName
+        subsetConstraint.target.table = targetName
+        subsetConstraint.source.columns.addAll(keyCols)
+        subsetConstraint.target.columns.addAll(keyCols)
+        subsetConstraint.type = Constraint.TYPE.DISJUNCTION.name
+        constraints().add(subsetConstraint)
+        return subsetConstraint
+    }
+
     fun addKey(commandArgs:String):Schema {
         val tableName:String = commandArgs.split(":")[0]
         val attributeNames = commandArgs.split(":")[1]
@@ -694,7 +720,9 @@ class Schema () {
         tableName: String,
         keyCols: Set<Column>
     ) {
-        val table = table(tableName.trim()) ?: throw IllegalArgumentException("Table $tableName not found")
+        val table = table(tableName.trim())
+            ?: relation(tableName.trim())
+            ?: throw IllegalArgumentException("Table $tableName not found")
         for (col in keyCols) {
             if (!table.hasColumn(col.name))
                 throw IllegalArgumentException("Column ${col.name} not found in table $tableName.")
