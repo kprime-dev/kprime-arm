@@ -41,6 +41,27 @@ class Schema () {
         return tables().firstOrNull { it.name.contains("_${relName}_") || it.view == relName }
     }
 
+    fun parents(tableName:String): List<Table> {
+        println("parents:")
+        val parentNames =  table(tableName)?.parent?.split(",")?: emptyList()
+        val parents = mutableListOf<Table>()
+        for (parentName in parentNames) {
+            println(parentName)
+            val parentTable = table(parentName)?:continue
+            parents.add(parentTable)
+        }
+        return parents
+    }
+
+    fun children(tableName:String): List<Table> {
+        val children = mutableListOf<Table>()
+        for (table in tables()) {
+            if (table.parent?.split(",")?.contains(tableName) == true)
+                children.add(table)
+        }
+        return children
+    }
+
     fun constraints(): MutableList<Constraint> {
         return constraints?: mutableListOf()
     }
