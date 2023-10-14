@@ -34,6 +34,10 @@ open class Query {
         return this.union as Union
     }
 
+    override fun toString(): String {
+        return "Query(id='$id', name='$name', select=$select, union=$union, minus=$minus, options=$options)"
+    }
+
     companion object {
         fun build(tableName:String): Query {
             val query = Query()
@@ -98,4 +102,7 @@ open class Query {
         }
 
     }
+
+
+
 }

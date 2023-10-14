@@ -81,6 +81,7 @@ class XMLSerializerChangeSetTest  {
                   </attributes>
                   <from tableName="film" alias=""/>
                   <where condition="Name='Gigi'"/>
+                  <groupBy/>
                 </select>
                 <union/>
                 <minus/>

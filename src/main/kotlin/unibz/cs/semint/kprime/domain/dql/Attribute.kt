@@ -23,4 +23,8 @@ class Attribute() {
             name.equals(other.name)
         else false
     }
+
+    override fun toString(): String {
+        return "Attribute(name='$name', asName=$asName)"
+    }
 }

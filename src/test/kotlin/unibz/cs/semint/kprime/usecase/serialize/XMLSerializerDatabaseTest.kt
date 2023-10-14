@@ -82,6 +82,7 @@ class XMLSerializerDatabaseTest {
                     </attributes>
                     <from tableName="people" alias=""/>
                     <where condition=""/>
+                    <groupBy/>
                   </select>
                   <union/>
                   <minus/>

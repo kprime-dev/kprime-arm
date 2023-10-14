@@ -9,6 +9,7 @@ import unibz.cs.semint.kprime.domain.datasource.DataSource
 import unibz.cs.semint.kprime.domain.Gid
 import unibz.cs.semint.kprime.domain.dql.Mapping
 import unibz.cs.semint.kprime.domain.dql.Query
+import java.io.NotActiveException
 import java.util.UUID
 import kotlin.collections.ArrayList
 
@@ -111,5 +112,10 @@ open class Database () {
 
     fun tableGid(tableName:String):String {
         return this.gid+schema.table(tableName)?.id
+    }
+
+    fun mappingUnwrap(mappingName:String):Result<Mapping> {
+        val rootMapping = mapping(mappingName) ?: return Result.failure(NotActiveException())
+        return Result.success(rootMapping)
     }
 }

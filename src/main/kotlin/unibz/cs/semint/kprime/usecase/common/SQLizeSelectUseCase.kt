@@ -43,11 +43,18 @@ class SQLizeSelectUseCase {
             sql = "SELECT DISTINCT"
         }
         sql += " " + select.attributes
-                .map { a -> mapAttribute(a) }.toList().joinToString(",") + System.lineSeparator()
+                .map { a -> mapAttribute(a) }.joinToString(",") + System.lineSeparator()
         sql += "FROM "
         sql = sqlizeFrom(select, sql)
-        if (!select.where.condition.isEmpty()) {
+        if (select.where.condition.isNotEmpty()) {
             sql += "WHERE ${select.where.condition}"  //+ System.lineSeparator()
+        }
+        println(select.groupBy)
+        if (select.groupBy.isNotEmpty()) {
+            println("groupped!")
+            sql += System.lineSeparator()
+            sql += "GROUP BY " + select.groupBy
+                .map { a -> a.name }.joinToString(",") + System.lineSeparator()
         }
         sql += if (select.limit!=null) " LIMIT "+select.limit else  "" //+ System.lineSeparator()
         return sql.trim()

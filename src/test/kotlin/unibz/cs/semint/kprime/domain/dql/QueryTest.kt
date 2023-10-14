@@ -54,6 +54,7 @@ class QueryTest {
                 </attributes>
                 <from tableName="Table1" alias=""/>
                 <where condition="Name='Gigi'"/>
+                <groupBy/>
               </select>
               <union/>
               <minus/>
@@ -184,6 +185,7 @@ class QueryTest {
                 </attributes>
                 <from tableName="Table1" alias=""/>
                 <where condition="Name='Gigi'"/>
+                <groupBy/>
               </select>
               <union>
                 <selects>
@@ -195,6 +197,7 @@ class QueryTest {
                     </attributes>
                     <from tableName="Table2" alias=""/>
                     <where condition="Name='Gigi'"/>
+                    <groupBy/>
                   </selects>
                 </selects>
               </union>

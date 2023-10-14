@@ -32,6 +32,7 @@ class UnSQLizeSelectUseCase {
             parseJoin(select,lineStrippedOption)
             parseJoinOn(select,lineStrippedOption)
             parseWhere(select,lineStrippedOption)
+            parseGroupBy(select,lineStrippedOption)
             parseUnionMinus(query,lineStrippedOption)
         }
         if (query.safeUnion().selects().size>0) {
@@ -69,11 +70,11 @@ class UnSQLizeSelectUseCase {
                 .joinToString(" ")
     }
     private  val sqlKeywords = listOf(
-            "select","as","from","where","union","minus","join","on"
+            "select","as","from","where","union","minus","join","on","group"
     )
 
     private fun uppercaseKey(key: String):String {
-        if (sqlKeywords.contains(key.trim())) return key.toUpperCase()
+        if (sqlKeywords.contains(key.trim())) return key.uppercase()
         return key
     }
 
@@ -184,4 +185,10 @@ class UnSQLizeSelectUseCase {
         }
     }
 
+    private fun parseGroupBy(select: Select, sqlline: String) {
+        if (sqlline.length > 9 && sqlline.substring(0..8).uppercase().equals("GROUP BY ")) {
+            val attributeNames = sqlline.drop(8).split(",").map { it.trim() }
+            select.addGroupBy(attributeNames)
+        }
+    }
 }
