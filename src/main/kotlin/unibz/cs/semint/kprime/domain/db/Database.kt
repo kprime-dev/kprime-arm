@@ -8,7 +8,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import unibz.cs.semint.kprime.domain.datasource.DataSource
 import unibz.cs.semint.kprime.domain.Gid
 import unibz.cs.semint.kprime.domain.dql.Mapping
-import unibz.cs.semint.kprime.domain.dql.Query
+import unibz.cs.semint.kprime.usecase.common.SQLizeSelectUseCase
 import java.io.NotActiveException
 import java.util.UUID
 import kotlin.collections.ArrayList
@@ -114,8 +114,44 @@ open class Database () {
         return this.gid+schema.table(tableName)?.id
     }
 
-    fun mappingUnwrap(mappingName:String):Result<Mapping> {
-        val rootMapping = mapping(mappingName) ?: return Result.failure(NotActiveException())
-        return Result.success(rootMapping)
+    fun mappingSql(mappingName:String):Result<String> {
+        val rootMapping = mapping(mappingName) ?: return Result.failure(NotActiveException(mappingName))
+        val rootSql = SQLizeSelectUseCase().sqlize(rootMapping)
+        var resultSql = rootSql
+        for (subMappingName in mappings().map { it.name }) {
+            println("try subMappingName : $subMappingName")
+           //mappings().map { it.name }.forEach { subMappingName ->
+            if (rootSql.contains(subMappingName)) {
+                println("root contains : $subMappingName")
+                val mapping = mapping(subMappingName) ?: return Result.failure(NotActiveException(subMappingName))
+                val mappingSql = SQLizeSelectUseCase().sqlize(mapping)
+                resultSql = resultSql.replace("SELECT $subMappingName", mappingSql)
+            }
+        }
+        return Result.success(resultSql)
     }
+
+    fun mappingSql2(mappingName:String):Result<String> {
+        val rootMapping = mapping(mappingName) ?: return Result.failure(NotActiveException(mappingName))
+        val rootSql = SQLizeSelectUseCase().sqlize(rootMapping)
+        println("---------")
+        println(rootSql)
+        var resultSql = rootSql
+        for (subMappingName in mappings().map { it.name }) {
+            if (rootSql.contains(subMappingName)) {
+                println("----subMappingName:[$subMappingName]")
+                mapping(subMappingName) ?: return Result.failure(NotActiveException(subMappingName))
+                mappingSql2(subMappingName).onSuccess {
+                    resultSql = resultSql.replace("FROM SELECT $subMappingName", "FROM ($it)" )
+                    resultSql = resultSql.replace("SELECT $subMappingName", it)
+                }
+            }
+        }
+        println("----rootMapping:[$rootMapping]")
+        val mappingSql = SQLizeSelectUseCase().sqlize(rootMapping)
+        resultSql = resultSql.replace("FROM SELECT $mappingName", "FROM ($mappingSql)" )
+        resultSql = resultSql.replace("SELECT $mappingName", mappingSql)
+        return Result.success(resultSql)
+    }
+
 }

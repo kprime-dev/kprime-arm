@@ -44,19 +44,22 @@ class SQLizeSelectUseCase {
         }
         sql += " " + select.attributes
                 .map { a -> mapAttribute(a) }.joinToString(",") + System.lineSeparator()
-        sql += "FROM "
-        sql = sqlizeFrom(select, sql)
-        if (select.where.condition.isNotEmpty()) {
-            sql += "WHERE ${select.where.condition}"  //+ System.lineSeparator()
+        if (select.from.tableName.isNotEmpty()) {
+            sql += "FROM "
+            sql = sqlizeFrom(select, sql)
         }
-        println(select.groupBy)
+        if (select.where.condition.isNotEmpty()) {
+            sql += "WHERE ${select.where.condition}"  + System.lineSeparator()
+        }
+        //println(select.groupBy)
         if (select.groupBy.isNotEmpty()) {
-            println("groupped!")
-            sql += System.lineSeparator()
+            //println("groupped!")
+            //sql += System.lineSeparator()
             sql += "GROUP BY " + select.groupBy
                 .map { a -> a.name }.joinToString(",") + System.lineSeparator()
         }
-        sql += if (select.limit!=null) " LIMIT "+select.limit else  "" //+ System.lineSeparator()
+        sql += if (select.limit!=null) " LIMIT "+select.limit else  "" + System.lineSeparator()
+        if (sql.endsWith(System.lineSeparator()))  sql.dropLast(1)
         return sql.trim()
     }
 

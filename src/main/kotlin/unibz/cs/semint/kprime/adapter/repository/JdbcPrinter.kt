@@ -36,15 +36,20 @@ object JdbcPrinter {
         return result
     }
 
-    fun printJsonResultList(header: Map<String,Any?>, result: ResultList, referencedSets: Map<String,Any?>):String {
+    fun printJsonResultList(header: Map<String,Any?>, result: ResultList, referencedSets: Map<String,Any?>,
+                            externalKeys: Map<String,String?>, externalSources: Map<String,String>):String {
         val a =  try {
             val list = mutableListOf<Map<String, Any?>>()
             if (result.isEmpty()) return ""
             for (row in result) {
                 val obj = LinkedHashMap<String, Any?>()
                 for (col in row) {
-                    obj[col.key] = col.value
+                    obj[col.key] = if (externalKeys[col.key]!=null) externalKeys[col.key]+col.value else col.value
                     obj.putAll(referencedSets)
+                }
+                for (externalSource in externalSources) {
+                    val keyName = externalSource.value.substringAfterLast("=")
+                    obj[externalSource.key] = externalSource.value.substringBeforeLast("=") + "=" + obj[keyName]
                 }
                 list.add(obj)
             }
