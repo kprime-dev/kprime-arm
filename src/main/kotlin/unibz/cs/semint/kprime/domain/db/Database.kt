@@ -119,38 +119,17 @@ open class Database () {
         val rootSql = SQLizeSelectUseCase().sqlize(rootMapping)
         var resultSql = rootSql
         for (subMappingName in mappings().map { it.name }) {
-            println("try subMappingName : $subMappingName")
-           //mappings().map { it.name }.forEach { subMappingName ->
-            if (rootSql.contains(subMappingName)) {
-                println("root contains : $subMappingName")
-                val mapping = mapping(subMappingName) ?: return Result.failure(NotActiveException(subMappingName))
-                val mappingSql = SQLizeSelectUseCase().sqlize(mapping)
-                resultSql = resultSql.replace("SELECT $subMappingName", mappingSql)
-            }
-        }
-        return Result.success(resultSql)
-    }
-
-    fun mappingSql2(mappingName:String):Result<String> {
-        val rootMapping = mapping(mappingName) ?: return Result.failure(NotActiveException(mappingName))
-        val rootSql = SQLizeSelectUseCase().sqlize(rootMapping)
-        println("---------")
-        println(rootSql)
-        var resultSql = rootSql
-        for (subMappingName in mappings().map { it.name }) {
-            if (rootSql.contains(subMappingName)) {
-                println("----subMappingName:[$subMappingName]")
+            if (rootSql.contains("($subMappingName)")) {
                 mapping(subMappingName) ?: return Result.failure(NotActiveException(subMappingName))
-                mappingSql2(subMappingName).onSuccess {
-                    resultSql = resultSql.replace("FROM SELECT $subMappingName", "FROM ($it)" )
-                    resultSql = resultSql.replace("SELECT $subMappingName", it)
+                mappingSql(subMappingName).onSuccess {
+                    resultSql = resultSql.replace("SELECT ($subMappingName)", "($it)")
+                    resultSql = resultSql.replace("($subMappingName)", "($it)  $subMappingName")
                 }
             }
         }
-        println("----rootMapping:[$rootMapping]")
         val mappingSql = SQLizeSelectUseCase().sqlize(rootMapping)
-        resultSql = resultSql.replace("FROM SELECT $mappingName", "FROM ($mappingSql)" )
-        resultSql = resultSql.replace("SELECT $mappingName", mappingSql)
+        resultSql = resultSql.replace("SELECT ($mappingName)", mappingSql)
+        resultSql = resultSql.replace("($mappingName)", mappingSql)
         return Result.success(resultSql)
     }
 
