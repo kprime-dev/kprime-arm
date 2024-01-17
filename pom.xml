@@ -8,6 +8,10 @@
     <groupId>unibz.cs.semint.kprime</groupId>
     <artifactId>kprime</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>kprime-arm</name>
+    <description>Abstract Relational Model</description>
+    <url>https://kprime.it/</url>
+    <inceptionYear>2020</inceptionYear>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
